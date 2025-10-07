@@ -25,4 +25,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# data files
 *.csv
+fabric-inventory.csv

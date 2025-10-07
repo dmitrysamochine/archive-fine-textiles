@@ -1,9 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config({ path: '.env.local' })
-
-/** 
- * CSV to Sanity Import Script
- * ...rest of the file
 /**
  * CSV to Sanity Import Script
  *
@@ -17,13 +11,35 @@ dotenv.config({ path: '.env.local' })
  * Run this script from the v0 interface to import your CSV data
  */
 
+import { config } from "dotenv"
+import { resolve } from "path"
+
+config({ path: resolve(process.cwd(), ".env.local") })
+
 import { createClient } from "@sanity/client"
 
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production"
+const token = process.env.SANITY_API_TOKEN
+
+if (!projectId) {
+  console.error("❌ Error: NEXT_PUBLIC_SANITY_PROJECT_ID is not set in .env.local")
+  process.exit(1)
+}
+
+if (!token) {
+  console.error("❌ Error: SANITY_API_TOKEN is not set in .env.local")
+  process.exit(1)
+}
+
+console.log(`✅ Using Sanity project: ${projectId}`)
+console.log(`✅ Using dataset: ${dataset}`)
+
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+  projectId,
+  dataset,
   apiVersion: "2024-01-01",
-  token: process.env.SANITY_API_TOKEN,
+  token,
   useCdn: false,
 })
 
