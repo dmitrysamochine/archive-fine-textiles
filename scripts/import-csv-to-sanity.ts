@@ -1,3 +1,9 @@
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env.local' })
+
+/** 
+ * CSV to Sanity Import Script
+ * ...rest of the file
 /**
  * CSV to Sanity Import Script
  *
