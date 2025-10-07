@@ -81,4 +81,4 @@ Your Sanity schema includes:
 5. Start building the frontend catalog interface
 \`\`\`
 
-```json file="" isHidden
+\`\`\`json file="" isHidden
