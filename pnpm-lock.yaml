@@ -168,7 +168,7 @@ importers:
         specifier: ^1.7.4
         version: 1.7.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       styled-components:
-        specifier: latest
+        specifier: ^6.1.15
         version: 6.1.19(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwind-merge:
         specifier: ^2.5.5
