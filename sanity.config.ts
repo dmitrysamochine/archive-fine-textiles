@@ -7,7 +7,7 @@ export default defineConfig({
   name: "default",
   title: "Archive Fine Textiles",
 
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  projectId: "0piql2nt",
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
 
   plugins: [structureTool(), visionTool()],
