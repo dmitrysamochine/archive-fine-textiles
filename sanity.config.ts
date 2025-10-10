@@ -10,7 +10,12 @@ export default defineConfig({
   projectId: "0piql2nt",
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool({
+      defaultDocumentNode: (S) => S.document(),
+    }),
+    visionTool(),
+  ],
 
   schema: {
     types: schemaTypes,
