@@ -3,7 +3,7 @@ import { defineType, defineField, defineArrayMember } from "sanity"
 // Fabric Item - Main content type
 export const fabricItem = defineType({
   name: "fabricItem",
-  title: "Fabric Item",
+  title: "Fabric Items",
   type: "document",
   fields: [
     defineField({
@@ -154,7 +154,7 @@ export const fabricItem = defineType({
 // Fabric Collection
 export const fabricCollection = defineType({
   name: "fabricCollection",
-  title: "Fabric Collection",
+  title: "Fabric Collections",
   type: "document",
   fields: [
     defineField({
@@ -193,7 +193,7 @@ export const fabricCollection = defineType({
 // Colorway
 export const colorway = defineType({
   name: "colorway",
-  title: "Colorway",
+  title: "Colorways",
   type: "document",
   fields: [
     defineField({
@@ -224,7 +224,7 @@ export const colorway = defineType({
 // Category
 export const category = defineType({
   name: "category",
-  title: "Category",
+  title: "Categories",
   type: "document",
   fields: [
     defineField({
@@ -249,7 +249,7 @@ export const category = defineType({
 // Color
 export const color = defineType({
   name: "color",
-  title: "Color",
+  title: "Colors",
   type: "document",
   fields: [
     defineField({
