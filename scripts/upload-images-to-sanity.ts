@@ -3,10 +3,23 @@ import { createReadStream } from "fs"
 import { readdir } from "fs/promises"
 import { join, parse } from "path"
 
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
+const token = process.env.SANITY_API_TOKEN
+
+if (!projectId || !dataset || !token) {
+  console.error("Error: Missing required environment variables")
+  console.error("Make sure these are set in your environment:")
+  console.error("  - NEXT_PUBLIC_SANITY_PROJECT_ID")
+  console.error("  - NEXT_PUBLIC_SANITY_DATASET")
+  console.error("  - SANITY_API_TOKEN")
+  process.exit(1)
+}
+
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  token: process.env.SANITY_API_TOKEN!,
+  projectId,
+  dataset,
+  token,
   apiVersion: "2024-01-01",
   useCdn: false,
 })
@@ -57,15 +70,17 @@ async function uploadImagesToSanity() {
         // Update fabric item with image reference
         await client
           .patch(fabricItem._id)
-          .set({
-            image: {
+          .setIfMissing({ images: [] })
+          .append("images", [
+            {
               _type: "image",
+              _key: imageAsset._id,
               asset: {
                 _type: "reference",
                 _ref: imageAsset._id,
               },
             },
-          })
+          ])
           .commit()
 
         console.log(`  ✓ Associated image with fabric item ${itemNumber}\n`)
