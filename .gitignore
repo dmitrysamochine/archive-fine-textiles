@@ -33,3 +33,6 @@ fabric-inventory.csv
 # sanity
 .sanity
 dist
+
+# images
+fabric-images/
