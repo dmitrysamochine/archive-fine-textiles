@@ -94,7 +94,7 @@ async function importData() {
   const uniqueCategories = [
     ...new Set(rows.flatMap((r) => r.DESCRIPTON?.split("/").map((c) => c.trim()) || []).filter(Boolean)),
   ]
-  const uniqueColors = [...new Set(rows.map((r) => r.COLOR).filter(Boolean))]
+  const uniqueColors = [...new Set(rows.flatMap((r) => r.COLOR?.split("/").map((c) => c.trim()) || []).filter(Boolean))]
 
   console.log("[v0] Creating supporting documents...")
   console.log(`[v0] - ${uniqueFabrics.length} fabric collections`)
@@ -172,7 +172,10 @@ async function importData() {
         row.DESCRIPTON?.split("/")
           .map((c) => c.trim())
           .filter(Boolean) || []
-      const colors = row.COLOR ? [row.COLOR] : []
+      const colors =
+        row.COLOR?.split("/")
+          .map((c) => c.trim())
+          .filter(Boolean) || []
 
       await client.create({
         _type: "fabricItem",
