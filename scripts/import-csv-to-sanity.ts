@@ -11,11 +11,6 @@
  * Run this script from the v0 interface to import your CSV data
  */
 
-import { config } from "dotenv"
-import { resolve } from "path"
-
-config({ path: resolve(process.cwd(), ".env.local") })
-
 import { createClient } from "@sanity/client"
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
@@ -23,12 +18,12 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production"
 const token = process.env.SANITY_API_TOKEN
 
 if (!projectId) {
-  console.error("❌ Error: NEXT_PUBLIC_SANITY_PROJECT_ID is not set in .env.local")
+  console.error("❌ Error: NEXT_PUBLIC_SANITY_PROJECT_ID is not set")
   process.exit(1)
 }
 
 if (!token) {
-  console.error("❌ Error: SANITY_API_TOKEN is not set in .env.local")
+  console.error("❌ Error: SANITY_API_TOKEN is not set")
   process.exit(1)
 }
 
@@ -43,24 +38,24 @@ const client = createClient({
   useCdn: false,
 })
 
-interface CSVRow {
-  Fabric: string
-  Colorway: string
-  "Item Number": string
-  Type: string
-  Price: string
-  Yardage: string
-  Status: string
-  Notes?: string
-  CONTENT?: string
-  WIDTH?: string
-  REPEAT?: string
-  DESCRIPTON?: string
-  COLOR?: string
-  Photo?: string
-}
-
 async function importData() {
+  interface CSVRow {
+    Fabric: string
+    Colorway: string
+    "Item Number": string
+    Type: string
+    Price: string
+    Yardage: string
+    Status: string
+    Notes?: string
+    CONTENT?: string
+    WIDTH?: string
+    REPEAT?: string
+    DESCRIPTON?: string
+    COLOR?: string
+    Photo?: string
+  }
+
   console.log("[v0] Starting CSV import to Sanity...")
 
   // Fetch CSV data
@@ -88,7 +83,6 @@ async function importData() {
 
   console.log(`[v0] Parsed ${rows.length} fabric items from CSV`)
 
-  // Extract unique values for relational data
   const uniqueFabrics = [...new Set(rows.map((r) => r.Fabric).filter(Boolean))]
   const uniqueColorways = [...new Set(rows.map((r) => r.Colorway).filter(Boolean))]
   const uniqueCategories = [
@@ -147,7 +141,6 @@ async function importData() {
     console.log(`[v0] Created category: ${categoryName}`)
   }
 
-  // Create colors
   const colorMap = new Map()
   for (const colorName of uniqueColors) {
     const doc = await client.create({
@@ -172,6 +165,7 @@ async function importData() {
         row.DESCRIPTON?.split("/")
           .map((c) => c.trim())
           .filter(Boolean) || []
+
       const colors =
         row.COLOR?.split("/")
           .map((c) => c.trim())

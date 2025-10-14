@@ -1,10 +1,26 @@
 export interface FabricItem {
   _id: string
   itemNumber: string
-  fabric: string
-  fabricSlug: string
-  colorway: string
-  colorwaySlug: string
+  fabric: {
+    name: string
+    slug: {
+      current: string
+    }
+    description?: string
+    featuredImage?: {
+      asset: {
+        _id: string
+        url: string
+      }
+    }
+  }
+  colorway: {
+    name: string
+    slug: {
+      current: string
+    }
+    description?: string
+  }
   type: "wing" | "flat"
   price: number
   yardage: number
@@ -13,8 +29,19 @@ export interface FabricItem {
   content?: string
   width?: string
   repeat?: string
-  categories?: string[]
-  colors?: string[]
+  categories?: Array<{
+    name: string
+    slug: {
+      current: string
+    }
+  }>
+  colors?: Array<{
+    name: string
+    slug: {
+      current: string
+    }
+    hexValue?: string
+  }>
   images?: Array<{
     asset: {
       _id: string
@@ -37,6 +64,7 @@ export interface FabricCollection {
       url: string
     }
   }
+  itemCount?: number
   items?: FabricItem[]
 }
 
@@ -47,6 +75,8 @@ export interface Colorway {
     current: string
   }
   description?: string
+  itemCount?: number
+  items?: FabricItem[]
 }
 
 export interface Category {

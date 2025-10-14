@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export default function Page() {
   return (
     <div className="min-h-screen bg-background">
@@ -7,8 +9,16 @@ export default function Page() {
           <p className="text-xl text-muted-foreground text-pretty">
             Curated collection of premium fabrics for discerning designers and trade professionals
           </p>
-          <div className="pt-8">
-            <p className="text-sm text-muted-foreground">Catalog coming soon</p>
+          <div className="pt-8 flex gap-4 justify-center">
+            <Link
+              href="/fabrics"
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              Browse Fabrics
+            </Link>
+            <Link href="/collections" className="px-6 py-3 border rounded-lg hover:bg-muted transition-colors">
+              View Collections
+            </Link>
           </div>
         </div>
       </main>

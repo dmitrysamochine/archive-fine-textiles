@@ -1,24 +1,32 @@
 import { groq } from "next-sanity"
 
-// Get all fabric items with related data
+// Get all fabric items with filtering and sorting
 export const fabricItemsQuery = groq`
-  *[_type == "fabricItem"] | order(itemNumber asc) {
+  *[_type == "fabricItem" 
+    ${`&& ($collection == null || references($collection))`}
+    ${`&& ($colorway == null || colorway->slug.current == $colorway)`}
+    ${`&& ($color == null || $color in color[]->slug.current)`}
+    ${`&& ($status == null || status == $status)`}
+  ] | order(
+    ${`$sort == "price-asc" => price asc,`}
+    ${`$sort == "price-desc" => price desc,`}
+    ${`$sort == "item-asc" => itemNumber asc,`}
+    ${`$sort == "item-desc" => itemNumber desc,`}
+    itemNumber asc
+  ) {
     _id,
     itemNumber,
-    "fabric": fabric->name,
-    "fabricSlug": fabric->slug.current,
-    "colorway": colorway->name,
-    "colorwaySlug": colorway->slug.current,
+    "fabric": fabric->{name, slug},
+    "colorway": colorway->{name, slug},
     type,
     price,
     yardage,
     status,
-    notes,
     content,
     width,
     repeat,
-    "categories": description[]->name,
-    "colors": color[]->name,
+    "categories": description[]->{name, slug},
+    "colors": color[]->{name, slug, hexValue},
     images[] {
       asset->,
       alt
@@ -58,14 +66,7 @@ export const fabricCollectionsQuery = groq`
     slug,
     description,
     featuredImage,
-    "items": *[_type == "fabricItem" && references(^._id)] {
-      itemNumber,
-      "colorway": colorway->name,
-      price,
-      yardage,
-      status,
-      images[0]
-    }
+    "itemCount": count(*[_type == "fabricItem" && references(^._id)])
   }
 `
 
@@ -80,6 +81,7 @@ export const fabricCollectionBySlugQuery = groq`
     "items": *[_type == "fabricItem" && references(^._id)] | order(itemNumber asc) {
       _id,
       itemNumber,
+      "fabric": fabric->{name, slug},
       "colorway": colorway->{name, slug},
       type,
       price,
@@ -88,12 +90,67 @@ export const fabricCollectionBySlugQuery = groq`
       content,
       width,
       repeat,
-      "categories": description[]->name,
-      "colors": color[]->name,
+      "categories": description[]->{name, slug},
+      "colors": color[]->{name, slug, hexValue},
       images[] {
         asset->,
         alt
       }
     }
   }
+`
+
+// Get all colorways
+export const colorwaysQuery = groq`
+  *[_type == "colorway"] | order(name asc) {
+    _id,
+    name,
+    slug,
+    description,
+    "itemCount": count(*[_type == "fabricItem" && references(^._id)])
+  }
+`
+
+// Get colorway by slug
+export const colorwayBySlugQuery = groq`
+  *[_type == "colorway" && slug.current == $slug][0] {
+    _id,
+    name,
+    slug,
+    description,
+    "items": *[_type == "fabricItem" && references(^._id)] | order(itemNumber asc) {
+      _id,
+      itemNumber,
+      "fabric": fabric->{name, slug},
+      "colorway": colorway->{name, slug},
+      type,
+      price,
+      yardage,
+      status,
+      content,
+      width,
+      repeat,
+      "categories": description[]->{name, slug},
+      "colors": color[]->{name, slug, hexValue},
+      images[] {
+        asset->,
+        alt
+      }
+    }
+  }
+`
+
+// Get all unique colors for filtering
+export const colorsQuery = groq`
+  *[_type == "color"] | order(name asc) {
+    _id,
+    name,
+    slug,
+    hexValue
+  }
+`
+
+// Get all unique statuses
+export const statusesQuery = groq`
+  array::unique(*[_type == "fabricItem"].status)
 `
