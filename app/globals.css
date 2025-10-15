@@ -104,6 +104,24 @@
 @theme inline {
   --font-heading: var(--font-bernhard);
   --font-sans: var(--font-lato);
+
+  /* Add custom color palette to Tailwind theme */
+  --color-cream-50: oklch(var(--cream-50));
+  --color-cream-100: oklch(var(--cream-100));
+  --color-cream-200: oklch(var(--cream-200));
+  --color-linen-50: oklch(var(--linen-50));
+  --color-linen-100: oklch(var(--linen-100));
+  --color-linen-200: oklch(var(--linen-200));
+  --color-terracotta-50: oklch(var(--terracotta-50));
+  --color-terracotta-100: oklch(var(--terracotta-100));
+  --color-terracotta-500: oklch(var(--terracotta-500));
+  --color-terracotta-600: oklch(var(--terracotta-600));
+  --color-steel-50: oklch(var(--steel-50));
+  --color-steel-100: oklch(var(--steel-100));
+  --color-steel-500: oklch(var(--steel-500));
+  --color-steel-600: oklch(var(--steel-600));
+  --color-black: oklch(var(--black));
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
