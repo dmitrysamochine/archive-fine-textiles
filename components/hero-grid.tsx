@@ -96,8 +96,8 @@ export function HeroGrid() {
 
       {/* Centered Logo with background rectangle */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="bg-cream-100 px-12 py-8">
-          <Image src="/logo.svg" alt="Archive Fine Textiles" width={400} height={100} className="w-1/3 max-w-md" />
+        <div className="bg-cream-100 px-16 py-10">
+          <Image src="/logo.svg" alt="Archive Fine Textiles" width={800} height={200} className="w-[40vw] h-auto" />
         </div>
       </div>
     </div>
