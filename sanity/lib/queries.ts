@@ -3,17 +3,11 @@ import { groq } from "next-sanity"
 // Get all fabric items with filtering and sorting
 export const fabricItemsQuery = groq`
   *[_type == "fabricItem" 
-    ${`&& ($collection == null || references($collection))`}
-    ${`&& ($colorway == null || colorway->slug.current == $colorway)`}
-    ${`&& ($color == null || $color in color[]->slug.current)`}
-    ${`&& ($status == null || status == $status)`}
-  ] | order(
-    ${`$sort == "price-asc" => price asc,`}
-    ${`$sort == "price-desc" => price desc,`}
-    ${`$sort == "item-asc" => itemNumber asc,`}
-    ${`$sort == "item-desc" => itemNumber desc,`}
-    itemNumber asc
-  ) {
+    && ($collection == null || references($collection))
+    && ($colorway == null || colorway->slug.current == $colorway)
+    && ($color == null || $color in color[]->slug.current)
+    && ($status == null || status == $status)
+  ] | order(itemNumber asc) {
     _id,
     itemNumber,
     "fabric": fabric->{name, slug},
