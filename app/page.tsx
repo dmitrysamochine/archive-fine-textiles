@@ -1,27 +1,12 @@
-import Link from "next/link"
+import { HeroGrid } from "@/components/hero-grid"
+import { FabricGrid } from "@/components/fabric-grid"
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-balance">Archive Fine Textiles</h1>
-          <p className="text-xl text-muted-foreground text-pretty">
-            Curated collection of premium fabrics for discerning designers and trade professionals
-          </p>
-          <div className="pt-8 flex gap-4 justify-center">
-            <Link
-              href="/fabrics"
-              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              Browse Fabrics
-            </Link>
-            <Link href="/collections" className="px-6 py-3 border rounded-lg hover:bg-muted transition-colors">
-              View Collections
-            </Link>
-          </div>
-        </div>
-      </main>
+    <div className="min-h-screen">
+      <HeroGrid />
+
+      <FabricGrid />
     </div>
   )
 }
