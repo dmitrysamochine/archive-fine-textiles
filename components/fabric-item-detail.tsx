@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { urlForImage } from "@/lib/sanity-image"
+import { urlForImage } from "@/sanity/lib/image"
 import type { FabricItem } from "@/sanity/types"
 import { RelatedFabrics } from "./related-fabrics"
 

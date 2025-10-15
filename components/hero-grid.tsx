@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { client } from "@/sanity/lib/client"
-import { urlForImage } from "@/lib/sanity-image"
+import { urlForImage } from "@/sanity/lib/image"
 
 interface FabricItem {
   _id: string
