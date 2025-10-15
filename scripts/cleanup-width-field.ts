@@ -29,8 +29,8 @@ async function cleanupWidthField() {
       continue
     }
 
-    // Remove extra quotes - replace multiple quotes with single quote
-    const cleanedWidth = originalWidth.replace(/"+/g, '"')
+    // Pattern: "59" becomes 59"
+    const cleanedWidth = originalWidth.replace(/^"/, "").replace(/"$/, '"')
 
     // Only update if the value changed
     if (cleanedWidth !== originalWidth) {
