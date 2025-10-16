@@ -101,7 +101,7 @@ export function HeroGrid() {
           style={{
             paddingBlock: "calc(var(--spacing) * 8)",
             paddingInline: "calc(var(--spacing) * 14)",
-            borderRadius: "4px",
+            borderRadius: "20px",
           }}
         >
           <Image src="/logo.svg" alt="Archive Fine Textiles" width={800} height={200} className="w-[20vw] h-auto" />
