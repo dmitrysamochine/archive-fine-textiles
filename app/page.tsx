@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useRef } from "react"
+import { useSearchParams } from "next/navigation"
+import { motion, AnimatePresence } from "framer-motion"
 import { HeroGrid } from "@/components/hero-grid"
 import { FabricGrid } from "@/components/fabric-grid"
 import { FilterPanel } from "@/components/filter-panel"
@@ -12,6 +14,14 @@ export default function Page() {
   const [filterOpen, setFilterOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const mainPanelRef = useRef<HTMLElement>(null)
+  const searchParams = useSearchParams()
+
+  const hasActiveFilters =
+    searchParams.has("collection") ||
+    searchParams.has("colorway") ||
+    searchParams.has("color") ||
+    searchParams.has("material") ||
+    searchParams.has("category")
 
   const handleCategoryClick = (category: string) => {
     if (activeCategory === category) {
@@ -55,7 +65,20 @@ export default function Page() {
             marginLeft: filterOpen ? (activeCategory ? "400px" : "80px") : "0",
           }}
         >
-          <HeroGrid />
+          <AnimatePresence mode="wait">
+            {!hasActiveFilters && (
+              <motion.div
+                key="hero"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <HeroGrid />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <FabricGrid />
         </div>
       </div>

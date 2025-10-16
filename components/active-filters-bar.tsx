@@ -131,7 +131,7 @@ export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBa
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="sticky top-[73px] z-30 border-b border-border bg-cream-50 transition-all duration-300"
+      className="sticky top-0 z-30 border-b border-border bg-cream-50 transition-all duration-300"
       style={{ marginLeft }}
     >
       <div className="px-6 py-4">
