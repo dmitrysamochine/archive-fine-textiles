@@ -4,22 +4,40 @@ import { useState } from "react"
 import { HeroGrid } from "@/components/hero-grid"
 import { FabricGrid } from "@/components/fabric-grid"
 import { FilterPanel } from "@/components/filter-panel"
+import { FilterSubPanel } from "@/components/filter-sub-panel"
+import { ActiveFiltersBar } from "@/components/active-filters-bar"
 import { SiteHeader } from "@/components/site-header"
 
 export default function Page() {
   const [filterOpen, setFilterOpen] = useState(false)
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+
+  const handleCategoryClick = (category: string) => {
+    setActiveCategory(activeCategory === category ? null : category)
+  }
+
+  const handleFilterToggle = () => {
+    setFilterOpen(!filterOpen)
+    if (filterOpen) {
+      setActiveCategory(null) // Close sub-panel when closing main panel
+    }
+  }
 
   return (
     <>
-      <SiteHeader filterOpen={filterOpen} onFilterToggle={() => setFilterOpen(!filterOpen)} />
+      <SiteHeader filterOpen={filterOpen} onFilterToggle={handleFilterToggle} />
 
       <div className="min-h-screen">
-        <FilterPanel isOpen={filterOpen} onClose={() => setFilterOpen(false)} />
+        <ActiveFiltersBar />
+
+        <FilterPanel isOpen={filterOpen} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />
+
+        <FilterSubPanel category={activeCategory} isOpen={!!activeCategory} onClose={() => setActiveCategory(null)} />
 
         <div
           className="transition-all duration-300"
           style={{
-            marginLeft: filterOpen ? "320px" : "0",
+            marginLeft: filterOpen ? (activeCategory ? "400px" : "80px") : "0",
           }}
         >
           <HeroGrid />
