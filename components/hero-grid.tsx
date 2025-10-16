@@ -97,7 +97,7 @@ export function HeroGrid() {
       {/* Centered Logo with background rectangle */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
-          className="bg-cream-100"
+          className="bg-cream-100 rounded-sm"
           style={{
             paddingBlock: "calc(var(--spacing) * 8)",
             paddingInline: "calc(var(--spacing) * 14)",
