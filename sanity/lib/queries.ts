@@ -10,7 +10,7 @@ export const fabricItemsQuery = groq`
   ] | order(itemNumber asc) {
     _id,
     itemNumber,
-    "fabric": fabric->{name, slug},
+    "collection": fabric->{name, slug},
     "colorway": colorway->{name, slug},
     type,
     price,
@@ -33,8 +33,8 @@ export const fabricItemByNumberQuery = groq`
   *[_type == "fabricItem" && itemNumber == $itemNumber][0] {
     _id,
     itemNumber,
-    "fabric": fabric->{name, slug, description, featuredImage},
-    "colorway": colorway->{name, slug, description},
+    "collection": fabric->{_id, name, slug, description, featuredImage},
+    "colorway": colorway->{_id, name, slug, description},
     type,
     price,
     yardage,

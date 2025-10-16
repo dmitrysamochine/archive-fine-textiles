@@ -25,14 +25,13 @@ export function RelatedFabrics({ colorwayId, currentItemId }: RelatedFabricsProp
   const [colorwayName, setColorwayName] = useState("")
 
   useEffect(() => {
-    // Fetch items from same colorway
     client
       .fetch<{ items: FabricItem[]; colorway: { name: string } }>(
         `{
           "items": *[_type == "fabricItem" && colorway._ref == $colorwayId && _id != $currentItemId && defined(images[0])] [0...12] {
             _id,
             itemNumber,
-            collection->{name},
+            "collection": fabric->{name},
             colorway->{name},
             images
           },
@@ -76,8 +75,9 @@ export function RelatedFabrics({ colorwayId, currentItemId }: RelatedFabricsProp
                   />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-heading">{fabric.itemNumber}</p>
-                  {fabric.collection && <p className="text-xs text-muted-foreground">{fabric.collection.name}</p>}
+                  {fabric.collection && <h3 className="text-sm font-heading">{fabric.collection.name}</h3>}
+                  {fabric.colorway && <h4 className="text-xs font-medium">{fabric.colorway.name}</h4>}
+                  <p className="text-xs text-muted-foreground">{fabric.itemNumber}</p>
                 </div>
               </Link>
             </motion.div>

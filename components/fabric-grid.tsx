@@ -41,7 +41,7 @@ export function FabricGrid() {
     const query = `*[_type == "fabricItem" && defined(images[0])] {
       _id,
       itemNumber,
-      collection->{name, "slug": slug.current},
+      "collection": fabric->{name, "slug": slug.current},
       colorway->{name, "slug": slug.current},
       images,
       price,
@@ -64,26 +64,12 @@ export function FabricGrid() {
     const categoryFilter = searchParams.get("category")?.split(",")
     const searchQuery = searchParams.get("search")?.toLowerCase()
 
-    console.log("[v0] Collection filter:", collectionFilter)
-    console.log("[v0] Sample fabric collection:", filtered[0]?.collection)
-
     if (collectionFilter) {
-      filtered = filtered.filter((f) => {
-        const hasMatch = f.collection && collectionFilter.includes(f.collection.slug)
-        console.log("[v0] Fabric", f.itemNumber, "collection:", f.collection?.slug, "matches:", hasMatch)
-        return hasMatch
-      })
+      filtered = filtered.filter((f) => f.collection && collectionFilter.includes(f.collection.slug))
     }
 
-    console.log("[v0] Colorway filter:", colorwayFilter)
-    console.log("[v0] Sample fabric colorway:", filtered[0]?.colorway)
-
     if (colorwayFilter) {
-      filtered = filtered.filter((f) => {
-        const hasMatch = f.colorway && colorwayFilter.includes(f.colorway.slug)
-        console.log("[v0] Fabric", f.itemNumber, "colorway:", f.colorway?.slug, "matches:", hasMatch)
-        return hasMatch
-      })
+      filtered = filtered.filter((f) => f.colorway && colorwayFilter.includes(f.colorway.slug))
     }
 
     if (colorFilter) {
@@ -123,7 +109,7 @@ export function FabricGrid() {
     })
 
     setFabrics(filtered)
-    setHasMore(false) // All loaded client-side
+    setHasMore(false)
   }
 
   const displayedFabrics = fabrics.slice(0, page * 30)

@@ -1,6 +1,20 @@
 export interface FabricItem {
   _id: string
   itemNumber: string
+  collection?: {
+    _id?: string
+    name: string
+    slug: {
+      current: string
+    }
+    description?: string
+    featuredImage?: {
+      asset: {
+        _id: string
+        url: string
+      }
+    }
+  }
   fabric: {
     name: string
     slug: {
@@ -15,6 +29,7 @@ export interface FabricItem {
     }
   }
   colorway: {
+    _id?: string
     name: string
     slug: {
       current: string
@@ -49,6 +64,9 @@ export interface FabricItem {
     }
     alt?: string
   }>
+  composition?: string
+  origin?: string
+  description?: string
 }
 
 export interface FabricCollection {
