@@ -1,204 +1,277 @@
 "use client"
 
-import { X } from "lucide-react"
+import { X, Search } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { client } from "@/sanity/lib/client"
 
 interface FilterPanelProps {
   isOpen: boolean
   onClose: () => void
 }
 
+interface FilterOptions {
+  collections: Array<{ name: string; slug: string; count: number }>
+  colorways: Array<{ name: string; slug: string; count: number }>
+  colors: Array<{ name: string; slug: string; hexValue?: string; count: number }>
+  materials: Array<{ name: string; count: number }>
+  categories: Array<{ name: string; slug: string; count: number }>
+}
+
 export function FilterPanel({ isOpen, onClose }: FilterPanelProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-
-  // Initialize filters from URL
-  const [filters, setFilters] = useState({
-    collections: [] as string[],
-    colorways: [] as string[],
-    colors: [] as string[],
-    materials: [] as string[],
-    categories: [] as string[],
-    sort: searchParams.get("sort") || "",
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    collections: [],
+    colorways: [],
+    colors: [],
+    materials: [],
+    categories: [],
   })
 
-  // Mock data - will be replaced with actual Sanity data
-  const filterOptions = {
-    collections: ["Heritage Wool", "Linen Blend", "Cotton Classics"],
-    colorways: ["Ivory", "Natural", "White"],
-    colors: ["White", "Natural", "Ivory", "Black"],
-    materials: ["Cotton", "Linen", "Wool", "Silk"],
-    categories: ["Upholstery", "Drapery", "Bedding"],
+  const [selectedFilters, setSelectedFilters] = useState({
+    collections: searchParams.get("collection")?.split(",") || [],
+    colorways: searchParams.get("colorway")?.split(",") || [],
+    colors: searchParams.get("color")?.split(",") || [],
+    materials: searchParams.get("material")?.split(",") || [],
+    categories: searchParams.get("category")?.split(",") || [],
+  })
+
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      const [collections, colorways, colors, categories, materials] = await Promise.all([
+        client.fetch(`*[_type == "fabricCollection"] | order(name asc) {
+          name,
+          "slug": slug.current,
+          "count": count(*[_type == "fabricItem" && references(^._id)])
+        }`),
+        client.fetch(`*[_type == "colorway"] | order(name asc) {
+          name,
+          "slug": slug.current,
+          "count": count(*[_type == "fabricItem" && references(^._id)])
+        }`),
+        client.fetch(`*[_type == "color"] | order(name asc) {
+          name,
+          "slug": slug.current,
+          hexValue,
+          "count": count(*[_type == "fabricItem" && $slug in color[]->slug.current])
+        }`),
+        client.fetch(`*[_type == "descriptionCategory"] | order(name asc) {
+          name,
+          "slug": slug.current,
+          "count": count(*[_type == "fabricItem" && references(^._id)])
+        }`),
+        client.fetch(`array::unique(*[_type == "fabricItem" && defined(content)].content)`),
+      ])
+
+      setFilterOptions({
+        collections,
+        colorways,
+        colors,
+        categories,
+        materials: materials.map((m: string) => ({ name: m, count: 0 })),
+      })
+    }
+
+    fetchFilterOptions()
+  }, [])
+
+  const updateFilters = (category: keyof typeof selectedFilters, value: string) => {
+    const current = selectedFilters[category]
+    const updated = current.includes(value) ? current.filter((v) => v !== value) : [...current, value]
+
+    const newFilters = { ...selectedFilters, [category]: updated }
+    setSelectedFilters(newFilters)
+
+    // Update URL params immediately
+    const params = new URLSearchParams(searchParams.toString())
+    if (updated.length > 0) {
+      params.set(category === "categories" ? "category" : category.slice(0, -1), updated.join(","))
+    } else {
+      params.delete(category === "categories" ? "category" : category.slice(0, -1))
+    }
+
+    router.push(`/?${params.toString()}`, { scroll: false })
   }
 
-  const handleApply = () => {
-    const params = new URLSearchParams()
-
-    if (filters.collections.length) params.set("collection", filters.collections.join(","))
-    if (filters.colorways.length) params.set("colorway", filters.colorways.join(","))
-    if (filters.colors.length) params.set("color", filters.colors.join(","))
-    if (filters.materials.length) params.set("material", filters.materials.join(","))
-    if (filters.categories.length) params.set("category", filters.categories.join(","))
-    if (filters.sort) params.set("sort", filters.sort)
-
-    router.push(`/?${params.toString()}`)
-    onClose()
-  }
-
-  const handleClear = () => {
-    setFilters({
+  const clearAll = () => {
+    setSelectedFilters({
       collections: [],
       colorways: [],
       colors: [],
       materials: [],
       categories: [],
-      sort: "",
     })
-    router.push("/")
+    router.push("/", { scroll: false })
   }
 
+  const activeFilterCount =
+    selectedFilters.collections.length +
+    selectedFilters.colorways.length +
+    selectedFilters.colors.length +
+    selectedFilters.materials.length +
+    selectedFilters.categories.length
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
+    <>
+      <AnimatePresence>
+        {isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/20 z-40 top-[73px]"
+            className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           />
+        )}
+      </AnimatePresence>
 
-          {/* Filter Panel */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-[73px] left-0 right-0 z-50 bg-background border-b border-border shadow-lg"
-          >
-            <div className="container mx-auto px-6 py-6">
-              <div className="flex items-start justify-between mb-6">
-                <h3 className="text-lg font-heading">Filter Fabrics</h3>
-                <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
-                {/* Collection Filter */}
-                <FilterSection
-                  title="Collection"
-                  options={filterOptions.collections}
-                  selected={filters.collections}
-                  onChange={(collections) => setFilters({ ...filters, collections })}
-                />
-
-                {/* Colorway Filter */}
-                <FilterSection
-                  title="Colorway"
-                  options={filterOptions.colorways}
-                  selected={filters.colorways}
-                  onChange={(colorways) => setFilters({ ...filters, colorways })}
-                />
-
-                {/* Color Filter */}
-                <FilterSection
-                  title="Color"
-                  options={filterOptions.colors}
-                  selected={filters.colors}
-                  onChange={(colors) => setFilters({ ...filters, colors })}
-                />
-
-                {/* Material Filter */}
-                <FilterSection
-                  title="Material"
-                  options={filterOptions.materials}
-                  selected={filters.materials}
-                  onChange={(materials) => setFilters({ ...filters, materials })}
-                />
-
-                {/* Category Filter */}
-                <FilterSection
-                  title="Category"
-                  options={filterOptions.categories}
-                  selected={filters.categories}
-                  onChange={(categories) => setFilters({ ...filters, categories })}
-                />
-              </div>
-
-              {/* Sort */}
-              <div className="mb-6">
-                <label className="text-sm font-medium mb-2 block">Sort By</label>
-                <select
-                  value={filters.sort}
-                  onChange={(e) => setFilters({ ...filters, sort: e.target.value })}
-                  className="px-3 py-2 bg-muted/50 border border-border rounded-md text-sm"
-                >
-                  <option value="">Default</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="price-low">Price: Low to High</option>
-                </select>
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={handleApply}
-                  className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
-                >
-                  Apply Filters
-                </button>
-                <button onClick={handleClear} className="px-6 py-2 text-sm hover:text-accent transition-colors">
-                  Clear All
-                </button>
-              </div>
+      <motion.aside
+        initial={false}
+        animate={{ x: isOpen ? 0 : "-100%" }}
+        transition={{ type: "spring", damping: 30, stiffness: 300 }}
+        className="fixed left-0 top-[73px] bottom-0 w-full lg:w-80 bg-background border-r border-border z-50 overflow-y-auto"
+      >
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-lg font-heading">Filters</h2>
+              {activeFilterCount > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">{activeFilterCount} active</p>
+              )}
             </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+            <div className="flex items-center gap-2">
+              {activeFilterCount > 0 && (
+                <button
+                  onClick={clearAll}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Clear all
+                </button>
+              )}
+              <button onClick={onClose} className="lg:hidden text-muted-foreground hover:text-foreground">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          <Accordion type="multiple" className="space-y-4">
+            {/* Collection Filter */}
+            <FilterAccordion
+              title="Collection"
+              options={filterOptions.collections}
+              selected={selectedFilters.collections}
+              onToggle={(value) => updateFilters("collections", value)}
+              searchable
+            />
+
+            {/* Colorway Filter */}
+            <FilterAccordion
+              title="Colorway"
+              options={filterOptions.colorways}
+              selected={selectedFilters.colorways}
+              onToggle={(value) => updateFilters("colorways", value)}
+              searchable
+            />
+
+            {/* Color Filter */}
+            <FilterAccordion
+              title="Color"
+              options={filterOptions.colors}
+              selected={selectedFilters.colors}
+              onToggle={(value) => updateFilters("colors", value)}
+              showColorDot
+            />
+
+            {/* Material Content Filter */}
+            <FilterAccordion
+              title="Material Content"
+              options={filterOptions.materials}
+              selected={selectedFilters.materials}
+              onToggle={(value) => updateFilters("materials", value)}
+            />
+
+            {/* Description Categories Filter */}
+            <FilterAccordion
+              title="Description Categories"
+              options={filterOptions.categories}
+              selected={selectedFilters.categories}
+              onToggle={(value) => updateFilters("categories", value)}
+            />
+          </Accordion>
+        </div>
+      </motion.aside>
+    </>
   )
 }
 
-function FilterSection({
+function FilterAccordion({
   title,
   options,
   selected,
-  onChange,
+  onToggle,
+  searchable = false,
+  showColorDot = false,
 }: {
   title: string
-  options: string[]
+  options: Array<{ name: string; slug?: string; hexValue?: string; count?: number }>
   selected: string[]
-  onChange: (selected: string[]) => void
+  onToggle: (value: string) => void
+  searchable?: boolean
+  showColorDot?: boolean
 }) {
-  const toggleOption = (option: string) => {
-    if (selected.includes(option)) {
-      onChange(selected.filter((s) => s !== option))
-    } else {
-      onChange([...selected, option])
-    }
-  }
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const filteredOptions = searchable
+    ? options.filter((opt) => opt.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    : options
 
   return (
-    <div>
-      <label className="text-sm font-medium mb-2 block">{title}</label>
-      <div className="space-y-2">
-        {options.map((option) => (
-          <label key={option} className="flex items-center gap-2 cursor-pointer">
+    <AccordionItem value={title} className="border border-border rounded-sm">
+      <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/50 transition-colors">
+        <span className="text-sm font-medium">{title}</span>
+      </AccordionTrigger>
+      <AccordionContent className="px-4 pb-4">
+        {searchable && (
+          <div className="relative mb-3">
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
             <input
-              type="checkbox"
-              checked={selected.includes(option)}
-              onChange={() => toggleOption(option)}
-              className="rounded border-border"
+              type="text"
+              placeholder={`Search ${title.toLowerCase()}...`}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-7 pr-2 py-1.5 text-xs bg-muted/50 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-ring"
             />
-            <span className="text-sm">{option}</span>
-          </label>
-        ))}
-      </div>
-    </div>
+          </div>
+        )}
+        <div className="space-y-2 max-h-64 overflow-y-auto">
+          {filteredOptions.map((option) => {
+            const value = option.slug || option.name
+            const isSelected = selected.includes(value)
+
+            return (
+              <label key={value} className="flex items-center gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={() => onToggle(value)}
+                  className="rounded border-border text-primary focus:ring-primary"
+                />
+                {showColorDot && option.hexValue && (
+                  <span
+                    className="w-3 h-3 rounded-full border border-border flex-shrink-0"
+                    style={{ backgroundColor: option.hexValue }}
+                  />
+                )}
+                <span className="text-sm group-hover:text-foreground transition-colors flex-1">{option.name}</span>
+                {option.count !== undefined && <span className="text-xs text-muted-foreground">({option.count})</span>}
+              </label>
+            )
+          })}
+        </div>
+      </AccordionContent>
+    </AccordionItem>
   )
 }

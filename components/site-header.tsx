@@ -2,13 +2,48 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useState } from "react"
-import { Search, SlidersHorizontal } from "lucide-react"
-import { FilterPanel } from "./filter-panel"
+import { useState, useEffect } from "react"
+import { Search, SlidersHorizontal, X } from "lucide-react"
+import { useSearchParams, useRouter } from "next/navigation"
 
-export function SiteHeader() {
-  const [filterOpen, setFilterOpen] = useState(false)
+interface SiteHeaderProps {
+  filterOpen: boolean
+  onFilterToggle: () => void
+}
+
+export function SiteHeader({ filterOpen, onFilterToggle }: SiteHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("")
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  const activeFilterCount = [
+    searchParams.get("collection"),
+    searchParams.get("colorway"),
+    searchParams.get("color"),
+    searchParams.get("material"),
+    searchParams.get("category"),
+  ].filter(Boolean).length
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchQuery) {
+        const params = new URLSearchParams(searchParams.toString())
+        params.set("search", searchQuery)
+        router.push(`/?${params.toString()}`, { scroll: false })
+      } else {
+        const params = new URLSearchParams(searchParams.toString())
+        params.delete("search")
+        router.push(`/?${params.toString()}`, { scroll: false })
+      }
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
+  useEffect(() => {
+    const search = searchParams.get("search")
+    if (search) setSearchQuery(search)
+  }, [])
 
   return (
     <>
@@ -29,19 +64,32 @@ export function SiteHeader() {
                   placeholder="Search fabrics..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-muted/50 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full pl-10 pr-10 py-2 bg-muted/50 border border-border rounded-sm text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
               </div>
             </div>
 
             {/* Filter + Contact */}
             <div className="flex items-center gap-6">
               <button
-                onClick={() => setFilterOpen(!filterOpen)}
+                onClick={onFilterToggle}
                 className="flex items-center gap-2 text-sm hover:text-accent transition-colors"
               >
                 <SlidersHorizontal className="h-4 w-4" />
-                Filter
+                <span>Filter</span>
+                {activeFilterCount > 0 && (
+                  <span className="flex items-center justify-center w-5 h-5 text-xs bg-primary text-primary-foreground rounded-full">
+                    {activeFilterCount}
+                  </span>
+                )}
               </button>
               <Link href="/contact" className="text-sm hover:text-accent transition-colors">
                 Contact Us
@@ -50,9 +98,6 @@ export function SiteHeader() {
           </nav>
         </div>
       </header>
-
-      {/* Filter Dropdown Panel */}
-      <FilterPanel isOpen={filterOpen} onClose={() => setFilterOpen(false)} />
 
       {/* Spacer for fixed header */}
       <div className="h-[73px]" />
