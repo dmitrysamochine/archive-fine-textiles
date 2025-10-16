@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { HeroGrid } from "@/components/hero-grid"
 import { FabricGrid } from "@/components/fabric-grid"
 import { FilterPanel } from "@/components/filter-panel"
@@ -11,6 +11,7 @@ import { SiteHeader } from "@/components/site-header"
 export default function Page() {
   const [filterOpen, setFilterOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const mainPanelRef = useRef<HTMLElement>(null)
 
   const handleCategoryClick = (category: string) => {
     if (activeCategory === category) {
@@ -34,9 +35,19 @@ export default function Page() {
       <div className="min-h-screen">
         <ActiveFiltersBar filterOpen={filterOpen} activeCategory={activeCategory} />
 
-        <FilterPanel isOpen={filterOpen} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />
+        <FilterPanel
+          ref={mainPanelRef}
+          isOpen={filterOpen}
+          activeCategory={activeCategory}
+          onCategoryClick={handleCategoryClick}
+        />
 
-        <FilterSubPanel category={activeCategory} isOpen={!!activeCategory} onClose={() => setActiveCategory(null)} />
+        <FilterSubPanel
+          category={activeCategory}
+          isOpen={!!activeCategory}
+          onClose={() => setActiveCategory(null)}
+          mainPanelRef={mainPanelRef}
+        />
 
         <div
           className="transition-all duration-300"

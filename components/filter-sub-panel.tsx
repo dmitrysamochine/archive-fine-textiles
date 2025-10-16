@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { X, Search } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -10,6 +12,7 @@ interface FilterSubPanelProps {
   category: string | null
   isOpen: boolean
   onClose: () => void
+  mainPanelRef?: React.RefObject<HTMLElement> // Added mainPanelRef prop
 }
 
 interface FilterOption {
@@ -19,7 +22,7 @@ interface FilterOption {
   count: number
 }
 
-export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProps) {
+export function FilterSubPanel({ category, isOpen, onClose, mainPanelRef }: FilterSubPanelProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const panelRef = useRef<HTMLDivElement>(null)
@@ -47,7 +50,10 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+      const isOutsideSubPanel = panelRef.current && !panelRef.current.contains(event.target as Node)
+      const isOutsideMainPanel = mainPanelRef?.current && !mainPanelRef.current.contains(event.target as Node)
+
+      if (isOutsideSubPanel && isOutsideMainPanel) {
         onClose()
       }
     }
@@ -59,7 +65,7 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [isOpen, onClose])
+  }, [isOpen, onClose, mainPanelRef])
 
   const fetchOptions = async () => {
     if (!category) return
