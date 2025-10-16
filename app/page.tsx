@@ -54,7 +54,7 @@ export default function Page() {
             marginLeft: filterOpen ? (activeCategory ? "400px" : "80px") : "0",
           }}
         >
-          {hasActiveFilters && <div className="h-40" />}
+          {hasActiveFilters && <div className="h-12" />}
 
           <AnimatePresence mode="wait">
             {!hasActiveFilters && (
