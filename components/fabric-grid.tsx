@@ -188,9 +188,9 @@ export function FabricGrid() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-heading">{fabric.itemNumber}</p>
-                  {fabric.collection && <p className="text-xs text-muted-foreground">{fabric.collection.name}</p>}
-                  {fabric.colorway && <p className="text-xs text-muted-foreground">{fabric.colorway.name}</p>}
+                  {fabric.collection && <h3 className="text-sm font-heading">{fabric.collection.name}</h3>}
+                  {fabric.colorway && <h4 className="text-xs font-medium">{fabric.colorway.name}</h4>}
+                  <p className="text-xs text-muted-foreground">{fabric.itemNumber}</p>
                 </div>
               </Link>
             </motion.div>
