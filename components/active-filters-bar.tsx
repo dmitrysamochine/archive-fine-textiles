@@ -12,14 +12,18 @@ interface ActiveFilter {
   label: string
 }
 
-export function ActiveFiltersBar() {
+interface ActiveFiltersBarProps {
+  filterOpen: boolean
+  activeCategory: string | null
+}
+
+export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBarProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([])
   const [filterLabels, setFilterLabels] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    // Fetch labels for slugs
     const fetchLabels = async () => {
       const [collections, colorways, colors, categories] = await Promise.all([
         client.fetch(`*[_type == "fabricCollection"] { "slug": slug.current, name }`),
@@ -121,13 +125,16 @@ export function ActiveFiltersBar() {
 
   if (activeFilters.length === 0) return null
 
+  const marginLeft = filterOpen ? (activeCategory ? "400px" : "80px") : "0"
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="border-b border-border bg-cream-50"
+      className="sticky top-[73px] z-30 border-b border-border bg-cream-50 transition-all duration-300"
+      style={{ marginLeft }}
     >
-      <div className="container mx-auto px-6 py-4">
+      <div className="px-6 py-4">
         <div className="flex items-center gap-3 flex-wrap">
           <span className="text-sm text-muted-foreground">Active Filters:</span>
           <AnimatePresence mode="popLayout">

@@ -13,13 +13,17 @@ export default function Page() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
   const handleCategoryClick = (category: string) => {
-    setActiveCategory(activeCategory === category ? null : category)
+    if (activeCategory === category) {
+      setActiveCategory(null)
+    } else {
+      setActiveCategory(category)
+    }
   }
 
   const handleFilterToggle = () => {
     setFilterOpen(!filterOpen)
     if (filterOpen) {
-      setActiveCategory(null) // Close sub-panel when closing main panel
+      setActiveCategory(null)
     }
   }
 
@@ -28,7 +32,7 @@ export default function Page() {
       <SiteHeader filterOpen={filterOpen} onFilterToggle={handleFilterToggle} />
 
       <div className="min-h-screen">
-        <ActiveFiltersBar />
+        <ActiveFiltersBar filterOpen={filterOpen} activeCategory={activeCategory} />
 
         <FilterPanel isOpen={filterOpen} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />
 
