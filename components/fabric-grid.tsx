@@ -17,6 +17,8 @@ interface FabricItem {
   images?: Array<{ asset: { _ref: string } }>
   price?: number
   content?: string
+  categories?: Array<{ name: string; slug: string }>
+  colors?: Array<{ name: string; slug: string }>
 }
 
 export function FabricGrid() {
@@ -62,12 +64,26 @@ export function FabricGrid() {
     const categoryFilter = searchParams.get("category")?.split(",")
     const searchQuery = searchParams.get("search")?.toLowerCase()
 
+    console.log("[v0] Collection filter:", collectionFilter)
+    console.log("[v0] Sample fabric collection:", filtered[0]?.collection)
+
     if (collectionFilter) {
-      filtered = filtered.filter((f) => f.collection && collectionFilter.includes(f.collection.slug))
+      filtered = filtered.filter((f) => {
+        const hasMatch = f.collection && collectionFilter.includes(f.collection.slug)
+        console.log("[v0] Fabric", f.itemNumber, "collection:", f.collection?.slug, "matches:", hasMatch)
+        return hasMatch
+      })
     }
 
+    console.log("[v0] Colorway filter:", colorwayFilter)
+    console.log("[v0] Sample fabric colorway:", filtered[0]?.colorway)
+
     if (colorwayFilter) {
-      filtered = filtered.filter((f) => f.colorway && colorwayFilter.includes(f.colorway.slug))
+      filtered = filtered.filter((f) => {
+        const hasMatch = f.colorway && colorwayFilter.includes(f.colorway.slug)
+        console.log("[v0] Fabric", f.itemNumber, "colorway:", f.colorway?.slug, "matches:", hasMatch)
+        return hasMatch
+      })
     }
 
     if (colorFilter) {

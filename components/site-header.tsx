@@ -98,9 +98,6 @@ export function SiteHeader({ filterOpen, onFilterToggle }: SiteHeaderProps) {
           </nav>
         </div>
       </header>
-
-      {/* Spacer for fixed header */}
-      <div className="h-[73px]" />
     </>
   )
 }
