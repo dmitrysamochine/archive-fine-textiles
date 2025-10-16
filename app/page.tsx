@@ -52,9 +52,10 @@ export default function Page() {
           className="transition-all duration-300"
           style={{
             marginLeft: filterOpen ? (activeCategory ? "400px" : "80px") : "0",
-            paddingTop: hasActiveFilters ? "73px" : "0",
           }}
         >
+          {hasActiveFilters && <div className="h-[73px]" />}
+
           <AnimatePresence mode="wait">
             {!hasActiveFilters && (
               <motion.div
