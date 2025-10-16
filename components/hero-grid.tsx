@@ -97,10 +97,11 @@ export function HeroGrid() {
       {/* Centered Logo with background rectangle */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
-          className="bg-cream-100 rounded-sm"
+          className="bg-cream-100"
           style={{
             paddingBlock: "calc(var(--spacing) * 8)",
             paddingInline: "calc(var(--spacing) * 14)",
+            borderRadius: "4px",
           }}
         >
           <Image src="/logo.svg" alt="Archive Fine Textiles" width={800} height={200} className="w-[20vw] h-auto" />
