@@ -77,11 +77,10 @@ export function FabricItemDetail({ item }: FabricItemDetailProps) {
         {/* Info Overlay - Right Side */}
         <div className="absolute right-0 top-0 bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto">
           <div className="space-y-6">
-            {/* Header */}
             <div>
-              <h1 className="text-3xl font-heading mb-2">{item.itemNumber}</h1>
-              {item.collection && <p className="text-lg text-muted-foreground">{item.collection.name}</p>}
-              {item.colorway && <p className="text-lg text-muted-foreground">{item.colorway.name}</p>}
+              {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
+              {item.colorway && <h2 className="text-xl font-heading mb-2">{item.colorway.name}</h2>}
+              <p className="text-lg text-muted-foreground">Item #{item.itemNumber}</p>
             </div>
 
             {/* Price */}
