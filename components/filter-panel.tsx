@@ -56,7 +56,7 @@ export function FilterPanel({ isOpen, onClose }: FilterPanelProps) {
           name,
           "slug": slug.current,
           hexValue,
-          "count": count(*[_type == "fabricItem" && $slug in color[]->slug.current])
+          "count": count(*[_type == "fabricItem" && references(^._id)])
         }`),
         client.fetch(`*[_type == "descriptionCategory"] | order(name asc) {
           name,
