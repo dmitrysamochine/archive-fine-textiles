@@ -52,6 +52,7 @@ export default function Page() {
           className="transition-all duration-300"
           style={{
             marginLeft: filterOpen ? (activeCategory ? "400px" : "80px") : "0",
+            paddingTop: hasActiveFilters ? "73px" : "0",
           }}
         >
           <AnimatePresence mode="wait">
