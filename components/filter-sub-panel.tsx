@@ -58,14 +58,14 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
           data = await client.fetch(`*[_type == "fabricCollection"] | order(name asc) {
             name,
             "slug": slug.current,
-            "count": count(*[_type == "fabricItem" && references(^._id)])
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0])])
           }`)
           break
         case "colorway":
           data = await client.fetch(`*[_type == "colorway"] | order(name asc) {
             name,
             "slug": slug.current,
-            "count": count(*[_type == "fabricItem" && references(^._id)])
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0])])
           }`)
           break
         case "color":
@@ -73,18 +73,20 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
             name,
             "slug": slug.current,
             hexValue,
-            "count": count(*[_type == "fabricItem" && references(^._id)])
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0])])
           }`)
           break
         case "material":
-          const materials = await client.fetch(`array::unique(*[_type == "fabricItem" && defined(content)].content)`)
+          const materials = await client.fetch(
+            `array::unique(*[_type == "fabricItem" && defined(images[0]) && defined(content)].content)`,
+          )
           data = materials.map((m: string) => ({ name: m, count: 0 }))
           break
         case "category":
           data = await client.fetch(`*[_type == "category"] | order(name asc) {
             name,
             "slug": slug.current,
-            "count": count(*[_type == "fabricItem" && references(^._id)])
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0])])
           }`)
           break
       }
