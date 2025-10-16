@@ -135,7 +135,7 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
 
   const searchable = category === "collection" || category === "colorway"
 
-  if (!isOpen) return null
+  if (!isOpen || !category) return null
 
   return (
     <>
@@ -153,11 +153,10 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
 
       <motion.div
         ref={panelRef}
-        initial={{ x: "-100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: "-100%" }}
+        initial={{ width: 0, opacity: 0 }}
+        animate={{ width: "20rem", opacity: 1 }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
-        className="fixed left-0 lg:left-20 top-[73px] bottom-0 w-full lg:w-80 bg-background border-r border-border z-50 flex flex-col"
+        className="fixed left-0 lg:left-20 top-[73px] bottom-0 bg-background border-r border-border z-30 flex flex-col overflow-hidden"
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -165,11 +164,11 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.2 }}
             className="flex flex-col h-full"
           >
             <div className="flex items-center justify-between p-4 border-b border-border">
-              <h3 className="text-sm font-heading">{category ? categoryLabels[category] : ""}</h3>
+              <h3 className="text-sm font-heading">{categoryLabels[category]}</h3>
               <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
                 <X className="h-5 w-5" />
               </button>
@@ -181,7 +180,7 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <input
                     type="text"
-                    placeholder={`Search ${category ? categoryLabels[category].toLowerCase() : ""}...`}
+                    placeholder={`Search ${categoryLabels[category].toLowerCase()}...`}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-9 pr-3 py-2 text-sm bg-muted/50 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-ring"
