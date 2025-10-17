@@ -78,20 +78,6 @@ export function HeroGrid() {
                   />
                 </motion.div>
 
-                {hoveredIndex === index && (
-                  <motion.div
-                    className="absolute inset-0 pointer-events-none"
-                    initial={{ x: "-100%" }}
-                    animate={{ x: "100%" }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                    style={{
-                      background:
-                        "linear-gradient(90deg, transparent 0%, transparent 46%, rgba(255,255,255,0.5) 50%, transparent 54%, transparent 100%)",
-                      width: "100%",
-                    }}
-                  />
-                )}
-
                 {/* Hover overlay with info */}
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -114,8 +100,7 @@ export function HeroGrid() {
           animate={{ x: isLoaded ? "100%" : "-100%" }}
           transition={{ duration: 1.5, ease: "easeInOut", delay: 0.3 }}
           style={{
-            background:
-              "linear-gradient(90deg, transparent 0%, transparent 46%, rgba(255,255,255,0.4) 50%, transparent 54%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)",
             width: "100%",
           }}
         />
