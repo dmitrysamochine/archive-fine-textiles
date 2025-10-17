@@ -62,13 +62,7 @@ export function HeroGrid() {
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
-                <motion.div
-                  className="absolute inset-0"
-                  animate={{
-                    scale: hoveredIndex === index ? 1.1 : 1,
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
+                <div className="absolute inset-0">
                   <Image
                     src={imageUrl || "/placeholder.svg"}
                     alt={fabric.itemNumber}
@@ -76,19 +70,14 @@ export function HeroGrid() {
                     className="object-cover"
                     sizes="(max-width: 768px) 25vw, 4.17vw"
                   />
-                </motion.div>
+                </div>
 
-                {/* Hover overlay with info */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white p-2 text-center"
-                >
-                  <p className="text-xs font-heading mb-1">{fabric.itemNumber}</p>
-                  {fabric.collection && <p className="text-[10px]">{fabric.collection.name}</p>}
-                  {fabric.colorway && <p className="text-[10px]">{fabric.colorway.name}</p>}
-                </motion.div>
+                  className="absolute inset-0 bg-white/30 pointer-events-none"
+                />
               </Link>
             </motion.div>
           )
