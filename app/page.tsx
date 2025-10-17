@@ -129,7 +129,7 @@ export default function Page() {
           <div
             className="transition-all duration-300"
             style={{
-              marginLeft: gridMarginLeft,
+              paddingLeft: gridMarginLeft,
             }}
           >
             <FabricGrid hasScrolled={hasPassedT1} />
