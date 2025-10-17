@@ -133,7 +133,7 @@ export function FabricGrid({ hasScrolled }: FabricGridProps) {
   }, [displayedFabrics.length, fabrics.length])
 
   return (
-    <div className="w-full max-w-7xl px-6 py-12">
+    <div className="container mx-auto px-6 py-12">
       {hasScrolled && (
         <div className="flex items-center justify-between mb-8">
           <p className="text-sm text-muted-foreground">

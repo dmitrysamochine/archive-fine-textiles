@@ -126,13 +126,7 @@ export default function Page() {
             )}
           </AnimatePresence>
 
-          <div
-            className="transition-all duration-300"
-            style={{
-              width: activeCategory ? `calc(100% - ${subPanelWidth})` : "100%",
-              marginLeft: subPanelWidth,
-            }}
-          >
+          <div className="transition-all duration-300">
             <FabricGrid hasScrolled={hasPassedT1} />
           </div>
         </div>
