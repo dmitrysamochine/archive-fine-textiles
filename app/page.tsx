@@ -78,6 +78,8 @@ export default function Page() {
     }
   }
 
+  const contentMargin = activeCategory ? "400px" : "80px"
+
   return (
     <>
       <SiteHeader
@@ -105,7 +107,7 @@ export default function Page() {
         <div
           className="transition-all duration-300"
           style={{
-            marginLeft: filterOpen ? (activeCategory ? "400px" : "80px") : "0",
+            marginLeft: contentMargin,
             paddingTop: hasPassedT1 ? `${NAV_HEIGHT}px` : "0",
           }}
         >

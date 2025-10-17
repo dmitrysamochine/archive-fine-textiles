@@ -125,7 +125,7 @@ export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBa
 
   if (activeFilters.length === 0) return null
 
-  const marginLeft = filterOpen ? (activeCategory ? "400px" : "80px") : "0"
+  const marginLeft = activeCategory ? "400px" : "80px"
 
   return (
     <motion.div
