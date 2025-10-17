@@ -26,7 +26,7 @@ export default function Page() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrolled = window.scrollY > 100
+      const scrolled = window.scrollY > window.innerHeight
       if (scrolled) {
         setHasScrolled(true)
       }
@@ -88,7 +88,7 @@ export default function Page() {
             )}
           </AnimatePresence>
 
-          <FabricGrid />
+          <FabricGrid hasScrolled={hasScrolled} />
         </div>
       </div>
     </>

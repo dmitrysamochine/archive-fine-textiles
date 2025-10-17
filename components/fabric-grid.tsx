@@ -21,7 +21,11 @@ interface FabricItem {
   colors?: Array<{ name: string; slug: string }>
 }
 
-export function FabricGrid() {
+interface FabricGridProps {
+  hasScrolled: boolean
+}
+
+export function FabricGrid({ hasScrolled }: FabricGridProps) {
   const [fabrics, setFabrics] = useState<FabricItem[]>([])
   const [allFabrics, setAllFabrics] = useState<FabricItem[]>([])
   const [page, setPage] = useState(1)
@@ -130,24 +134,26 @@ export function FabricGrid() {
 
   return (
     <div className="container mx-auto px-6 py-12">
-      <div className="flex items-center justify-between mb-8">
-        <p className="text-sm text-muted-foreground">
-          Showing {displayedFabrics.length} of {fabrics.length} items
-        </p>
-        <div className="flex items-center gap-2">
-          <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="text-sm bg-transparent border-none focus:outline-none cursor-pointer"
-          >
-            <option value="item-asc">Item Number: A-Z</option>
-            <option value="item-desc">Item Number: Z-A</option>
-            <option value="price-high">Price: High to Low</option>
-            <option value="price-low">Price: Low to High</option>
-          </select>
+      {hasScrolled && (
+        <div className="flex items-center justify-between mb-8">
+          <p className="text-sm text-muted-foreground">
+            Showing {displayedFabrics.length} of {fabrics.length} items
+          </p>
+          <div className="flex items-center gap-2">
+            <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="text-sm bg-transparent border-none focus:outline-none cursor-pointer"
+            >
+              <option value="item-asc">Item Number: A-Z</option>
+              <option value="item-desc">Item Number: Z-A</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="price-low">Price: Low to High</option>
+            </select>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

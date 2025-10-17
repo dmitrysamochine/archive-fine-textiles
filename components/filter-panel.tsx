@@ -8,7 +8,7 @@ interface FilterPanelProps {
   isOpen: boolean
   activeCategory: string | null
   onCategoryClick: (category: string) => void
-  hasScrolled: boolean // Added hasScrolled prop
+  hasScrolled: boolean
 }
 
 const categories = [
@@ -24,10 +24,10 @@ export const FilterPanel = forwardRef<HTMLElement, FilterPanelProps>(
     return (
       <motion.aside
         ref={ref}
-        initial={{ x: "-100%", opacity: 0 }} // Added initial animation state
+        initial={{ x: "-100%", opacity: 0 }}
         animate={{
-          x: hasScrolled ? (isOpen ? 0 : "-100%") : "-100%", // Animate based on hasScrolled
-          opacity: hasScrolled ? 1 : 0, // Animate opacity based on hasScrolled
+          x: hasScrolled ? 0 : "-100%",
+          opacity: hasScrolled ? 1 : 0,
         }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
         className="fixed left-0 top-[73px] bottom-0 w-20 bg-cream-50 border-r border-border z-40 hidden lg:flex flex-col"
