@@ -14,7 +14,11 @@ export default function Page() {
   const [filterOpen, setFilterOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [showHero, setShowHero] = useState(true)
-  const [hasScrolled, setHasScrolled] = useState(false)
+  const [hasPassedT1, setHasPassedT1] = useState(false) // 100px threshold
+  const [hasPassedT2, setHasPassedT2] = useState(false) // viewport height threshold
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("down")
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [heroOpacity, setHeroOpacity] = useState(1)
   const searchParams = useSearchParams()
 
   const hasActiveFilters =
@@ -26,20 +30,35 @@ export default function Page() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrolled = window.scrollY > window.innerHeight
-      if (scrolled) {
-        setHasScrolled(true)
+      const currentScrollY = window.scrollY
+      const viewportHeight = window.innerHeight
+
+      const fadeProgress = Math.min(currentScrollY / viewportHeight, 1)
+      setHeroOpacity(1 - fadeProgress)
+
+      if (currentScrollY > 100 && !hasPassedT1) {
+        setHasPassedT1(true)
       }
 
-      // Once scrolled past hero, hide it permanently
-      if (scrolled && showHero) {
+      if (currentScrollY > viewportHeight && !hasPassedT2) {
+        setHasPassedT2(true)
         setShowHero(false)
       }
+
+      if (hasPassedT1 && !hasPassedT2) {
+        if (currentScrollY > lastScrollY) {
+          setScrollDirection("down")
+        } else if (currentScrollY < lastScrollY) {
+          setScrollDirection("up")
+        }
+      }
+
+      setLastScrollY(currentScrollY)
     }
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [showHero])
+  }, [hasPassedT1, hasPassedT2, lastScrollY])
 
   const handleCategoryClick = (category: string) => {
     if (activeCategory === category) {
@@ -58,7 +77,13 @@ export default function Page() {
 
   return (
     <>
-      <SiteHeader filterOpen={filterOpen} onFilterToggle={handleFilterToggle} hasScrolled={hasScrolled} />
+      <SiteHeader
+        filterOpen={filterOpen}
+        onFilterToggle={handleFilterToggle}
+        hasPassedT1={hasPassedT1}
+        hasPassedT2={hasPassedT2}
+        scrollDirection={scrollDirection}
+      />
 
       <div className="min-h-screen">
         <ActiveFiltersBar filterOpen={filterOpen} activeCategory={activeCategory} />
@@ -67,7 +92,9 @@ export default function Page() {
           isOpen={filterOpen}
           activeCategory={activeCategory}
           onCategoryClick={handleCategoryClick}
-          hasScrolled={hasScrolled}
+          hasPassedT1={hasPassedT1}
+          hasPassedT2={hasPassedT2}
+          scrollDirection={scrollDirection}
         />
 
         <FilterSubPanel category={activeCategory} isOpen={!!activeCategory} onClose={() => setActiveCategory(null)} />
@@ -82,13 +109,19 @@ export default function Page() {
 
           <AnimatePresence mode="wait">
             {showHero && (
-              <motion.div key="hero" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+              <motion.div
+                key="hero"
+                initial={{ opacity: 1 }}
+                animate={{ opacity: heroOpacity }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0 }}
+              >
                 <HeroGrid />
               </motion.div>
             )}
           </AnimatePresence>
 
-          <FabricGrid hasScrolled={hasScrolled} />
+          <FabricGrid hasScrolled={hasPassedT1} />
         </div>
       </div>
     </>

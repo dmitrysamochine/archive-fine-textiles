@@ -10,10 +10,12 @@ import { useSearchParams, useRouter } from "next/navigation"
 interface SiteHeaderProps {
   filterOpen: boolean
   onFilterToggle: () => void
-  hasScrolled: boolean
+  hasPassedT1: boolean
+  hasPassedT2: boolean
+  scrollDirection: "up" | "down"
 }
 
-export function SiteHeader({ filterOpen, onFilterToggle, hasScrolled }: SiteHeaderProps) {
+export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT2, scrollDirection }: SiteHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -47,15 +49,28 @@ export function SiteHeader({ filterOpen, onFilterToggle, hasScrolled }: SiteHead
     if (search) setSearchQuery(search)
   }, [])
 
+  const getAnimationState = () => {
+    if (!hasPassedT1) {
+      // Before T1: hidden
+      return { y: -100, opacity: 0 }
+    } else if (hasPassedT1 && !hasPassedT2) {
+      // Between T1 and T2: show/hide based on scroll direction
+      return {
+        y: scrollDirection === "down" ? 0 : -100,
+        opacity: scrollDirection === "down" ? 1 : 0,
+      }
+    } else {
+      // After T2: always visible
+      return { y: 0, opacity: 1 }
+    }
+  }
+
   return (
     <>
       <motion.header
         className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border"
         initial={{ y: -100, opacity: 0 }}
-        animate={{
-          y: hasScrolled ? 0 : -100,
-          opacity: hasScrolled ? 1 : 0,
-        }}
+        animate={getAnimationState()}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <div className="container mx-auto px-6 py-4">
