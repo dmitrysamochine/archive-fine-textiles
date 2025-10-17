@@ -78,7 +78,7 @@ export default function Page() {
     }
   }
 
-  const contentMargin = activeCategory ? "320px" : "0px"
+  const subPanelSpacerWidth = activeCategory ? "320px" : "0px"
 
   return (
     <>
@@ -126,13 +126,16 @@ export default function Page() {
             )}
           </AnimatePresence>
 
-          <div
-            className="transition-all duration-300"
-            style={{
-              marginLeft: contentMargin,
-            }}
-          >
-            <FabricGrid hasScrolled={hasPassedT1} />
+          <div className="flex">
+            <div
+              className="transition-all duration-300 flex-shrink-0"
+              style={{
+                width: subPanelSpacerWidth,
+              }}
+            />
+            <div className="flex-1 min-w-0">
+              <FabricGrid hasScrolled={hasPassedT1} />
+            </div>
           </div>
         </div>
       </div>
