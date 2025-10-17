@@ -101,7 +101,7 @@ export function HeroGrid() {
           transition={{ duration: 1.5, ease: "easeInOut", delay: 0.3 }}
           style={{
             background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)",
-            width: "30%",
+            width: "100%",
           }}
         />
       </div>

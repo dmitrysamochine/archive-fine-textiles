@@ -61,7 +61,12 @@ export default function Page() {
       <div className="min-h-screen">
         <ActiveFiltersBar filterOpen={filterOpen} activeCategory={activeCategory} />
 
-        <FilterPanel isOpen={filterOpen} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />
+        <FilterPanel
+          isOpen={filterOpen}
+          activeCategory={activeCategory}
+          onCategoryClick={handleCategoryClick}
+          hasScrolled={hasScrolled}
+        />
 
         <FilterSubPanel category={activeCategory} isOpen={!!activeCategory} onClose={() => setActiveCategory(null)} />
 
