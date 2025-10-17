@@ -126,7 +126,14 @@ export default function Page() {
             )}
           </AnimatePresence>
 
-          <FabricGrid hasScrolled={hasPassedT1} />
+          <div
+            className="transition-all duration-300"
+            style={{
+              marginLeft: contentMargin,
+            }}
+          >
+            <FabricGrid hasScrolled={hasPassedT1} />
+          </div>
         </div>
       </div>
     </>
