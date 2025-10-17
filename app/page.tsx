@@ -107,7 +107,6 @@ export default function Page() {
         <div
           className="transition-all duration-300"
           style={{
-            marginLeft: contentMargin,
             paddingTop: hasPassedT1 ? `${NAV_HEIGHT}px` : "0",
           }}
         >
