@@ -10,12 +10,14 @@ import { FilterSubPanel } from "@/components/filter-sub-panel"
 import { ActiveFiltersBar } from "@/components/active-filters-bar"
 import { SiteHeader } from "@/components/site-header"
 
+const NAV_HEIGHT = 80 // Height of the fixed navigation bar
+
 export default function Page() {
   const [filterOpen, setFilterOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [showHero, setShowHero] = useState(true)
   const [hasPassedT1, setHasPassedT1] = useState(false) // 100px threshold
-  const [hasPassedT2, setHasPassedT2] = useState(false) // viewport height threshold
+  const [hasPassedT2, setHasPassedT2] = useState(false) // viewport height - nav height threshold
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("down")
   const [lastScrollY, setLastScrollY] = useState(0)
   const [heroOpacity, setHeroOpacity] = useState(1)
@@ -32,6 +34,7 @@ export default function Page() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
       const viewportHeight = window.innerHeight
+      const t2Threshold = viewportHeight - NAV_HEIGHT
 
       const fadeProgress = Math.min(currentScrollY / viewportHeight, 1)
       setHeroOpacity(1 - fadeProgress)
@@ -40,7 +43,7 @@ export default function Page() {
         setHasPassedT1(true)
       }
 
-      if (currentScrollY > viewportHeight && !hasPassedT2) {
+      if (currentScrollY > t2Threshold && !hasPassedT2) {
         setHasPassedT2(true)
         setShowHero(false)
       }
@@ -103,6 +106,7 @@ export default function Page() {
           className="transition-all duration-300"
           style={{
             marginLeft: filterOpen ? (activeCategory ? "400px" : "80px") : "0",
+            paddingTop: hasPassedT1 ? `${NAV_HEIGHT}px` : "0",
           }}
         >
           {hasActiveFilters && <div className="h-24" />}
