@@ -3,15 +3,17 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import { Search, SlidersHorizontal, X } from "lucide-react"
 import { useSearchParams, useRouter } from "next/navigation"
 
 interface SiteHeaderProps {
   filterOpen: boolean
   onFilterToggle: () => void
+  hasScrolled: boolean
 }
 
-export function SiteHeader({ filterOpen, onFilterToggle }: SiteHeaderProps) {
+export function SiteHeader({ filterOpen, onFilterToggle, hasScrolled }: SiteHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -47,7 +49,15 @@ export function SiteHeader({ filterOpen, onFilterToggle }: SiteHeaderProps) {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+      <motion.header
+        className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border"
+        initial={{ y: -100, opacity: 0 }}
+        animate={{
+          y: hasScrolled ? 0 : -100,
+          opacity: hasScrolled ? 1 : 0,
+        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
         <div className="container mx-auto px-6 py-4">
           <nav className="flex items-center justify-between gap-8">
             {/* Logo */}
@@ -97,7 +107,7 @@ export function SiteHeader({ filterOpen, onFilterToggle }: SiteHeaderProps) {
             </div>
           </nav>
         </div>
-      </header>
+      </motion.header>
     </>
   )
 }

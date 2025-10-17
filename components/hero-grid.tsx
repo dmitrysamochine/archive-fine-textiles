@@ -18,12 +18,12 @@ interface FabricItem {
 export function HeroGrid() {
   const [fabrics, setFabrics] = useState<FabricItem[]>([])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    // Fetch random 32 fabrics for hero grid
     client
       .fetch<FabricItem[]>(
-        `*[_type == "fabricItem" && defined(images[0])] | order(_createdAt desc) [0...32] {
+        `*[_type == "fabricItem" && defined(images[0])] | order(_createdAt desc) [0...24] {
           _id,
           itemNumber,
           collection->{name},
@@ -35,6 +35,7 @@ export function HeroGrid() {
         // Shuffle for random display
         const shuffled = data.sort(() => Math.random() - 0.5)
         setFabrics(shuffled)
+        setTimeout(() => setIsLoaded(true), 100)
       })
   }, [])
 
@@ -42,60 +43,75 @@ export function HeroGrid() {
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
-      {/* Grid: 2 rows × 16 columns */}
-      <div className="grid grid-rows-2 h-full">
-        {[0, 1].map((row) => (
-          <div key={row} className="grid grid-cols-16 h-full">
-            {fabrics.slice(row * 16, (row + 1) * 16).map((fabric, colIndex) => {
-              const index = row * 16 + colIndex
-              const imageUrl = fabric.images?.[0]
-                ? urlForImage(fabric.images[0]).width(400).height(400).url()
-                : "/placeholder.svg?height=400&width=400"
+      <div className="grid grid-cols-24 h-full relative">
+        {fabrics.map((fabric, index) => {
+          const imageUrl = fabric.images?.[0]
+            ? urlForImage(fabric.images[0]).width(400).height(400).url()
+            : "/placeholder.svg?height=400&width=400"
 
-              return (
-                <Link
-                  key={fabric._id}
-                  href={`/fabrics/${fabric.itemNumber}`}
-                  className="relative overflow-hidden group"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
+          return (
+            <motion.div
+              key={fabric._id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isLoaded ? 1 : 0 }}
+              transition={{ duration: 0.4, delay: index * 0.02 }}
+            >
+              <Link
+                href={`/fabrics/${fabric.itemNumber}`}
+                className="relative overflow-hidden group block h-full"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <motion.div
+                  className="absolute inset-0"
+                  animate={{
+                    scale: hoveredIndex === index ? 1.1 : 1,
+                  }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <motion.div
-                    className="absolute inset-0"
-                    animate={{
-                      scale: hoveredIndex === index ? 1.1 : 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Image
-                      src={imageUrl || "/placeholder.svg"}
-                      alt={fabric.itemNumber}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 25vw, 6.25vw"
-                    />
-                  </motion.div>
+                  <Image
+                    src={imageUrl || "/placeholder.svg"}
+                    alt={fabric.itemNumber}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 25vw, 4.17vw"
+                  />
+                </motion.div>
 
-                  {/* Hover overlay with info */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white p-2 text-center"
-                  >
-                    <p className="text-xs font-heading mb-1">{fabric.itemNumber}</p>
-                    {fabric.collection && <p className="text-[10px]">{fabric.collection.name}</p>}
-                    {fabric.colorway && <p className="text-[10px]">{fabric.colorway.name}</p>}
-                  </motion.div>
-                </Link>
-              )
-            })}
-          </div>
-        ))}
+                {/* Hover overlay with info */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white p-2 text-center"
+                >
+                  <p className="text-xs font-heading mb-1">{fabric.itemNumber}</p>
+                  {fabric.collection && <p className="text-[10px]">{fabric.collection.name}</p>}
+                  {fabric.colorway && <p className="text-[10px]">{fabric.colorway.name}</p>}
+                </motion.div>
+              </Link>
+            </motion.div>
+          )
+        })}
+
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          initial={{ x: "-100%" }}
+          animate={{ x: isLoaded ? "100%" : "-100%" }}
+          transition={{ duration: 1.5, ease: "easeInOut", delay: 0.3 }}
+          style={{
+            background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)",
+            width: "30%",
+          }}
+        />
       </div>
 
-      {/* Centered Logo with background rectangle */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoaded ? 1 : 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
         <div
           className="bg-cream-100"
           style={{
@@ -106,7 +122,7 @@ export function HeroGrid() {
         >
           <Image src="/logo.svg" alt="Archive Fine Textiles" width={800} height={200} className="w-[20vw] h-auto" />
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

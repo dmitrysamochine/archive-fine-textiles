@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { HeroGrid } from "@/components/hero-grid"
@@ -13,6 +13,8 @@ import { SiteHeader } from "@/components/site-header"
 export default function Page() {
   const [filterOpen, setFilterOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [showHero, setShowHero] = useState(true)
+  const [hasScrolled, setHasScrolled] = useState(false)
   const searchParams = useSearchParams()
 
   const hasActiveFilters =
@@ -21,6 +23,21 @@ export default function Page() {
     searchParams.has("color") ||
     searchParams.has("material") ||
     searchParams.has("category")
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 100
+      setHasScrolled(scrolled)
+
+      // Once scrolled past hero, hide it permanently
+      if (scrolled && showHero) {
+        setShowHero(false)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [showHero])
 
   const handleCategoryClick = (category: string) => {
     if (activeCategory === category) {
@@ -39,7 +56,7 @@ export default function Page() {
 
   return (
     <>
-      <SiteHeader filterOpen={filterOpen} onFilterToggle={handleFilterToggle} />
+      <SiteHeader filterOpen={filterOpen} onFilterToggle={handleFilterToggle} hasScrolled={hasScrolled} />
 
       <div className="min-h-screen">
         <ActiveFiltersBar filterOpen={filterOpen} activeCategory={activeCategory} />
@@ -54,17 +71,11 @@ export default function Page() {
             marginLeft: filterOpen ? (activeCategory ? "400px" : "80px") : "0",
           }}
         >
-          {hasActiveFilters && <div className="h-30" />}
+          {hasActiveFilters && <div className="h-24" />}
 
           <AnimatePresence mode="wait">
-            {!hasActiveFilters && (
-              <motion.div
-                key="hero"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
+            {showHero && (
+              <motion.div key="hero" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
                 <HeroGrid />
               </motion.div>
             )}
