@@ -27,7 +27,9 @@ export default function Page() {
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 100
-      setHasScrolled(scrolled)
+      if (scrolled) {
+        setHasScrolled(true)
+      }
 
       // Once scrolled past hero, hide it permanently
       if (scrolled && showHero) {
