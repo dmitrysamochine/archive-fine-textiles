@@ -78,7 +78,7 @@ export default function Page() {
     }
   }
 
-  const gridMarginLeft = activeCategory ? "320px" : "0px"
+  const subPanelWidth = activeCategory ? "320px" : "0px"
 
   return (
     <>
@@ -129,7 +129,8 @@ export default function Page() {
           <div
             className="transition-all duration-300"
             style={{
-              paddingLeft: gridMarginLeft,
+              width: activeCategory ? `calc(100% - ${subPanelWidth})` : "100%",
+              marginLeft: subPanelWidth,
             }}
           >
             <FabricGrid hasScrolled={hasPassedT1} />
