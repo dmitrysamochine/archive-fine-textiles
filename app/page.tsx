@@ -78,7 +78,7 @@ export default function Page() {
     }
   }
 
-  const subPanelWidth = activeCategory ? "320px" : "0px"
+  const gridMarginLeft = filterOpen ? (activeCategory ? "400px" : "80px") : "0"
 
   return (
     <>
@@ -126,7 +126,13 @@ export default function Page() {
             )}
           </AnimatePresence>
 
-          <div className="transition-all duration-300">
+          <div
+            className="transition-all duration-300"
+            style={{
+              marginLeft: gridMarginLeft,
+              width: `calc(100% - ${gridMarginLeft})`,
+            }}
+          >
             <FabricGrid hasScrolled={hasPassedT1} />
           </div>
         </div>
