@@ -78,7 +78,7 @@ export default function Page() {
     }
   }
 
-  const contentMargin = activeCategory ? "400px" : "80px"
+  const contentMargin = activeCategory ? "320px" : "0px"
 
   return (
     <>
