@@ -143,7 +143,8 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
         animate={{ width: "20rem", opacity: 1 }}
         exit={{ width: 0, opacity: 0 }}
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
-        className="fixed left-0 lg:left-20 top-[73px] bottom-0 bg-background border-r border-border z-30 flex flex-col overflow-hidden"
+        className="absolute left-0 top-[73px] bottom-0 bg-background border-r border-border z-30 flex flex-col overflow-hidden"
+        style={{ left: "0" }}
       >
         <AnimatePresence mode="wait">
           <motion.div
