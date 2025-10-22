@@ -23,11 +23,9 @@ interface FabricItem {
 
 interface FabricGridProps {
   hasScrolled: boolean
-  filterOpen?: boolean
-  activeCategory?: string | null
 }
 
-export function FabricGrid({ hasScrolled, filterOpen = false, activeCategory = null }: FabricGridProps) {
+export function FabricGrid({ hasScrolled }: FabricGridProps) {
   const [fabrics, setFabrics] = useState<FabricItem[]>([])
   const [allFabrics, setAllFabrics] = useState<FabricItem[]>([])
   const [page, setPage] = useState(1)
@@ -134,16 +132,8 @@ export function FabricGrid({ hasScrolled, filterOpen = false, activeCategory = n
     return () => window.removeEventListener("scroll", handleScroll)
   }, [displayedFabrics.length, fabrics.length])
 
-  // When parent has marginLeft, reduce container's left padding to compensate
-  const paddingLeftOffset = filterOpen ? (activeCategory ? "400px" : "80px") : "0px"
-
   return (
-    <div
-      className="container mx-auto pr-6 py-12"
-      style={{
-        paddingLeft: `calc(1.5rem - ${paddingLeftOffset})`,
-      }}
-    >
+    <div className="container mx-auto px-6 py-12">
       {hasScrolled && (
         <div className="flex items-center justify-between mb-8">
           <p className="text-sm text-muted-foreground">
