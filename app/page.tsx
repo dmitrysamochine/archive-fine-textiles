@@ -81,6 +81,10 @@ export default function Page() {
   const gridMarginLeft = filterOpen ? (activeCategory ? "400px" : "80px") : "0"
   const gridWidth = filterOpen ? (activeCategory ? "calc(100% - 400px)" : "calc(100% - 80px)") : "100%"
 
+  useEffect(() => {
+    console.log("[v0] Filter state:", { filterOpen, activeCategory, gridMarginLeft, gridWidth })
+  }, [filterOpen, activeCategory, gridMarginLeft, gridWidth])
+
   return (
     <>
       <SiteHeader
