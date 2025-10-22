@@ -79,6 +79,7 @@ export default function Page() {
   }
 
   const gridMarginLeft = filterOpen ? (activeCategory ? "400px" : "80px") : "0"
+  const gridWidth = filterOpen ? (activeCategory ? "calc(100% - 400px)" : "calc(100% - 80px)") : "100%"
 
   return (
     <>
@@ -130,6 +131,7 @@ export default function Page() {
             className="transition-all duration-300"
             style={{
               marginLeft: gridMarginLeft,
+              width: gridWidth,
               paddingTop: hasActiveFilters ? "73px" : "0",
             }}
           >
