@@ -115,8 +115,6 @@ export default function Page() {
             paddingTop: hasPassedT1 ? `${NAV_HEIGHT}px` : "0",
           }}
         >
-          {hasActiveFilters && <div className="h-24" />}
-
           <AnimatePresence mode="wait">
             {showHero && (
               <motion.div
