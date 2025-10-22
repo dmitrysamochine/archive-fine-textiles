@@ -129,10 +129,11 @@ export default function Page() {
           <div
             className="transition-all duration-300"
             style={{
-              paddingLeft: gridMarginLeft,
+              marginLeft: gridMarginLeft,
+              paddingTop: hasActiveFilters ? "73px" : "0",
             }}
           >
-            <FabricGrid hasScrolled={hasPassedT1} filterOpen={filterOpen} activeCategory={activeCategory} />
+            <FabricGrid hasScrolled={hasPassedT1} />
           </div>
         </div>
       </div>
