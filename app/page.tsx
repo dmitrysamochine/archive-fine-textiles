@@ -133,7 +133,7 @@ export default function Page() {
               width: `calc(100% - ${gridMarginLeft})`,
             }}
           >
-            <FabricGrid hasScrolled={hasPassedT1} />
+            <FabricGrid hasScrolled={hasPassedT1} filterOpen={filterOpen} activeCategory={activeCategory} />
           </div>
         </div>
       </div>
