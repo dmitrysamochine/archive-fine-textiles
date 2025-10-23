@@ -162,6 +162,12 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
+  /* Add cursor pointer to interactive elements */
+  a,
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
 }
 
 @layer utilities {

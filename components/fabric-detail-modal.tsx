@@ -101,13 +101,22 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
       >
         <button
           onClick={onClose}
-          className="fixed top-6 left-6 z-[60] bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors"
+          className="fixed top-6 right-6 z-[60] bg-black/80 hover:bg-black text-white p-3 rounded-full shadow-lg transition-colors"
           aria-label="Close"
         >
           <X className="h-6 w-6" />
         </button>
 
         <FabricItemDetail item={fabric} />
+
+        <div className="sticky bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-transparent md:hidden">
+          <button
+            onClick={onClose}
+            className="w-full bg-black hover:bg-black/90 text-white py-4 px-6 rounded-lg font-medium transition-colors"
+          >
+            Close
+          </button>
+        </div>
       </motion.div>
     </motion.div>
   )
