@@ -70,7 +70,7 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
         className="fixed inset-0 z-50"
       >
         <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" onClick={onClose} />
-        <div className="relative h-full w-full flex items-center justify-center">
+        <div className="absolute inset-y-0 left-0 right-0 md:right-96 flex items-center justify-center pointer-events-none">
           <LoadingSpinner />
         </div>
       </motion.div>
