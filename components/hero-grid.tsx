@@ -23,7 +23,15 @@ export function HeroGrid() {
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const [loadedCount, setLoadedCount] = useState(0)
 
+  console.log("[v0] HeroGrid render:", {
+    fabricsCount: fabrics.length,
+    loadedCount,
+    imagesLoaded,
+    isLoaded,
+  })
+
   useEffect(() => {
+    console.log("[v0] HeroGrid: Fetching fabrics...")
     client
       .fetch<FabricItem[]>(
         `*[_type == "fabricItem" && defined(images[0])] | order(_createdAt desc) [0...24] {
@@ -35,23 +43,37 @@ export function HeroGrid() {
         }`,
       )
       .then((data) => {
+        console.log("[v0] HeroGrid: Fabrics fetched:", data.length)
         const shuffled = data.sort(() => Math.random() - 0.5)
         setFabrics(shuffled)
+      })
+      .catch((error) => {
+        console.error("[v0] HeroGrid: Error fetching fabrics:", error)
       })
   }, [])
 
   useEffect(() => {
+    console.log("[v0] HeroGrid: Checking if all images loaded:", {
+      fabricsLength: fabrics.length,
+      loadedCount,
+    })
     if (fabrics.length > 0 && loadedCount >= fabrics.length) {
+      console.log("[v0] HeroGrid: All images loaded!")
       setImagesLoaded(true)
       setTimeout(() => setIsLoaded(true), 100)
     }
   }, [loadedCount, fabrics.length])
 
   const handleImageLoad = () => {
-    setLoadedCount((prev) => prev + 1)
+    setLoadedCount((prev) => {
+      const newCount = prev + 1
+      console.log("[v0] HeroGrid: Image loaded:", newCount)
+      return newCount
+    })
   }
 
-  if (!imagesLoaded) {
+  if (fabrics.length === 0) {
+    console.log("[v0] HeroGrid: Showing loading spinner (no fabrics yet)")
     return (
       <div className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-background">
         <LoadingSpinner />
@@ -61,6 +83,12 @@ export function HeroGrid() {
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
+      {!imagesLoaded && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-background">
+          <LoadingSpinner />
+        </div>
+      )}
+
       <div className="grid grid-cols-24 h-full relative">
         {fabrics.map((fabric, index) => {
           const imageUrl = fabric.images?.[0]

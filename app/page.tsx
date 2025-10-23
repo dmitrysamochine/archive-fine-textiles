@@ -106,6 +106,14 @@ export default function Page() {
   const gridMarginLeft = activeCategory ? "400px" : "0"
   const gridWidth = activeCategory ? "calc(100% - 400px)" : "100%"
 
+  console.log("[v0] Page render:", {
+    showHero,
+    hasPassedT1,
+    hasPassedT2,
+    selectedFabricId,
+    hasActiveFilters,
+  })
+
   return (
     <>
       <SiteHeader

@@ -132,6 +132,13 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [displayedFabrics.length, fabrics.length])
 
+  console.log("[v0] FabricGrid render:", {
+    allFabricsCount: allFabrics.length,
+    fabricsCount: fabrics.length,
+    displayedCount: displayedFabrics.length,
+    hasScrolled,
+  })
+
   return (
     <div className="container mx-auto px-6 py-12">
       {hasScrolled && (
