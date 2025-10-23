@@ -64,8 +64,11 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                 pinch={{ step: 10 }}
                 doubleClick={{ mode: "reset" }}
                 panning={{ velocityDisabled: true }}
-                velocityAnimation={{ disabled: true }}
-                zoomAnimation={{ animationTime: 100 }}
+                velocityAnimation={{ disabled: true, sensitivity: 0 }}
+                options={{
+                  zoomAnimation: { disabled: true }, // Disables zoom animation
+                  panning: { animationTime: 0 }, // Disables panning animation
+                }}
               >
                 {({ zoomIn, zoomOut, resetTransform }) => (
                   <>
