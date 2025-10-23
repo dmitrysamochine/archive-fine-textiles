@@ -33,7 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${bernhard.variable} ${lato.variable} font-sans`}>
-        <SiteHeader />
+        <Suspense fallback={<div className="h-16" />}>
+          <SiteHeader />
+        </Suspense>
         <Suspense fallback={null}>
           {children}
           <Analytics />
