@@ -48,9 +48,7 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
         <div className="absolute inset-0 bg-white">
           {!currentImageLoaded && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="-mr-48">
-                <LoadingSpinner />
-              </div>
+              <LoadingSpinner />
             </div>
           )}
 
