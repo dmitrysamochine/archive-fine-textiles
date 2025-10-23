@@ -104,7 +104,7 @@ export function HeroGrid() {
         <div
           className="bg-cream-100"
           style={{
-            paddingBlock: "calc(var(--spacing) * 8)",
+            paddingBlock: "calc(var(--spacing) * 14)",
             paddingInline: "calc(var(--spacing) * 14)",
             borderRadius: "20px",
           }}
