@@ -7,22 +7,33 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { urlForImage } from "@/sanity/lib/image"
 import type { FabricItem } from "@/sanity/types"
 import { RelatedFabrics } from "./related-fabrics"
+import { LoadingSpinner } from "./loading-spinner"
 
 interface FabricItemDetailProps {
   item: FabricItem
+  onImageLoad?: () => void
+  imageLoaded?: boolean
 }
 
-export function FabricItemDetail({ item }: FabricItemDetailProps) {
+export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: FabricItemDetailProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [currentImageLoaded, setCurrentImageLoaded] = useState(false)
   const images = item.images || []
   const hasMultipleImages = images.length > 1
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length)
+    setCurrentImageLoaded(false)
   }
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
+    setCurrentImageLoaded(false)
+  }
+
+  const handleImageLoad = () => {
+    setCurrentImageLoaded(true)
+    onImageLoad?.()
   }
 
   const currentImageUrl = images[currentImageIndex]
@@ -34,25 +45,34 @@ export function FabricItemDetail({ item }: FabricItemDetailProps) {
       {/* Full viewport image with info overlay */}
       <div className="relative h-screen w-full overflow-hidden">
         {/* Background Image */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentImageIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={currentImageUrl || "/placeholder.svg"}
-              alt={item.itemNumber}
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-            />
-          </motion.div>
-        </AnimatePresence>
+        <div className="absolute inset-0 bg-background">
+          {!currentImageLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <LoadingSpinner />
+            </div>
+          )}
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentImageIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: currentImageLoaded ? 1 : 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={currentImageUrl || "/placeholder.svg"}
+                alt={item.itemNumber}
+                fill
+                className="object-cover"
+                priority
+                sizes="100vw"
+                onLoad={handleImageLoad}
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
         {/* Image Navigation Arrows */}
         {hasMultipleImages && (
@@ -74,8 +94,12 @@ export function FabricItemDetail({ item }: FabricItemDetailProps) {
           </>
         )}
 
-        {/* Info Overlay - Right Side */}
-        <div className="absolute right-0 top-0 bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="absolute right-0 top-0 bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto"
+        >
           <div className="space-y-6">
             <div>
               {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
@@ -144,7 +168,7 @@ export function FabricItemDetail({ item }: FabricItemDetailProps) {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Related Items from Same Colorway */}

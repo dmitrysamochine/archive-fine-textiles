@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { X } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 import { FabricItemDetail } from "./fabric-item-detail"
+import { LoadingSpinner } from "./loading-spinner"
 import type { FabricItem } from "@/sanity/types"
 
 interface FabricDetailModalProps {
@@ -15,10 +16,12 @@ interface FabricDetailModalProps {
 export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProps) {
   const [fabric, setFabric] = useState<FabricItem | null>(null)
   const [loading, setLoading] = useState(true)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   useEffect(() => {
     const fetchFabric = async () => {
       setLoading(true)
+      setImageLoaded(false)
       const query = `*[_type == "fabricItem" && itemNumber == $itemNumber][0] {
         _id,
         itemNumber,
@@ -57,46 +60,38 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
     }
   }, [])
 
-  if (loading) {
+  if (loading || !fabric) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-background z-50 flex items-center justify-center"
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50"
       >
-        <p className="text-muted-foreground">Loading...</p>
-      </motion.div>
-    )
-  }
-
-  if (!fabric) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-background z-50 flex items-center justify-center"
-      >
-        <div className="text-center">
-          <p className="text-muted-foreground mb-4">Fabric not found</p>
-          <button onClick={onClose} className="text-sm underline">
-            Close
-          </button>
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+        <div className="relative h-full w-full flex items-center justify-center">
+          <LoadingSpinner />
         </div>
       </motion.div>
     )
   }
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-0 z-50"
+    >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
       <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
         className="relative h-full w-full overflow-y-auto"
       >
         <button
@@ -107,7 +102,7 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
           <X className="h-6 w-6" />
         </button>
 
-        <FabricItemDetail item={fabric} />
+        <FabricItemDetail item={fabric} onImageLoad={() => setImageLoaded(true)} imageLoaded={imageLoaded} />
 
         <div className="sticky bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-transparent md:hidden">
           <button

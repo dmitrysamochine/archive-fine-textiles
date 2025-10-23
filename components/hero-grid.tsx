@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { client } from "@/sanity/lib/client"
 import { urlForImage } from "@/sanity/lib/image"
+import { LoadingSpinner } from "./loading-spinner"
 
 interface FabricItem {
   _id: string
@@ -19,6 +20,8 @@ export function HeroGrid() {
   const [fabrics, setFabrics] = useState<FabricItem[]>([])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [imagesLoaded, setImagesLoaded] = useState(false)
+  const [loadedCount, setLoadedCount] = useState(0)
 
   useEffect(() => {
     client
@@ -32,14 +35,29 @@ export function HeroGrid() {
         }`,
       )
       .then((data) => {
-        // Shuffle for random display
         const shuffled = data.sort(() => Math.random() - 0.5)
         setFabrics(shuffled)
-        setTimeout(() => setIsLoaded(true), 100)
       })
   }, [])
 
-  if (fabrics.length === 0) return null
+  useEffect(() => {
+    if (fabrics.length > 0 && loadedCount >= fabrics.length) {
+      setImagesLoaded(true)
+      setTimeout(() => setIsLoaded(true), 100)
+    }
+  }, [loadedCount, fabrics.length])
+
+  const handleImageLoad = () => {
+    setLoadedCount((prev) => prev + 1)
+  }
+
+  if (!imagesLoaded) {
+    return (
+      <div className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-background">
+        <LoadingSpinner />
+      </div>
+    )
+  }
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
@@ -69,6 +87,7 @@ export function HeroGrid() {
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 25vw, 4.17vw"
+                    onLoad={handleImageLoad}
                   />
                 </div>
 
@@ -99,7 +118,7 @@ export function HeroGrid() {
         className="absolute inset-0 flex items-center justify-center pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        transition={{ duration: 0.8, delay: 1.05 }}
       >
         <div
           className="bg-cream-100"

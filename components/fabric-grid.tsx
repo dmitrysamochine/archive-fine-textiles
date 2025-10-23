@@ -167,7 +167,7 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
               key={fabric._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
+              transition={{ duration: 0.4, delay: index * 0.03, ease: "easeOut" }}
             >
               <button onClick={() => onFabricClick(fabric.itemNumber)} className="group block w-full text-left">
                 <div className="relative aspect-square overflow-hidden rounded-sm mb-3">
