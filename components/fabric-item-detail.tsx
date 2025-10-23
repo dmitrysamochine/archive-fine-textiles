@@ -60,10 +60,12 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                 minScale={1}
                 maxScale={4}
                 centerOnInit
-                wheel={{ step: 0.1 }}
-                pinch={{ step: 5 }}
+                wheel={{ step: 0.3 }}
+                pinch={{ step: 10 }}
                 doubleClick={{ mode: "reset" }}
                 panning={{ velocityDisabled: true }}
+                velocityAnimation={{ disabled: true }}
+                zoomAnimation={{ animationTime: 100 }}
               >
                 {({ zoomIn, zoomOut, resetTransform }) => (
                   <>
@@ -82,14 +84,14 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                     {currentImageLoaded && (
                       <div className="absolute bottom-6 right-6 md:right-[25rem] flex gap-2 z-20">
                         <button
-                          onClick={() => zoomIn()}
+                          onClick={() => zoomIn(0.5)}
                           className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
                           aria-label="Zoom in"
                         >
                           <ZoomIn className="h-4 w-4" />
                         </button>
                         <button
-                          onClick={() => zoomOut()}
+                          onClick={() => zoomOut(0.5)}
                           className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
                           aria-label="Zoom out"
                         >
