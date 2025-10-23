@@ -170,7 +170,7 @@ export function FilterSubPanel({ category, isOpen, onClose }: FilterSubPanelProp
                     placeholder={`Search ${categoryLabels[category].toLowerCase()}...`}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 text-sm bg-muted/50 border border-border rounded-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                    className="w-full pl-9 pr-3 py-2 text-sm bg-muted/50 border border-border rounded-full focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                 </div>
               </div>

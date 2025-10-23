@@ -145,7 +145,7 @@ export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBa
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => removeFilter(filter.category, filter.value)}
-                className="inline-flex items-center gap-2 px-3 py-1.5 bg-linen-100 hover:bg-linen-200 rounded-sm text-sm transition-colors group"
+                className="inline-flex items-center gap-2 px-3 py-1.5 bg-linen-100 hover:bg-linen-200 rounded-full text-sm transition-colors group"
               >
                 <span>{filter.label}</span>
                 <X className="h-3 w-3 text-muted-foreground group-hover:text-foreground transition-colors" />
