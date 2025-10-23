@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { HeroGrid } from "@/components/hero-grid"
 import { FabricGrid } from "@/components/fabric-grid"
@@ -9,19 +9,22 @@ import { FilterPanel } from "@/components/filter-panel"
 import { FilterSubPanel } from "@/components/filter-sub-panel"
 import { ActiveFiltersBar } from "@/components/active-filters-bar"
 import { SiteHeader } from "@/components/site-header"
+import { FabricDetailModal } from "@/components/fabric-detail-modal"
 
-const NAV_HEIGHT = 80 // Height of the fixed navigation bar
+const NAV_HEIGHT = 80
 
 export default function Page() {
   const [filterOpen, setFilterOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [showHero, setShowHero] = useState(true)
-  const [hasPassedT1, setHasPassedT1] = useState(false) // 100px threshold
-  const [hasPassedT2, setHasPassedT2] = useState(false) // viewport height - nav height threshold
+  const [hasPassedT1, setHasPassedT1] = useState(false)
+  const [hasPassedT2, setHasPassedT2] = useState(false)
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("down")
   const [lastScrollY, setLastScrollY] = useState(0)
   const [heroOpacity, setHeroOpacity] = useState(1)
+  const [selectedFabricId, setSelectedFabricId] = useState<string | null>(null)
   const searchParams = useSearchParams()
+  const router = useRouter()
 
   const hasActiveFilters =
     searchParams.has("collection") ||
@@ -29,6 +32,13 @@ export default function Page() {
     searchParams.has("color") ||
     searchParams.has("material") ||
     searchParams.has("category")
+
+  useEffect(() => {
+    const fabricParam = searchParams.get("fabric")
+    if (fabricParam) {
+      setSelectedFabricId(fabricParam)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,12 +88,23 @@ export default function Page() {
     }
   }
 
+  const handleFabricClick = (itemNumber: string) => {
+    setSelectedFabricId(itemNumber)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("fabric", itemNumber)
+    router.push(`?${params.toString()}`, { scroll: false })
+  }
+
+  const handleModalClose = () => {
+    setSelectedFabricId(null)
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete("fabric")
+    const newUrl = params.toString() ? `?${params.toString()}` : "/"
+    router.push(newUrl, { scroll: false })
+  }
+
   const gridMarginLeft = activeCategory ? "400px" : "0"
   const gridWidth = activeCategory ? "calc(100% - 400px)" : "100%"
-
-  useEffect(() => {
-    console.log("[v0] Filter state:", { filterOpen, activeCategory, gridMarginLeft, gridWidth })
-  }, [filterOpen, activeCategory, gridMarginLeft, gridWidth])
 
   return (
     <>
@@ -137,10 +158,14 @@ export default function Page() {
               paddingTop: hasActiveFilters ? "73px" : "0",
             }}
           >
-            <FabricGrid hasScrolled={hasPassedT1} />
+            <FabricGrid hasScrolled={hasPassedT1} onFabricClick={handleFabricClick} />
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedFabricId && <FabricDetailModal itemNumber={selectedFabricId} onClose={handleModalClose} />}
+      </AnimatePresence>
     </>
   )
 }

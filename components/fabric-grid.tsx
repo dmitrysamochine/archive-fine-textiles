@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { ArrowUpDown } from "lucide-react"
 import { client } from "@/sanity/lib/client"
@@ -23,9 +22,10 @@ interface FabricItem {
 
 interface FabricGridProps {
   hasScrolled: boolean
+  onFabricClick: (itemNumber: string) => void
 }
 
-export function FabricGrid({ hasScrolled }: FabricGridProps) {
+export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
   const [fabrics, setFabrics] = useState<FabricItem[]>([])
   const [allFabrics, setAllFabrics] = useState<FabricItem[]>([])
   const [page, setPage] = useState(1)
@@ -169,7 +169,7 @@ export function FabricGrid({ hasScrolled }: FabricGridProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
             >
-              <Link href={`/fabrics/${fabric.itemNumber}`} className="group block">
+              <button onClick={() => onFabricClick(fabric.itemNumber)} className="group block w-full text-left">
                 <div className="relative aspect-square overflow-hidden rounded-sm mb-3">
                   <Image
                     src={imageUrl || "/placeholder.svg"}
@@ -184,7 +184,7 @@ export function FabricGrid({ hasScrolled }: FabricGridProps) {
                   {fabric.colorway && <h4 className="text-xs font-medium">{fabric.colorway.name}</h4>}
                   <p className="text-xs text-muted-foreground">{fabric.itemNumber}</p>
                 </div>
-              </Link>
+              </button>
             </motion.div>
           )
         })}
