@@ -83,15 +83,30 @@ export function FabricItemDetail({ item }: FabricItemDetailProps) {
               <p className="text-lg text-muted-foreground">Item #{item.itemNumber}</p>
             </div>
 
-            {/* Price */}
-            {item.price && (
-              <div className="pt-4 border-t border-border">
-                <p className="text-2xl font-heading">${item.price}</p>
-              </div>
-            )}
-
             {/* Specifications */}
             <div className="space-y-4 pt-4 border-t border-border">
+              {item.type && (
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Type</h3>
+                  <p className="text-sm capitalize">{item.type}</p>
+                </div>
+              )}
+
+              {/* Price */}
+              {item.price && (
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Price</h3>
+                  <p className="text-sm">${item.price}</p>
+                </div>
+              )}
+
+              {item.content && (
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Material Content</h3>
+                  <p className="text-sm">{item.content}</p>
+                </div>
+              )}
+
               {item.width && (
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground mb-1">Width</h3>
@@ -99,47 +114,20 @@ export function FabricItemDetail({ item }: FabricItemDetailProps) {
                 </div>
               )}
 
-              {item.composition && (
+              {item.repeat && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Composition</h3>
-                  <p className="text-sm">{item.composition}</p>
-                </div>
-              )}
-
-              {item.origin && (
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Origin</h3>
-                  <p className="text-sm">{item.origin}</p>
-                </div>
-              )}
-
-              {item.description && (
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Description</h3>
-                  <p className="text-sm">{item.description}</p>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Pattern Repeat</h3>
+                  <p className="text-sm">{item.repeat}</p>
                 </div>
               )}
 
               {item.categories && item.categories.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Categories</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Description Categories</h3>
                   <div className="flex flex-wrap gap-2">
                     {item.categories.map((category) => (
                       <span key={category.slug.current} className="text-xs px-2 py-1 bg-muted rounded">
                         {category.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {item.colors && item.colors.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Colors</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {item.colors.map((color) => (
-                      <span key={color.slug.current} className="text-xs px-2 py-1 bg-muted rounded">
-                        {color.name}
                       </span>
                     ))}
                   </div>
