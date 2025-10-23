@@ -45,7 +45,7 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
       {/* Full viewport image with info overlay */}
       <div className="relative h-screen w-full overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 bg-background">
+        <div className="absolute inset-0 bg-white">
           {!currentImageLoaded && (
             <div className="absolute inset-0 flex items-center justify-center">
               <LoadingSpinner />
@@ -58,7 +58,7 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
               initial={{ opacity: 0 }}
               animate={{ opacity: currentImageLoaded ? 1 : 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2 }}
               className="absolute inset-0"
             >
               <Image
