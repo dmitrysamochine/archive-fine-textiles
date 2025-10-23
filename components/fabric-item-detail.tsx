@@ -12,10 +12,9 @@ import { LoadingSpinner } from "./loading-spinner"
 interface FabricItemDetailProps {
   item: FabricItem
   onImageLoad?: () => void
-  imageLoaded?: boolean
 }
 
-export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: FabricItemDetailProps) {
+export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentImageLoaded, setCurrentImageLoaded] = useState(false)
   const images = item.images || []
@@ -46,12 +45,6 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
       <div className="relative h-screen w-full overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 bg-white">
-          {!currentImageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <LoadingSpinner />
-            </div>
-          )}
-
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
@@ -73,6 +66,12 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
             </motion.div>
           </AnimatePresence>
         </div>
+
+        {!currentImageLoaded && (
+          <div className="absolute inset-y-0 left-0 right-0 md:right-96 flex items-center justify-center pointer-events-none z-10">
+            <LoadingSpinner />
+          </div>
+        )}
 
         {/* Image Navigation Arrows */}
         {hasMultipleImages && (
