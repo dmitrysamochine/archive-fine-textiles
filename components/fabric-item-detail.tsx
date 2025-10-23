@@ -58,7 +58,7 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
               initial={{ opacity: 0 }}
               animate={{ opacity: currentImageLoaded ? 1 : 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.3 }}
               className="absolute inset-0"
             >
               <Image
@@ -94,12 +94,7 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
           </>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="absolute right-0 top-0 bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto"
-        >
+        <div className="absolute right-0 top-0 bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto">
           <div className="space-y-6">
             <div>
               {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
@@ -168,7 +163,7 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
               </div>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Related Items from Same Colorway */}

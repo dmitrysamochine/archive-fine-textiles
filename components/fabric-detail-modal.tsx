@@ -66,7 +66,7 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.3 }}
         className="fixed inset-0 z-50"
       >
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
@@ -87,13 +87,7 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className="relative h-full w-full overflow-y-auto"
-      >
+      <div className="relative h-full w-full overflow-y-auto">
         <button
           onClick={onClose}
           className="fixed top-6 right-6 z-[60] bg-black/80 hover:bg-black text-white p-3 rounded-full shadow-lg transition-colors"
@@ -112,7 +106,7 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
             Close
           </button>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   )
 }
