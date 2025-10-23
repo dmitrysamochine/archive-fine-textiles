@@ -144,8 +144,11 @@ export function FabricItemDetail({ item, onImageLoad, imageLoaded = false }: Fab
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground mb-2">Description Categories</h3>
                   <div className="flex flex-wrap gap-2">
-                    {item.categories.map((category) => (
-                      <span key={category.slug.current} className="text-xs px-2 py-1 bg-muted rounded">
+                    {item.categories.map((category, index) => (
+                      <span
+                        key={category.slug?.current || `category-${index}`}
+                        className="text-xs px-2 py-1 bg-muted rounded"
+                      >
                         {category.name}
                       </span>
                     ))}
