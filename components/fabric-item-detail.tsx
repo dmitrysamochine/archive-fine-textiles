@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCcw } from "lucide-react"
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { urlForImage } from "@/sanity/lib/image"
 import type { FabricItem } from "@/sanity/types"
 import { RelatedFabrics } from "./related-fabrics"
@@ -54,15 +55,58 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
               transition={{ duration: 0.2 }}
               className="absolute inset-0"
             >
-              <Image
-                src={currentImageUrl || "/placeholder.svg"}
-                alt={item.itemNumber}
-                fill
-                className="object-cover"
-                priority
-                sizes="100vw"
-                onLoad={handleImageLoad}
-              />
+              <TransformWrapper
+                initialScale={1}
+                minScale={1}
+                maxScale={4}
+                centerOnInit
+                wheel={{ step: 0.1 }}
+                pinch={{ step: 5 }}
+                doubleClick={{ mode: "reset" }}
+                panning={{ velocityDisabled: true }}
+              >
+                {({ zoomIn, zoomOut, resetTransform }) => (
+                  <>
+                    <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full">
+                      <Image
+                        src={currentImageUrl || "/placeholder.svg"}
+                        alt={item.itemNumber}
+                        fill
+                        className="object-cover"
+                        priority
+                        sizes="100vw"
+                        onLoad={handleImageLoad}
+                      />
+                    </TransformComponent>
+
+                    {currentImageLoaded && (
+                      <div className="absolute bottom-6 right-6 md:right-[25rem] flex gap-2 z-20">
+                        <button
+                          onClick={() => zoomIn()}
+                          className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+                          aria-label="Zoom in"
+                        >
+                          <ZoomIn className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => zoomOut()}
+                          className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+                          aria-label="Zoom out"
+                        >
+                          <ZoomOut className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => resetTransform()}
+                          className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+                          aria-label="Reset zoom"
+                        >
+                          <RotateCcw className="h-4 w-4" />
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </TransformWrapper>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -85,7 +129,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-6 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors"
+              className="absolute right-6 top-1/2 -translate-y-1/2 z-10 md:right-[25rem] bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors"
               aria-label="Next image"
             >
               <ChevronRight className="h-6 w-6" />
