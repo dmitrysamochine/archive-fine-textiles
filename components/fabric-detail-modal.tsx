@@ -66,10 +66,10 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.15 }}
         className="fixed inset-0 z-50"
       >
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" onClick={onClose} />
         <div className="relative h-full w-full flex items-center justify-center">
           <LoadingSpinner />
         </div>
@@ -82,10 +82,10 @@ export function FabricDetailModal({ itemNumber, onClose }: FabricDetailModalProp
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.15 }}
       className="fixed inset-0 z-50"
     >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" onClick={onClose} />
 
       <div className="relative h-full w-full overflow-y-auto">
         <button
