@@ -97,6 +97,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                 tapZoomFactor={0}
                 doubleTapZoomOutOnMaxScale
                 doubleTapToggleZoom
+                style={{ width: "100%", height: "100%" }}
               >
                 <div ref={imageContainerRef} className="w-full h-full relative">
                   <Image
