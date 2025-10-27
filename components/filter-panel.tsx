@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Layers, Palette, Shirt, Tag } from "lucide-react"
+import { Layers, Palette, Shirt } from "lucide-react"
 import { forwardRef } from "react"
 
 interface FilterPanelProps {
@@ -15,10 +15,8 @@ interface FilterPanelProps {
 
 const categories = [
   { id: "collection", label: "Collection", icon: Layers },
-  { id: "colorway", label: "Colorway", icon: Palette },
   { id: "color", label: "Color", icon: Palette },
   { id: "material", label: "Material", icon: Shirt },
-  { id: "category", label: "Categories", icon: Tag },
 ]
 
 export const FilterPanel = forwardRef<HTMLElement, FilterPanelProps>(
