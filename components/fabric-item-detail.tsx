@@ -83,7 +83,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
               transition={{ duration: 0.2 }}
               className="absolute inset-0"
             >
-              <div className="w-full h-full">
+              <div className="absolute inset-0">
                 <QuickPinchZoom
                   ref={zoomRef}
                   onUpdate={({ x, y, scale }) => {
@@ -99,7 +99,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                   doubleTapZoomOutOnMaxScale
                   doubleTapToggleZoom
                 >
-                  <div ref={imageContainerRef} className="w-full h-full relative">
+                  <div ref={imageContainerRef} className="absolute inset-0">
                     <Image
                       src={currentImageUrl || "/placeholder.svg"}
                       alt={item.itemNumber}
