@@ -77,7 +77,7 @@ export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT
           <nav className="flex items-center justify-between gap-8">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
-              <Image src="/logo.svg" alt="Archive Fine Textiles" width={180} height={40} className="h-8 w-auto" />
+              <Image src="/logo.svg" alt="Archive Fine Textiles" width={216} height={48} className="h-12 w-auto" />
             </Link>
 
             {/* Search */}
@@ -106,7 +106,7 @@ export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT
             <div className="flex items-center gap-6">
               <button
                 onClick={onFilterToggle}
-                className="flex items-center gap-2 text-sm hover:text-accent transition-colors"
+                className="flex items-center gap-2 text-sm font-heading hover:text-accent transition-colors"
               >
                 <SlidersHorizontal className="h-4 w-4" />
                 <span>Filter</span>
@@ -116,7 +116,7 @@ export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT
                   </span>
                 )}
               </button>
-              <Link href="/contact" className="text-sm hover:text-accent transition-colors">
+              <Link href="/contact" className="text-sm font-heading hover:text-accent transition-colors">
                 Contact Us
               </Link>
             </div>
