@@ -92,8 +92,8 @@ export function HeroGrid() {
       <div className="grid grid-cols-24 h-full relative">
         {fabrics.map((fabric, index) => {
           const imageUrl = fabric.images?.[0]
-            ? urlForImage(fabric.images[0]).width(400).height(400).url()
-            : "/placeholder.svg?height=400&width=400"
+            ? urlForImage(fabric.images[0]).width(600).height(600).url()
+            : "/placeholder.svg?height=600&width=600"
 
           return (
             <motion.div
@@ -148,16 +148,16 @@ export function HeroGrid() {
         animate={{ opacity: isLoaded ? 1 : 0 }}
         transition={{ duration: 0.8, delay: 1.05 }}
       >
-        <div
-          className="bg-cream-100"
+        <Image
+          src="/logo.svg"
+          alt="Archive Fine Textiles"
+          width={800}
+          height={200}
+          className="w-[20vw] h-auto"
           style={{
-            paddingBlock: "calc(var(--spacing) * 14)",
-            paddingInline: "calc(var(--spacing) * 14)",
-            borderRadius: "20px",
+            filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 16px rgba(255, 255, 255, 0.4))",
           }}
-        >
-          <Image src="/logo.svg" alt="Archive Fine Textiles" width={800} height={200} className="w-[20vw] h-auto" />
-        </div>
+        />
       </motion.div>
     </div>
   )
