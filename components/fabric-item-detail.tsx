@@ -2,8 +2,7 @@
 
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import Image from "next/image"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Minimize2 } from "lucide-react"
 import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom"
 import { urlForImage } from "@/sanity/lib/image"
 import type { FabricItem } from "@/sanity/types"
@@ -83,7 +82,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
               transition={{ duration: 0.2 }}
               className="absolute inset-y-0 left-0 right-0 md:right-96"
             >
-              <div className="h-full w-full">
+              <div className="h-full w-full flex items-center justify-center">
                 <QuickPinchZoom
                   ref={zoomRef}
                   onUpdate={({ x, y, scale }) => {
@@ -99,14 +98,11 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                   doubleTapZoomOutOnMaxScale
                   doubleTapToggleZoom
                 >
-                  <div ref={imageContainerRef} className="w-full h-full relative">
-                    <Image
+                  <div ref={imageContainerRef} className="flex items-center justify-center h-screen">
+                    <img
                       src={currentImageUrl || "/placeholder.svg"}
                       alt={item.itemNumber}
-                      fill
-                      className="object-contain"
-                      priority
-                      sizes="100vw"
+                      className="max-h-full max-w-full object-contain"
                       onLoad={handleImageLoad}
                     />
                   </div>
@@ -119,6 +115,33 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
         {!currentImageLoaded && (
           <div className="absolute inset-y-0 left-0 right-0 md:right-96 flex items-center justify-center pointer-events-none z-10">
             <LoadingSpinner />
+          </div>
+        )}
+
+        {/* Zoom Controls */}
+        {currentImageLoaded && (
+          <div className="absolute bottom-6 left-6 z-10 flex gap-2 md:left-auto md:right-[25rem]">
+            <button
+              onClick={handleZoomIn}
+              className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+              aria-label="Zoom in"
+            >
+              <ZoomIn className="h-4 w-4" />
+            </button>
+            <button
+              onClick={handleZoomOut}
+              className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+              aria-label="Zoom out"
+            >
+              <ZoomOut className="h-4 w-4" />
+            </button>
+            <button
+              onClick={handleResetZoom}
+              className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+              aria-label="Reset zoom"
+            >
+              <Minimize2 className="h-4 w-4" />
+            </button>
           </div>
         )}
 
