@@ -106,7 +106,7 @@ export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT
             <div className="flex items-center gap-6">
               <button
                 onClick={onFilterToggle}
-                className="flex items-center gap-2 text-sm font-heading hover:text-accent transition-colors"
+                className="flex items-center gap-2 text-base font-heading hover:text-accent transition-colors"
               >
                 <SlidersHorizontal className="h-4 w-4" />
                 <span>Filter</span>
@@ -116,7 +116,7 @@ export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT
                   </span>
                 )}
               </button>
-              <Link href="/contact" className="text-sm font-heading hover:text-accent transition-colors">
+              <Link href="/contact" className="text-base font-heading hover:text-accent transition-colors">
                 Contact Us
               </Link>
             </div>
