@@ -97,7 +97,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                     src={currentImageUrl || "/placeholder.svg"}
                     alt={item.itemNumber}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     priority
                     sizes="100vw"
                     onLoad={handleImageLoad}
