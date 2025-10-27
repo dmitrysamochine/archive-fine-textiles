@@ -83,7 +83,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
               transition={{ duration: 0.2 }}
               className="absolute inset-0"
             >
-              <div className="absolute inset-0">
+              <div className="absolute inset-y-0 left-0 right-0 md:right-96">
                 <QuickPinchZoom
                   ref={zoomRef}
                   onUpdate={({ x, y, scale }) => {
