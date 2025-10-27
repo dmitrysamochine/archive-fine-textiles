@@ -19,6 +19,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentImageLoaded, setCurrentImageLoaded] = useState(false)
   const zoomRef = useRef<any>(null)
+  const imageContainerRef = useRef<HTMLDivElement>(null)
   const images = item.images || []
   const hasMultipleImages = images.length > 1
 
@@ -33,6 +34,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   }
 
   const handleImageLoad = () => {
+    console.log("[v0] Image loaded, index:", currentImageIndex)
     setCurrentImageLoaded(true)
     onImageLoad?.()
   }
@@ -40,6 +42,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   const handleZoomIn = () => {
     if (zoomRef.current) {
       const currentScale = zoomRef.current.scaleFactor || 1
+      console.log("[v0] Zoom in, current scale:", currentScale)
       zoomRef.current.scaleTo({ scale: Math.min(currentScale + 0.5, 4), x: 0.5, y: 0.5 })
     }
   }
@@ -47,11 +50,13 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   const handleZoomOut = () => {
     if (zoomRef.current) {
       const currentScale = zoomRef.current.scaleFactor || 1
+      console.log("[v0] Zoom out, current scale:", currentScale)
       zoomRef.current.scaleTo({ scale: Math.max(currentScale - 0.5, 1), x: 0.5, y: 0.5 })
     }
   }
 
   const handleResetZoom = () => {
+    console.log("[v0] Reset zoom")
     if (zoomRef.current) {
       zoomRef.current.scaleTo({ scale: 1, x: 0.5, y: 0.5 })
     }
@@ -60,6 +65,8 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   const currentImageUrl = images[currentImageIndex]
     ? urlForImage(images[currentImageIndex]).width(2000).height(2000).url()
     : "/placeholder.svg?height=2000&width=2000"
+
+  console.log("[v0] Rendering FabricItemDetail, imageLoaded:", currentImageLoaded, "imageUrl:", currentImageUrl)
 
   return (
     <>
@@ -80,9 +87,9 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                 ref={zoomRef}
                 onUpdate={({ x, y, scale }) => {
                   const value = make3dTransformValue({ x, y, scale })
-                  const img = document.getElementById(`fabric-image-${currentImageIndex}`)
-                  if (img) {
-                    img.style.setProperty("transform", value)
+                  console.log("[v0] Zoom update - scale:", scale, "transform:", value)
+                  if (imageContainerRef.current) {
+                    imageContainerRef.current.style.setProperty("transform", value)
                   }
                 }}
                 minZoom={1}
@@ -91,9 +98,8 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                 doubleTapZoomOutOnMaxScale
                 doubleTapToggleZoom
               >
-                <div className="w-full h-full relative">
+                <div ref={imageContainerRef} className="w-full h-full relative">
                   <Image
-                    id={`fabric-image-${currentImageIndex}`}
                     src={currentImageUrl || "/placeholder.svg"}
                     alt={item.itemNumber}
                     fill
