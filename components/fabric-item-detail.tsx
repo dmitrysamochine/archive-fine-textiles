@@ -3,7 +3,7 @@
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCcw } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom"
 import { urlForImage } from "@/sanity/lib/image"
 import type { FabricItem } from "@/sanity/types"
@@ -81,63 +81,35 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
               animate={{ opacity: currentImageLoaded ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-0"
+              className="absolute inset-y-0 left-0 right-0 md:right-96"
             >
-              <div className="absolute inset-y-0 left-0 right-0 md:right-96">
-                <QuickPinchZoom
-                  ref={zoomRef}
-                  onUpdate={({ x, y, scale }) => {
-                    const value = make3dTransformValue({ x, y, scale })
-                    console.log("[v0] Zoom update - scale:", scale, "transform:", value)
-                    if (imageContainerRef.current) {
-                      imageContainerRef.current.style.setProperty("transform", value)
-                    }
-                  }}
-                  minZoom={1}
-                  maxZoom={4}
-                  tapZoomFactor={0}
-                  doubleTapZoomOutOnMaxScale
-                  doubleTapToggleZoom
-                >
-                  <div ref={imageContainerRef} className="absolute inset-0">
-                    <Image
-                      src={currentImageUrl || "/placeholder.svg"}
-                      alt={item.itemNumber}
-                      fill
-                      className="object-contain"
-                      priority
-                      sizes="100vw"
-                      onLoad={handleImageLoad}
-                    />
-                  </div>
-                </QuickPinchZoom>
-              </div>
-
-              {currentImageLoaded && (
-                <div className="absolute bottom-6 right-6 md:right-[25rem] flex gap-2 z-20">
-                  <button
-                    onClick={handleZoomIn}
-                    className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-                    aria-label="Zoom in"
-                  >
-                    <ZoomIn className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={handleZoomOut}
-                    className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-                    aria-label="Zoom out"
-                  >
-                    <ZoomOut className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={handleResetZoom}
-                    className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-                    aria-label="Reset zoom"
-                  >
-                    <RotateCcw className="h-4 w-4" />
-                  </button>
+              <QuickPinchZoom
+                ref={zoomRef}
+                onUpdate={({ x, y, scale }) => {
+                  const value = make3dTransformValue({ x, y, scale })
+                  console.log("[v0] Zoom update - scale:", scale, "transform:", value)
+                  if (imageContainerRef.current) {
+                    imageContainerRef.current.style.setProperty("transform", value)
+                  }
+                }}
+                minZoom={1}
+                maxZoom={4}
+                tapZoomFactor={0}
+                doubleTapZoomOutOnMaxScale
+                doubleTapToggleZoom
+              >
+                <div ref={imageContainerRef} className="w-full h-full relative">
+                  <Image
+                    src={currentImageUrl || "/placeholder.svg"}
+                    alt={item.itemNumber}
+                    fill
+                    className="object-contain"
+                    priority
+                    sizes="100vw"
+                    onLoad={handleImageLoad}
+                  />
                 </div>
-              )}
+              </QuickPinchZoom>
             </motion.div>
           </AnimatePresence>
         </div>
