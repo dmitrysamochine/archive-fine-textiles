@@ -145,51 +145,42 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
           <div className="space-y-6">
             <div>
               {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
-              {item.colorway && <h2 className="text-xl font-heading mb-2">{item.colorway.name}</h2>}
-              <p className="text-lg text-muted-foreground">Item #{item.itemNumber}</p>
+              {item.colorway && <h2 className="text-xl font-heading mb-2 italic">{item.colorway.name}</h2>}
             </div>
 
             {/* Specifications */}
             <div className="space-y-4 pt-4 border-t border-border">
-              {item.type && (
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Type</h3>
-                  <p className="text-sm capitalize">{item.type}</p>
-                </div>
-              )}
-
-              {/* Price */}
               {item.price && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Price</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Price</h3>
                   <p className="text-sm">${item.price}</p>
                 </div>
               )}
 
               {item.content && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Material Content</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Material Content</h3>
                   <p className="text-sm">{item.content}</p>
                 </div>
               )}
 
               {item.width && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Width</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Width</h3>
                   <p className="text-sm">{item.width}</p>
                 </div>
               )}
 
               {item.repeat && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Pattern Repeat</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Pattern Repeat</h3>
                   <p className="text-sm">{item.repeat}</p>
                 </div>
               )}
 
               {item.categories && item.categories.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-2">Description Categories</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-2">Description Categories</h3>
                   <div className="flex flex-wrap gap-2">
                     {item.categories.map((category, index) => (
                       <span
