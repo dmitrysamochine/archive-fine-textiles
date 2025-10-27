@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCcw } from "lucide-react"
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
+import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom"
 import { urlForImage } from "@/sanity/lib/image"
 import type { FabricItem } from "@/sanity/types"
 import { RelatedFabrics } from "./related-fabrics"
@@ -18,6 +18,7 @@ interface FabricItemDetailProps {
 export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentImageLoaded, setCurrentImageLoaded] = useState(false)
+  const zoomRef = useRef<any>(null)
   const images = item.images || []
   const hasMultipleImages = images.length > 1
 
@@ -34,6 +35,26 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   const handleImageLoad = () => {
     setCurrentImageLoaded(true)
     onImageLoad?.()
+  }
+
+  const handleZoomIn = () => {
+    if (zoomRef.current) {
+      const currentScale = zoomRef.current.scaleFactor || 1
+      zoomRef.current.scaleTo({ scale: Math.min(currentScale + 0.5, 4), x: 0.5, y: 0.5 })
+    }
+  }
+
+  const handleZoomOut = () => {
+    if (zoomRef.current) {
+      const currentScale = zoomRef.current.scaleFactor || 1
+      zoomRef.current.scaleTo({ scale: Math.max(currentScale - 0.5, 1), x: 0.5, y: 0.5 })
+    }
+  }
+
+  const handleResetZoom = () => {
+    if (zoomRef.current) {
+      zoomRef.current.scaleTo({ scale: 1, x: 0.5, y: 0.5 })
+    }
   }
 
   const currentImageUrl = images[currentImageIndex]
@@ -55,63 +76,60 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
               transition={{ duration: 0.2 }}
               className="absolute inset-0"
             >
-              <TransformWrapper
-                initialScale={1}
-                minScale={1}
-                maxScale={4}
-                centerOnInit
-                wheel={{ step: 0.3 }}
-                pinch={{ step: 10 }}
-                doubleClick={{ mode: "reset" }}
-                panning={{ velocityDisabled: true }}
-                velocityAnimation={{ disabled: true, sensitivity: 0 }}
-                options={{
-                  zoomAnimation: { disabled: true }, // Disables zoom animation
-                  panning: { animationTime: 0 }, // Disables panning animation
+              <QuickPinchZoom
+                ref={zoomRef}
+                onUpdate={({ x, y, scale }) => {
+                  const value = make3dTransformValue({ x, y, scale })
+                  const img = document.getElementById(`fabric-image-${currentImageIndex}`)
+                  if (img) {
+                    img.style.setProperty("transform", value)
+                  }
                 }}
+                minZoom={1}
+                maxZoom={4}
+                tapZoomFactor={0}
+                doubleTapZoomOutOnMaxScale
+                doubleTapToggleZoom
               >
-                {({ zoomIn, zoomOut, resetTransform }) => (
-                  <>
-                    <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full">
-                      <Image
-                        src={currentImageUrl || "/placeholder.svg"}
-                        alt={item.itemNumber}
-                        fill
-                        className="object-cover"
-                        priority
-                        sizes="100vw"
-                        onLoad={handleImageLoad}
-                      />
-                    </TransformComponent>
+                <div className="w-full h-full relative">
+                  <Image
+                    id={`fabric-image-${currentImageIndex}`}
+                    src={currentImageUrl || "/placeholder.svg"}
+                    alt={item.itemNumber}
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="100vw"
+                    onLoad={handleImageLoad}
+                  />
+                </div>
+              </QuickPinchZoom>
 
-                    {currentImageLoaded && (
-                      <div className="absolute bottom-6 right-6 md:right-[25rem] flex gap-2 z-20">
-                        <button
-                          onClick={() => zoomIn(0.5)}
-                          className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-                          aria-label="Zoom in"
-                        >
-                          <ZoomIn className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => zoomOut(0.5)}
-                          className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-                          aria-label="Zoom out"
-                        >
-                          <ZoomOut className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => resetTransform()}
-                          className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-                          aria-label="Reset zoom"
-                        >
-                          <RotateCcw className="h-4 w-4" />
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
-              </TransformWrapper>
+              {currentImageLoaded && (
+                <div className="absolute bottom-6 right-6 md:right-[25rem] flex gap-2 z-20">
+                  <button
+                    onClick={handleZoomIn}
+                    className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+                    aria-label="Zoom in"
+                  >
+                    <ZoomIn className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={handleZoomOut}
+                    className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+                    aria-label="Zoom out"
+                  >
+                    <ZoomOut className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={handleResetZoom}
+                    className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+                    aria-label="Reset zoom"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
