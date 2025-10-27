@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Minimize2 } from "lucide-react"
-import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom"
+import { TransformWrapper, TransformComponent, useControls } from "react-zoom-pan-pinch"
+import Image from "next/image"
 import { urlForImage } from "@/sanity/lib/image"
 import type { FabricItem } from "@/sanity/types"
 import { RelatedFabrics } from "./related-fabrics"
@@ -14,11 +15,39 @@ interface FabricItemDetailProps {
   onImageLoad?: () => void
 }
 
+function ZoomControls() {
+  const { zoomIn, zoomOut, resetTransform } = useControls()
+
+  return (
+    <div className="absolute bottom-6 left-6 z-10 flex gap-2 md:left-auto md:right-[25rem]">
+      <button
+        onClick={() => zoomIn()}
+        className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+        aria-label="Zoom in"
+      >
+        <ZoomIn className="h-4 w-4" />
+      </button>
+      <button
+        onClick={() => zoomOut()}
+        className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+        aria-label="Zoom out"
+      >
+        <ZoomOut className="h-4 w-4" />
+      </button>
+      <button
+        onClick={() => resetTransform()}
+        className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
+        aria-label="Reset zoom"
+      >
+        <Minimize2 className="h-4 w-4" />
+      </button>
+    </div>
+  )
+}
+
 export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [currentImageLoaded, setCurrentImageLoaded] = useState(false)
-  const zoomRef = useRef<any>(null)
-  const imageContainerRef = useRef<HTMLDivElement>(null)
   const images = item.images || []
   const hasMultipleImages = images.length > 1
 
@@ -33,39 +62,13 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   }
 
   const handleImageLoad = () => {
-    console.log("[v0] Image loaded, index:", currentImageIndex)
     setCurrentImageLoaded(true)
     onImageLoad?.()
-  }
-
-  const handleZoomIn = () => {
-    if (zoomRef.current) {
-      const currentScale = zoomRef.current.scaleFactor || 1
-      console.log("[v0] Zoom in, current scale:", currentScale)
-      zoomRef.current.scaleTo({ scale: Math.min(currentScale + 0.5, 4), x: 0.5, y: 0.5 })
-    }
-  }
-
-  const handleZoomOut = () => {
-    if (zoomRef.current) {
-      const currentScale = zoomRef.current.scaleFactor || 1
-      console.log("[v0] Zoom out, current scale:", currentScale)
-      zoomRef.current.scaleTo({ scale: Math.max(currentScale - 0.5, 1), x: 0.5, y: 0.5 })
-    }
-  }
-
-  const handleResetZoom = () => {
-    console.log("[v0] Reset zoom")
-    if (zoomRef.current) {
-      zoomRef.current.scaleTo({ scale: 1, x: 0.5, y: 0.5 })
-    }
   }
 
   const currentImageUrl = images[currentImageIndex]
     ? urlForImage(images[currentImageIndex]).width(2000).height(2000).url()
     : "/placeholder.svg?height=2000&width=2000"
-
-  console.log("[v0] Rendering FabricItemDetail, imageLoaded:", currentImageLoaded, "imageUrl:", currentImageUrl)
 
   return (
     <>
@@ -82,32 +85,32 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
               transition={{ duration: 0.2 }}
               className="absolute inset-y-0 left-0 right-0 md:right-96"
             >
-              <div className="h-full w-full flex items-center justify-center">
-                <QuickPinchZoom
-                  ref={zoomRef}
-                  onUpdate={({ x, y, scale }) => {
-                    const value = make3dTransformValue({ x, y, scale })
-                    console.log("[v0] Zoom update - scale:", scale, "transform:", value)
-                    if (imageContainerRef.current) {
-                      imageContainerRef.current.style.setProperty("transform", value)
-                    }
-                  }}
-                  minZoom={1}
-                  maxZoom={4}
-                  tapZoomFactor={0}
-                  doubleTapZoomOutOnMaxScale
-                  doubleTapToggleZoom
+              <TransformWrapper
+                initialScale={1}
+                minScale={1}
+                maxScale={4}
+                wheel={{ step: 0.3 }}
+                velocityAnimation={{ disabled: true }}
+                doubleClick={{ mode: "toggle" }}
+                panning={{ velocityDisabled: true }}
+              >
+                <TransformComponent
+                  wrapperClass="!w-full !h-full"
+                  contentClass="!w-full !h-full flex items-center justify-center"
                 >
-                  <div ref={imageContainerRef} className="flex items-center justify-center h-screen">
-                    <img
+                  <div className="relative w-full h-full">
+                    <Image
                       src={currentImageUrl || "/placeholder.svg"}
                       alt={item.itemNumber}
-                      className="max-h-full max-w-full object-contain"
+                      fill
+                      className="object-contain"
                       onLoad={handleImageLoad}
+                      priority
                     />
                   </div>
-                </QuickPinchZoom>
-              </div>
+                </TransformComponent>
+                {currentImageLoaded && <ZoomControls />}
+              </TransformWrapper>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -115,33 +118,6 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
         {!currentImageLoaded && (
           <div className="absolute inset-y-0 left-0 right-0 md:right-96 flex items-center justify-center pointer-events-none z-10">
             <LoadingSpinner />
-          </div>
-        )}
-
-        {/* Zoom Controls */}
-        {currentImageLoaded && (
-          <div className="absolute bottom-6 left-6 z-10 flex gap-2 md:left-auto md:right-[25rem]">
-            <button
-              onClick={handleZoomIn}
-              className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-              aria-label="Zoom in"
-            >
-              <ZoomIn className="h-4 w-4" />
-            </button>
-            <button
-              onClick={handleZoomOut}
-              className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-              aria-label="Zoom out"
-            >
-              <ZoomOut className="h-4 w-4" />
-            </button>
-            <button
-              onClick={handleResetZoom}
-              className="bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-colors"
-              aria-label="Reset zoom"
-            >
-              <Minimize2 className="h-4 w-4" />
-            </button>
           </div>
         )}
 
