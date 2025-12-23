@@ -120,7 +120,7 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
     onClose()
   }
 
-  const topPosition = hasActiveFilters ? 153 : 80
+  const topPosition = hasActiveFilters ? 138 : 80
 
   return (
     <>
