@@ -1,5 +1,9 @@
 import { createClient } from "@sanity/client"
 
+// Environment variables must be set before running this script
+// Run with: NEXT_PUBLIC_SANITY_PROJECT_ID=your_id NEXT_PUBLIC_SANITY_DATASET=production SANITY_API_TOKEN=your_token npx tsx scripts/migrate-materials.ts
+// Or add them to your shell environment first
+
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
@@ -10,26 +14,18 @@ const client = createClient({
 
 // Material name patterns to match in content strings
 const materialPatterns = [
+  "solution dyed acrylic",
+  "ramie",
+  "silk",
+  "polyamide",
+  "polyester",
+  "mohair",
+  "merino lambswool",
+  "viscose",
+  "acrylic",
+  "wool",
   "cotton",
   "linen",
-  "silk",
-  "wool",
-  "polyester",
-  "viscose",
-  "rayon",
-  "cashmere",
-  "mohair",
-  "acrylic",
-  "nylon",
-  "spandex",
-  "elastane",
-  "hemp",
-  "bamboo",
-  "tencel",
-  "modal",
-  "acetate",
-  "velvet",
-  "chenille",
 ]
 
 function extractMaterials(contentString: string): string[] {
