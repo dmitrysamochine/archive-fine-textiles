@@ -73,9 +73,9 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
               <Image src="/logo.svg" alt="Archive Fine Textiles" width={216} height={48} className="h-12 w-auto" />
             </Link>
 
-            {/* Search */}
-            <div className="flex-1 max-w-md">
-              <div className="relative">
+            {/* Search - Hide on mobile */}
+            <div className="hidden md:flex flex-1 max-w-md">
+              <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input
                   type="search"
@@ -95,9 +95,9 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
               </div>
             </div>
 
-            {/* Contact */}
+            {/* Contact - Reduce font size on mobile */}
             <div className="flex items-center gap-6">
-              <Link href="/contact" className="text-base font-heading hover:text-accent transition-colors">
+              <Link href="/contact" className="text-sm md:text-base font-heading hover:text-accent transition-colors">
                 Contact Us
               </Link>
             </div>
