@@ -57,7 +57,7 @@ export function FilterTrigger({ onClick, isOpen, hasPassedT1, hasActiveFilters }
               scale: { type: "spring", damping: 20, stiffness: 300 },
             }}
             onClick={onClick}
-            className="md:hidden fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-terracotta-600 hover:bg-terracotta-700 text-white shadow-lg flex items-center justify-center transition-colors"
+            className="md:hidden fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-steel-600 hover:bg-steel-700 text-white shadow-lg flex items-center justify-center transition-colors"
             aria-label="Toggle filters"
           >
             <SlidersHorizontal className="h-5 w-5" />

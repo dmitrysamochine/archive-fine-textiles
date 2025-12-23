@@ -153,7 +153,7 @@ export function HeroGrid() {
           alt="Archive Fine Textiles"
           width={800}
           height={200}
-          className="w-[20vw] h-auto"
+          className="w-[85vw] md:w-[20vw] h-auto px-4 md:px-0"
           style={{
             filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 16px rgba(255, 255, 255, 0.4))",
           }}
