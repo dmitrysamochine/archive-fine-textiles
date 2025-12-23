@@ -152,7 +152,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                 animate={{ opacity: currentImageLoaded ? 1 : 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="absolute inset-0 w-full h-full flex items-center justify-center"
+                className="w-full h-full"
               >
                 <TransformWrapper
                   initialScale={1}
@@ -163,11 +163,8 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                   doubleClick={{ mode: "toggle" }}
                   panning={{ velocityDisabled: true }}
                 >
-                  <TransformComponent
-                    wrapperClass="!w-full !h-full flex items-center justify-center"
-                    contentClass="flex items-center justify-center"
-                  >
-                    <div className="relative w-full h-full max-w-full max-h-full flex items-center justify-center">
+                  <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full">
+                    <div className="relative w-full h-full">
                       <Image
                         src={currentImageUrl || "/placeholder.svg"}
                         alt={item.itemNumber}
