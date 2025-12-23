@@ -15,14 +15,14 @@ const NAV_HEIGHT = 80
 
 export default function Page() {
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [showHero, setShowHero] = useState(true)
+  const searchParams = useSearchParams()
+  const [showHero, setShowHero] = useState(!searchParams.toString())
   const [hasPassedT1, setHasPassedT1] = useState(false)
   const [hasPassedT2, setHasPassedT2] = useState(false)
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("down")
   const [lastScrollY, setLastScrollY] = useState(0)
   const [heroOpacity, setHeroOpacity] = useState(1)
   const [selectedFabricId, setSelectedFabricId] = useState<string | null>(null)
-  const searchParams = useSearchParams()
   const router = useRouter()
 
   const hasActiveFilters = searchParams.has("collection") || searchParams.has("color") || searchParams.has("material")
@@ -120,7 +120,7 @@ export default function Page() {
           <div
             className="transition-all duration-300"
             style={{
-              paddingTop: hasActiveFilters ? "73px" : "0",
+              paddingTop: hasActiveFilters ? "65px" : "0",
             }}
           >
             <FabricGrid hasScrolled={hasPassedT1} onFabricClick={handleFabricClick} />

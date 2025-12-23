@@ -11,7 +11,7 @@ interface FilterTriggerProps {
 }
 
 export function FilterTrigger({ onClick, isOpen, hasPassedT1, hasActiveFilters }: FilterTriggerProps) {
-  const topPosition = hasActiveFilters ? 138 : 80
+  const topPosition = hasActiveFilters ? 145 : 80
 
   return (
     <>
@@ -32,7 +32,7 @@ export function FilterTrigger({ onClick, isOpen, hasPassedT1, hasActiveFilters }
               top: { duration: 0.3 },
             }}
             onClick={onClick}
-            className="hidden md:block fixed left-0 z-40 px-3 py-8 bg-linen-100 hover:bg-linen-200 border-r border-t border-b border-border transition-colors shadow-sm"
+            className="hidden md:block fixed left-0 z-40 px-3 py-8 bg-linen-100 hover:bg-linen-200 border border-border transition-colors shadow-sm"
             aria-label="Toggle filters"
           >
             <span className="text-xs font-sans tracking-wider -rotate-90 whitespace-nowrap block origin-center">
