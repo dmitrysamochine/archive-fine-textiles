@@ -154,7 +154,7 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
             >
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-border">
-                <h2 className="text-lg font-heading">Filter By</h2>
+                <h2 className="text-lg font-sans">Filter By</h2>
                 <button onClick={handleClose} className="text-muted-foreground hover:text-foreground transition-colors">
                   <X className="h-5 w-5" />
                 </button>
@@ -166,7 +166,7 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
                   onClick={() => handleCategoryClick("collection")}
                   className="flex items-center justify-between px-6 py-5 hover:bg-linen-50 transition-colors border-b border-border group"
                 >
-                  <span className="text-base font-heading">Collection</span>
+                  <span className="text-base font-sans">Collection</span>
                   <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
                 </button>
 
@@ -174,7 +174,7 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
                   onClick={() => handleCategoryClick("color")}
                   className="flex items-center justify-between px-6 py-5 hover:bg-linen-50 transition-colors border-b border-border group"
                 >
-                  <span className="text-base font-heading">Color</span>
+                  <span className="text-base font-sans">Color</span>
                   <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
                 </button>
 
@@ -182,7 +182,7 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
                   onClick={() => handleCategoryClick("material")}
                   className="flex items-center justify-between px-6 py-5 hover:bg-linen-50 transition-colors border-b border-border group"
                 >
-                  <span className="text-base font-heading">Material</span>
+                  <span className="text-base font-sans">Material</span>
                   <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
                 </button>
               </div>
@@ -197,19 +197,21 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
               transition={{ duration: 0.2 }}
               className="flex flex-col h-full"
             >
+              <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+                <h3 className="text-base font-sans">{categoryLabels[activeCategory]}</h3>
+                <button onClick={handleClose} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
               {/* Back Button */}
               <button
                 onClick={handleBack}
                 className="flex items-center gap-2 px-6 py-4 border-b border-border hover:bg-linen-50 transition-colors"
               >
                 <ChevronLeft className="h-5 w-5" />
-                <span className="text-sm font-heading">Back</span>
+                <span className="text-sm font-sans">Back</span>
               </button>
-
-              {/* Category Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-                <h3 className="text-base font-heading">{categoryLabels[activeCategory]}</h3>
-              </div>
 
               {/* Search (for collection only) */}
               {searchable && (
@@ -221,7 +223,7 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
                       placeholder={`Search ${categoryLabels[activeCategory].toLowerCase()}...`}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-sm bg-muted/50 border border-border rounded-full focus:outline-none focus:ring-1 focus:ring-ring"
+                      className="w-full pl-9 pr-3 py-2 text-sm bg-muted/50 border border-border rounded-full focus:outline-none focus:ring-1 focus:ring-ring font-sans"
                     />
                   </div>
                 </div>
@@ -230,9 +232,9 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
               {/* Options List */}
               <div className="flex-1 overflow-y-auto px-6 py-4">
                 {loading ? (
-                  <p className="text-sm text-muted-foreground">Loading...</p>
+                  <p className="text-sm text-muted-foreground font-sans">Loading...</p>
                 ) : filteredOptions.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No options found</p>
+                  <p className="text-sm text-muted-foreground font-sans">No options found</p>
                 ) : (
                   <div className="space-y-2">
                     {filteredOptions.map((option) => {
@@ -253,10 +255,12 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
                               style={{ backgroundColor: option.hexValue }}
                             />
                           )}
-                          <span className="text-sm group-hover:text-foreground transition-colors flex-1">
+                          <span className="text-sm group-hover:text-foreground transition-colors flex-1 font-sans">
                             {option.name}
                           </span>
-                          {option.count > 0 && <span className="text-xs text-muted-foreground">({option.count})</span>}
+                          {option.count > 0 && (
+                            <span className="text-xs text-muted-foreground font-sans">({option.count})</span>
+                          )}
                         </label>
                       )
                     })}
