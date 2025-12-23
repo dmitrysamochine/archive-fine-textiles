@@ -143,8 +143,13 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
             </div>
           </div>
 
-          {/* Image Block - second on mobile (scroll down to see), fills screen on desktop */}
-          <div className="relative w-full h-[70vh] md:h-full md:flex-1 bg-white flex items-center justify-center">
+          <div className="relative w-full h-[70vh] md:h-full md:w-[calc(100%-24rem)] bg-white flex items-center justify-center">
+            {!currentImageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
+                <LoadingSpinner />
+              </div>
+            )}
+
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentImageIndex}
@@ -180,12 +185,6 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                 </TransformWrapper>
               </motion.div>
             </AnimatePresence>
-
-            {!currentImageLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
-                <LoadingSpinner />
-              </div>
-            )}
           </div>
 
           {/* Image Navigation Arrows */}
