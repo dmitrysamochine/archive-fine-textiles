@@ -18,6 +18,7 @@ interface FabricItem {
   content?: string
   categories?: Array<{ name: string; slug: string }>
   colors?: Array<{ name: string; slug: string }>
+  materials?: Array<{ name: string; slug: string }>
 }
 
 interface FabricGridProps {
@@ -51,7 +52,8 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
       price,
       content,
       "categories": description[]->{name, "slug": slug.current},
-      "colors": color[]->{name, "slug": slug.current}
+      "colors": color[]->{name, "slug": slug.current},
+      "materials": materials[]->{name, "slug": slug.current}
     }`
 
     const data = await client.fetch<FabricItem[]>(query)
@@ -81,7 +83,7 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
     }
 
     if (materialFilter) {
-      filtered = filtered.filter((f) => f.content && materialFilter.some((m) => f.content?.includes(m)))
+      filtered = filtered.filter((f) => f.materials && f.materials.some((m) => materialFilter.includes(m.slug)))
     }
 
     if (categoryFilter) {
