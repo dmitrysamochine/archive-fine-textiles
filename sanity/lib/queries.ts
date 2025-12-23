@@ -6,6 +6,7 @@ export const fabricItemsQuery = groq`
     && ($collection == null || references($collection))
     && ($colorway == null || colorway->slug.current == $colorway)
     && ($color == null || $color in color[]->slug.current)
+    && ($material == null || $material in materials[]->slug.current)
     && ($status == null || status == $status)
   ] | order(itemNumber asc) {
     _id,
@@ -21,6 +22,7 @@ export const fabricItemsQuery = groq`
     repeat,
     "categories": description[]->{name, slug},
     "colors": color[]->{name, slug, hexValue},
+    "materials": materials[]->{name, slug},
     images[] {
       asset->,
       alt
@@ -45,6 +47,7 @@ export const fabricItemByNumberQuery = groq`
     repeat,
     "categories": description[]->{name, slug},
     "colors": color[]->{name, slug, hexValue},
+    "materials": materials[]->{name, slug},
     images[] {
       asset->,
       alt
@@ -86,6 +89,7 @@ export const fabricCollectionBySlugQuery = groq`
       repeat,
       "categories": description[]->{name, slug},
       "colors": color[]->{name, slug, hexValue},
+      "materials": materials[]->{name, slug},
       images[] {
         asset->,
         alt
@@ -126,6 +130,7 @@ export const colorwayBySlugQuery = groq`
       repeat,
       "categories": description[]->{name, slug},
       "colors": color[]->{name, slug, hexValue},
+      "materials": materials[]->{name, slug},
       images[] {
         asset->,
         alt
@@ -147,4 +152,13 @@ export const colorsQuery = groq`
 // Get all unique statuses
 export const statusesQuery = groq`
   array::unique(*[_type == "fabricItem"].status)
+`
+
+// Get all unique materials for filtering
+export const materialsQuery = groq`
+  *[_type == "material"] | order(name asc) {
+    _id,
+    name,
+    slug
+  }
 `

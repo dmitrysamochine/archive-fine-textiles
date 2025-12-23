@@ -70,10 +70,11 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
           }`)
           break
         case "material":
-          const materials = await client.fetch(
-            `array::unique(*[_type == "fabricItem" && defined(images[0]) && defined(content)].content)`,
-          )
-          data = materials.map((m: string) => ({ name: m, count: 0 }))
+          data = await client.fetch(`*[_type == "material"] | order(name asc) {
+            name,
+            "slug": slug.current,
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0])])
+          }`)
           break
       }
 

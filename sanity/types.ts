@@ -57,6 +57,12 @@ export interface FabricItem {
     }
     hexValue?: string
   }>
+  materials?: Array<{
+    name: string
+    slug: {
+      current: string
+    }
+  }>
   images?: Array<{
     asset: {
       _id: string
@@ -112,4 +118,12 @@ export interface Color {
     current: string
   }
   hexValue?: string
+}
+
+export interface Material {
+  _id: string
+  name: string
+  slug: {
+    current: string
+  }
 }

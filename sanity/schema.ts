@@ -113,6 +113,18 @@ export const fabricItem = defineType({
       ],
     }),
     defineField({
+      name: "materials",
+      title: "Materials",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "material" }],
+        }),
+      ],
+      description: "Select material types (for filtering). Material Content field remains for display.",
+    }),
+    defineField({
       name: "images",
       title: "Images",
       type: "array",
@@ -289,4 +301,34 @@ export const color = defineType({
   },
 })
 
-export const schemaTypes = [fabricItem, fabricCollection, colorway, category, color]
+// Material
+export const material = defineType({
+  name: "material",
+  title: "Materials",
+  type: "document",
+  fields: [
+    defineField({
+      name: "name",
+      title: "Name",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "name",
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+  ],
+  preview: {
+    select: {
+      title: "name",
+    },
+  },
+})
+
+export const schemaTypes = [fabricItem, fabricCollection, colorway, category, color, material]

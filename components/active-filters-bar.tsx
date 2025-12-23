@@ -20,13 +20,14 @@ export function ActiveFiltersBar() {
 
   useEffect(() => {
     const fetchLabels = async () => {
-      const [collections, colors] = await Promise.all([
+      const [collections, colors, materials] = await Promise.all([
         client.fetch(`*[_type == "fabricCollection"] { "slug": slug.current, name }`),
         client.fetch(`*[_type == "color"] { "slug": slug.current, name }`),
+        client.fetch(`*[_type == "material"] { "slug": slug.current, name }`),
       ])
 
       const labels: Record<string, string> = {}
-      ;[...collections, ...colors].forEach((item: any) => {
+      ;[...collections, ...colors, ...materials].forEach((item: any) => {
         labels[item.slug] = item.name
       })
 
@@ -68,7 +69,7 @@ export function ActiveFiltersBar() {
         filters.push({
           category: "material",
           value,
-          label: value,
+          label: filterLabels[value] || value,
         })
       })
     }
