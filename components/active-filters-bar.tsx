@@ -105,7 +105,6 @@ export function ActiveFiltersBar() {
     >
       <div className="container mx-auto px-6 py-4 flex items-center">
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-sm text-muted-foreground">Active Filters:</span>
           <AnimatePresence mode="popLayout">
             {activeFilters.map((filter) => (
               <motion.button
