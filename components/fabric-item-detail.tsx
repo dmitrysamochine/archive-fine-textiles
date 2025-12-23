@@ -73,9 +73,9 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   return (
     <>
       {/* Full viewport image with info overlay */}
-      <div className="relative w-full h-screen overflow-hidden">
+      <div className="relative w-full flex flex-col md:h-screen md:flex-row md:overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 md:right-96 bg-white flex items-center justify-center">
+        <div className="relative w-full h-screen md:flex-1 bg-white flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
@@ -142,13 +142,12 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
           </>
         )}
 
-        <div className="absolute right-0 top-0 bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto translate-y-full md:translate-y-0">
+        {/* Info Panel - stacks below image on mobile, overlays on desktop */}
+        <div className="w-full md:absolute md:right-0 md:top-0 md:bottom-0 md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto">
           <div className="space-y-6">
             <div>
               {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
-              {item.colorway && (
-                <h2 className="text-xl font-sans mb-2 italic text-muted-foreground">{item.colorway.name}</h2>
-              )}
+              {item.colorway && <h2 className="text-xl font-sans mb-2 text-muted-foreground">{item.colorway.name}</h2>}
             </div>
 
             {/* Specifications */}
