@@ -73,140 +73,144 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   return (
     <>
       {/* Full viewport image with info overlay */}
-      <div className="relative w-full flex flex-col-reverse md:h-screen md:flex-row md:overflow-hidden">
-        {/* Info Panel - shows first on mobile, overlays on desktop */}
-        <div className="w-full md:absolute md:right-0 md:top-0 md:bottom-0 md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto md:z-20">
-          <div className="space-y-6">
-            <div>
-              {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
-              {item.colorway && <h2 className="text-xl font-sans mb-2 text-muted-foreground">{item.colorway.name}</h2>}
-            </div>
+      <div className="relative w-full md:h-screen md:overflow-hidden">
+        <div className="flex flex-col md:flex-row md:h-full">
+          {/* Info Panel - first on mobile (top), overlay on desktop (right side) */}
+          <div className="w-full md:absolute md:right-0 md:top-0 md:bottom-0 md:w-96 bg-background md:bg-background/95 md:backdrop-blur-sm p-8 overflow-y-auto md:z-20 md:shadow-xl">
+            <div className="space-y-6">
+              <div>
+                {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
+                {item.colorway && (
+                  <h2 className="text-xl font-sans mb-2 text-muted-foreground">{item.colorway.name}</h2>
+                )}
+              </div>
 
-            {/* Specifications */}
-            <div className="space-y-4 pt-4 border-t border-border">
-              {item.price && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Price</h3>
-                  <p className="text-sm text-muted-foreground">${item.price}</p>
-                </div>
-              )}
-
-              {item.content && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Material Content</h3>
-                  <p className="text-sm text-muted-foreground">{item.content}</p>
-                </div>
-              )}
-
-              {item.width && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Width</h3>
-                  <p className="text-sm text-muted-foreground">{item.width}</p>
-                </div>
-              )}
-
-              {item.repeat && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Pattern Repeat</h3>
-                  <p className="text-sm text-muted-foreground">{item.repeat}</p>
-                </div>
-              )}
-
-              {item.categories && item.categories.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-2">Description Categories</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {item.categories.map((category, index) => (
-                      <span
-                        key={category.slug?.current || `category-${index}`}
-                        className="text-xs px-2 py-1 bg-muted rounded"
-                      >
-                        {category.name}
-                      </span>
-                    ))}
+              {/* Specifications */}
+              <div className="space-y-4 pt-4 border-t border-border">
+                {item.price && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Price</h3>
+                    <p className="text-sm text-muted-foreground">${item.price}</p>
                   </div>
+                )}
+
+                {item.content && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Material Content</h3>
+                    <p className="text-sm text-muted-foreground">{item.content}</p>
+                  </div>
+                )}
+
+                {item.width && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Width</h3>
+                    <p className="text-sm text-muted-foreground">{item.width}</p>
+                  </div>
+                )}
+
+                {item.repeat && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Pattern Repeat</h3>
+                    <p className="text-sm text-muted-foreground">{item.repeat}</p>
+                  </div>
+                )}
+
+                {item.categories && item.categories.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-2">Description Categories</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {item.categories.map((category, index) => (
+                        <span
+                          key={category.slug?.current || `category-${index}`}
+                          className="text-xs px-2 py-1 bg-muted rounded"
+                        >
+                          {category.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Image Counter */}
+              {hasMultipleImages && (
+                <div className="pt-4 border-t border-border">
+                  <p className="text-xs text-muted-foreground">
+                    Image {currentImageIndex + 1} of {images.length}
+                  </p>
                 </div>
               )}
             </div>
+          </div>
 
-            {/* Image Counter */}
-            {hasMultipleImages && (
-              <div className="pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground">
-                  Image {currentImageIndex + 1} of {images.length}
-                </p>
+          {/* Image Block - second on mobile (scroll down to see), fills screen on desktop */}
+          <div className="relative w-full h-[70vh] md:h-full md:flex-1 bg-white flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentImageIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: currentImageLoaded ? 1 : 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="absolute inset-0 w-full h-full"
+              >
+                <TransformWrapper
+                  initialScale={1}
+                  minScale={1}
+                  maxScale={4}
+                  wheel={{ step: 0.3 }}
+                  velocityAnimation={{ disabled: true }}
+                  doubleClick={{ mode: "toggle" }}
+                  panning={{ velocityDisabled: true }}
+                >
+                  <TransformComponent
+                    wrapperClass="!w-full !h-full"
+                    contentClass="!w-full !h-full flex items-center justify-center"
+                  >
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={currentImageUrl || "/placeholder.svg"}
+                        alt={item.itemNumber}
+                        fill
+                        className="object-contain"
+                        onLoad={handleImageLoad}
+                        priority
+                        sizes="(max-width: 768px) 100vw, calc(100vw - 24rem)"
+                      />
+                    </div>
+                  </TransformComponent>
+                  {currentImageLoaded && <ZoomControls />}
+                </TransformWrapper>
+              </motion.div>
+            </AnimatePresence>
+
+            {!currentImageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
+                <LoadingSpinner />
               </div>
             )}
           </div>
-        </div>
 
-        {/* Background Image - shows second on mobile (scroll down), fills screen on desktop */}
-        <div className="relative w-full h-screen md:flex-1 bg-white flex items-center justify-center">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentImageIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: currentImageLoaded ? 1 : 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <TransformWrapper
-                initialScale={1}
-                minScale={1}
-                maxScale={4}
-                wheel={{ step: 0.3 }}
-                velocityAnimation={{ disabled: true }}
-                doubleClick={{ mode: "toggle" }}
-                panning={{ velocityDisabled: true }}
+          {/* Image Navigation Arrows */}
+          {hasMultipleImages && (
+            <>
+              <button
+                onClick={prevImage}
+                className="absolute left-6 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors md:top-1/2"
+                aria-label="Previous image"
               >
-                <TransformComponent
-                  wrapperClass="!w-full !h-full"
-                  contentClass="!w-full !h-full flex items-center justify-center"
-                >
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={currentImageUrl || "/placeholder.svg"}
-                      alt={item.itemNumber}
-                      fill
-                      className="object-contain"
-                      onLoad={handleImageLoad}
-                      priority
-                      sizes="(max-width: 768px) 100vw, calc(100vw - 24rem)"
-                    />
-                  </div>
-                </TransformComponent>
-                {currentImageLoaded && <ZoomControls />}
-              </TransformWrapper>
-            </motion.div>
-          </AnimatePresence>
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-6 top-1/2 -translate-y-1/2 z-10 md:right-[25rem] bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors md:top-1/2"
+                aria-label="Next image"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </>
+          )}
         </div>
-
-        {!currentImageLoaded && (
-          <div className="absolute inset-0 md:right-96 flex items-center justify-center bg-white z-10">
-            <LoadingSpinner />
-          </div>
-        )}
-
-        {/* Image Navigation Arrows */}
-        {hasMultipleImages && (
-          <>
-            <button
-              onClick={prevImage}
-              className="absolute left-6 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors md:left-6"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={nextImage}
-              className="absolute right-6 top-1/2 -translate-y-1/2 z-10 md:right-[25rem] bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors"
-              aria-label="Next image"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </>
-        )}
       </div>
 
       {/* Related Items from Same Colorway */}
