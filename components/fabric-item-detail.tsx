@@ -73,8 +73,74 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   return (
     <>
       {/* Full viewport image with info overlay */}
-      <div className="relative w-full flex flex-col md:h-screen md:flex-row md:overflow-hidden">
-        {/* Background Image */}
+      <div className="relative w-full flex flex-col-reverse md:h-screen md:flex-row md:overflow-hidden">
+        {/* Info Panel - shows first on mobile, overlays on desktop */}
+        <div className="w-full md:absolute md:right-0 md:top-0 md:bottom-0 md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto md:z-20">
+          <div className="space-y-6">
+            <div>
+              {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
+              {item.colorway && <h2 className="text-xl font-sans mb-2 text-muted-foreground">{item.colorway.name}</h2>}
+            </div>
+
+            {/* Specifications */}
+            <div className="space-y-4 pt-4 border-t border-border">
+              {item.price && (
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Price</h3>
+                  <p className="text-sm text-muted-foreground">${item.price}</p>
+                </div>
+              )}
+
+              {item.content && (
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Material Content</h3>
+                  <p className="text-sm text-muted-foreground">{item.content}</p>
+                </div>
+              )}
+
+              {item.width && (
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Width</h3>
+                  <p className="text-sm text-muted-foreground">{item.width}</p>
+                </div>
+              )}
+
+              {item.repeat && (
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Pattern Repeat</h3>
+                  <p className="text-sm text-muted-foreground">{item.repeat}</p>
+                </div>
+              )}
+
+              {item.categories && item.categories.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-2">Description Categories</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {item.categories.map((category, index) => (
+                      <span
+                        key={category.slug?.current || `category-${index}`}
+                        className="text-xs px-2 py-1 bg-muted rounded"
+                      >
+                        {category.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Image Counter */}
+            {hasMultipleImages && (
+              <div className="pt-4 border-t border-border">
+                <p className="text-xs text-muted-foreground">
+                  Image {currentImageIndex + 1} of {images.length}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Background Image - shows second on mobile (scroll down), fills screen on desktop */}
         <div className="relative w-full h-screen md:flex-1 bg-white flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
@@ -141,72 +207,6 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
             </button>
           </>
         )}
-
-        {/* Info Panel - stacks below image on mobile, overlays on desktop */}
-        <div className="w-full md:absolute md:right-0 md:top-0 md:bottom-0 md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto">
-          <div className="space-y-6">
-            <div>
-              {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
-              {item.colorway && <h2 className="text-xl font-sans mb-2 text-muted-foreground">{item.colorway.name}</h2>}
-            </div>
-
-            {/* Specifications */}
-            <div className="space-y-4 pt-4 border-t border-border">
-              {item.price && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Price</h3>
-                  <p className="text-sm text-muted-foreground">${item.price}</p>
-                </div>
-              )}
-
-              {item.content && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Material Content</h3>
-                  <p className="text-sm text-muted-foreground">{item.content}</p>
-                </div>
-              )}
-
-              {item.width && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Width</h3>
-                  <p className="text-sm text-muted-foreground">{item.width}</p>
-                </div>
-              )}
-
-              {item.repeat && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-1">Pattern Repeat</h3>
-                  <p className="text-sm text-muted-foreground">{item.repeat}</p>
-                </div>
-              )}
-
-              {item.categories && item.categories.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-2">Description Categories</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {item.categories.map((category, index) => (
-                      <span
-                        key={category.slug?.current || `category-${index}`}
-                        className="text-xs px-2 py-1 bg-muted rounded"
-                      >
-                        {category.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Image Counter */}
-            {hasMultipleImages && (
-              <div className="pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground">
-                  Image {currentImageIndex + 1} of {images.length}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Related Items from Same Colorway */}
