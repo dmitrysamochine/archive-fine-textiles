@@ -1,22 +1,37 @@
 "use client"
 
+import { motion, AnimatePresence } from "framer-motion"
+
 interface FilterTriggerProps {
   onClick: () => void
   isOpen: boolean
+  hasPassedT1: boolean
 }
 
-export function FilterTrigger({ onClick, isOpen }: FilterTriggerProps) {
+export function FilterTrigger({ onClick, isOpen, hasPassedT1 }: FilterTriggerProps) {
   return (
-    <button
-      onClick={onClick}
-      className={`fixed left-0 top-1/2 -translate-y-1/2 z-40 px-3 py-8 bg-linen-100 hover:bg-linen-200 border-r border-t border-b border-border transition-colors shadow-sm ${
-        isOpen ? "left-[320px]" : "left-0"
-      } transition-all duration-300`}
-      aria-label="Toggle filters"
-    >
-      <span className="text-xs font-sans tracking-wider -rotate-90 whitespace-nowrap block origin-center">
-        FILTER BY
-      </span>
-    </button>
+    <AnimatePresence>
+      {hasPassedT1 && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: isOpen ? 0 : 1,
+            left: isOpen ? 320 : 0,
+          }}
+          exit={{ opacity: 0 }}
+          transition={{
+            opacity: { duration: isOpen ? 0.15 : 0.2 },
+            left: { type: "spring", damping: 30, stiffness: 300 },
+          }}
+          onClick={onClick}
+          className="fixed left-0 top-[80px] z-40 px-3 py-8 bg-linen-100 hover:bg-linen-200 border-r border-t border-b border-border transition-colors shadow-sm"
+          aria-label="Toggle filters"
+        >
+          <span className="text-xs font-sans tracking-wider -rotate-90 whitespace-nowrap block origin-center">
+            FILTERS
+          </span>
+        </motion.button>
+      )}
+    </AnimatePresence>
   )
 }

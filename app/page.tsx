@@ -86,7 +86,7 @@ export default function Page() {
     <>
       <SiteHeader hasPassedT1={hasPassedT1} hasPassedT2={hasPassedT2} scrollDirection={scrollDirection} />
 
-      <FilterTrigger onClick={() => setDrawerOpen(!drawerOpen)} isOpen={drawerOpen} />
+      <FilterTrigger onClick={() => setDrawerOpen(!drawerOpen)} isOpen={drawerOpen} hasPassedT1={hasPassedT1} />
       <FilterDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
       <div className="min-h-screen">
