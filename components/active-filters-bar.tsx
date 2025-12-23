@@ -12,12 +12,7 @@ interface ActiveFilter {
   label: string
 }
 
-interface ActiveFiltersBarProps {
-  filterOpen: boolean
-  activeCategory: string | null
-}
-
-export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBarProps) {
+export function ActiveFiltersBar() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([])
@@ -25,15 +20,13 @@ export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBa
 
   useEffect(() => {
     const fetchLabels = async () => {
-      const [collections, colorways, colors, categories] = await Promise.all([
+      const [collections, colors] = await Promise.all([
         client.fetch(`*[_type == "fabricCollection"] { "slug": slug.current, name }`),
-        client.fetch(`*[_type == "colorway"] { "slug": slug.current, name }`),
         client.fetch(`*[_type == "color"] { "slug": slug.current, name }`),
-        client.fetch(`*[_type == "descriptionCategory"] { "slug": slug.current, name }`),
       ])
 
       const labels: Record<string, string> = {}
-      ;[...collections, ...colorways, ...colors, ...categories].forEach((item: any) => {
+      ;[...collections, ...colors].forEach((item: any) => {
         labels[item.slug] = item.name
       })
 
@@ -47,25 +40,13 @@ export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBa
     const filters: ActiveFilter[] = []
 
     const collectionParam = searchParams.get("collection")
-    const colorwayParam = searchParams.get("colorway")
     const colorParam = searchParams.get("color")
     const materialParam = searchParams.get("material")
-    const categoryParam = searchParams.get("category")
 
     if (collectionParam) {
       collectionParam.split(",").forEach((value) => {
         filters.push({
           category: "collection",
-          value,
-          label: filterLabels[value] || value,
-        })
-      })
-    }
-
-    if (colorwayParam) {
-      colorwayParam.split(",").forEach((value) => {
-        filters.push({
-          category: "colorway",
           value,
           label: filterLabels[value] || value,
         })
@@ -88,16 +69,6 @@ export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBa
           category: "material",
           value,
           label: value,
-        })
-      })
-    }
-
-    if (categoryParam) {
-      categoryParam.split(",").forEach((value) => {
-        filters.push({
-          category: "category",
-          value,
-          label: filterLabels[value] || value,
         })
       })
     }
@@ -125,14 +96,11 @@ export function ActiveFiltersBar({ filterOpen, activeCategory }: ActiveFiltersBa
 
   if (activeFilters.length === 0) return null
 
-  const marginLeft = activeCategory ? "400px" : "80px"
-
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed top-[73px] left-0 right-0 z-40 border-b border-border bg-cream-50 transition-all duration-300 min-h-[80px]"
-      style={{ marginLeft }}
+      className="fixed top-[73px] left-0 right-0 z-40 border-b border-border bg-cream-50 min-h-[80px]"
     >
       <div className="px-6 py-4">
         <div className="flex items-center gap-3 flex-wrap">

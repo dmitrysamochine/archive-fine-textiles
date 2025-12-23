@@ -5,17 +5,16 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { HeroGrid } from "@/components/hero-grid"
 import { FabricGrid } from "@/components/fabric-grid"
-import { FilterPanel } from "@/components/filter-panel"
-import { FilterSubPanel } from "@/components/filter-sub-panel"
 import { ActiveFiltersBar } from "@/components/active-filters-bar"
 import { SiteHeader } from "@/components/site-header"
 import { FabricDetailModal } from "@/components/fabric-detail-modal"
+import { FilterDrawer } from "@/components/filter-drawer"
+import { FilterTrigger } from "@/components/filter-trigger"
 
 const NAV_HEIGHT = 80
 
 export default function Page() {
-  const [filterOpen, setFilterOpen] = useState(false)
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [showHero, setShowHero] = useState(true)
   const [hasPassedT1, setHasPassedT1] = useState(false)
   const [hasPassedT2, setHasPassedT2] = useState(false)
@@ -26,12 +25,7 @@ export default function Page() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const hasActiveFilters =
-    searchParams.has("collection") ||
-    searchParams.has("colorway") ||
-    searchParams.has("color") ||
-    searchParams.has("material") ||
-    searchParams.has("category")
+  const hasActiveFilters = searchParams.has("collection") || searchParams.has("color") || searchParams.has("material")
 
   useEffect(() => {
     const fabricParam = searchParams.get("fabric")
@@ -73,21 +67,6 @@ export default function Page() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [hasPassedT1, hasPassedT2, lastScrollY])
 
-  const handleCategoryClick = (category: string) => {
-    if (activeCategory === category) {
-      setActiveCategory(null)
-    } else {
-      setActiveCategory(category)
-    }
-  }
-
-  const handleFilterToggle = () => {
-    setFilterOpen(!filterOpen)
-    if (filterOpen) {
-      setActiveCategory(null)
-    }
-  }
-
   const handleFabricClick = (itemNumber: string) => {
     setSelectedFabricId(itemNumber)
     const params = new URLSearchParams(searchParams.toString())
@@ -103,40 +82,15 @@ export default function Page() {
     router.push(newUrl, { scroll: false })
   }
 
-  const gridMarginLeft = activeCategory ? "400px" : "0"
-  const gridWidth = activeCategory ? "calc(100% - 400px)" : "100%"
-
-  console.log("[v0] Page render:", {
-    showHero,
-    hasPassedT1,
-    hasPassedT2,
-    selectedFabricId,
-    hasActiveFilters,
-  })
-
   return (
     <>
-      <SiteHeader
-        filterOpen={filterOpen}
-        onFilterToggle={handleFilterToggle}
-        hasPassedT1={hasPassedT1}
-        hasPassedT2={hasPassedT2}
-        scrollDirection={scrollDirection}
-      />
+      <SiteHeader hasPassedT1={hasPassedT1} hasPassedT2={hasPassedT2} scrollDirection={scrollDirection} />
+
+      <FilterTrigger onClick={() => setDrawerOpen(!drawerOpen)} isOpen={drawerOpen} />
+      <FilterDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
       <div className="min-h-screen">
-        <ActiveFiltersBar filterOpen={filterOpen} activeCategory={activeCategory} />
-
-        <FilterPanel
-          isOpen={filterOpen}
-          activeCategory={activeCategory}
-          onCategoryClick={handleCategoryClick}
-          hasPassedT1={hasPassedT1}
-          hasPassedT2={hasPassedT2}
-          scrollDirection={scrollDirection}
-        />
-
-        <FilterSubPanel category={activeCategory} isOpen={!!activeCategory} onClose={() => setActiveCategory(null)} />
+        <ActiveFiltersBar />
 
         <div
           className="transition-all duration-300"
@@ -161,8 +115,6 @@ export default function Page() {
           <div
             className="transition-all duration-300"
             style={{
-              marginLeft: gridMarginLeft,
-              width: gridWidth,
               paddingTop: hasActiveFilters ? "73px" : "0",
             }}
           >

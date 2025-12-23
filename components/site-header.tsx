@@ -4,28 +4,24 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Search, SlidersHorizontal, X } from "lucide-react"
+import { Search, X } from "lucide-react"
 import { useSearchParams, useRouter } from "next/navigation"
 
 interface SiteHeaderProps {
-  filterOpen: boolean
-  onFilterToggle: () => void
   hasPassedT1: boolean
   hasPassedT2: boolean
   scrollDirection: "up" | "down"
 }
 
-export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT2, scrollDirection }: SiteHeaderProps) {
+export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const searchParams = useSearchParams()
   const router = useRouter()
 
   const activeFilterCount = [
     searchParams.get("collection"),
-    searchParams.get("colorway"),
     searchParams.get("color"),
     searchParams.get("material"),
-    searchParams.get("category"),
   ].filter(Boolean).length
 
   useEffect(() => {
@@ -51,16 +47,13 @@ export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT
 
   const getAnimationState = () => {
     if (!hasPassedT1) {
-      // Before T1: hidden
       return { y: -100, opacity: 0 }
     } else if (hasPassedT1 && !hasPassedT2) {
-      // Between T1 and T2: show/hide based on scroll direction
       return {
         y: scrollDirection === "down" ? 0 : -100,
         opacity: scrollDirection === "down" ? 1 : 0,
       }
     } else {
-      // After T2: always visible
       return { y: 0, opacity: 1 }
     }
   }
@@ -102,20 +95,8 @@ export function SiteHeader({ filterOpen, onFilterToggle, hasPassedT1, hasPassedT
               </div>
             </div>
 
-            {/* Filter + Contact */}
+            {/* Contact */}
             <div className="flex items-center gap-6">
-              <button
-                onClick={onFilterToggle}
-                className="flex items-center gap-2 text-base font-heading hover:text-accent transition-colors"
-              >
-                <SlidersHorizontal className="h-4 w-4" />
-                <span>Filter</span>
-                {activeFilterCount > 0 && (
-                  <span className="flex items-center justify-center w-5 h-5 text-xs bg-primary text-primary-foreground rounded-full">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </button>
               <Link href="/contact" className="text-base font-heading hover:text-accent transition-colors">
                 Contact Us
               </Link>
