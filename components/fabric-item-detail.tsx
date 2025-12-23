@@ -73,9 +73,9 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   return (
     <>
       {/* Full viewport image with info overlay */}
-      <div className="relative min-h-screen w-full overflow-hidden">
+      <div className="relative w-full h-screen overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 md:inset-y-0 md:left-0 md:right-96 bg-white">
+        <div className="absolute inset-0 md:right-96 bg-white flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
@@ -98,7 +98,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                   wrapperClass="!w-full !h-full"
                   contentClass="!w-full !h-full flex items-center justify-center"
                 >
-                  <div className="relative w-full h-full flex items-center justify-center">
+                  <div className="relative w-full h-full">
                     <Image
                       src={currentImageUrl || "/placeholder.svg"}
                       alt={item.itemNumber}
@@ -117,7 +117,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
         </div>
 
         {!currentImageLoaded && (
-          <div className="absolute inset-0 md:inset-y-0 md:left-0 md:right-96 flex items-center justify-center pointer-events-none z-10">
+          <div className="absolute inset-0 md:right-96 flex items-center justify-center bg-white z-10">
             <LoadingSpinner />
           </div>
         )}
@@ -142,12 +142,12 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
           </>
         )}
 
-        <div className="relative md:absolute md:right-0 md:top-0 md:bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto">
+        <div className="absolute right-0 top-0 bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto translate-y-full md:translate-y-0">
           <div className="space-y-6">
             <div>
-              {item.collection && <h1 className="text-3xl font-sans font-semibold mb-2">{item.collection.name}</h1>}
+              {item.collection && <h1 className="text-3xl font-heading mb-2">{item.collection.name}</h1>}
               {item.colorway && (
-                <h2 className="text-xl font-heading mb-2 italic text-muted-foreground">{item.colorway.name}</h2>
+                <h2 className="text-xl font-sans mb-2 italic text-muted-foreground">{item.colorway.name}</h2>
               )}
             </div>
 

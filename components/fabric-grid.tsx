@@ -187,8 +187,8 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
                   />
                 </div>
                 <div className="space-y-1">
-                  {fabric.collection && <h3 className="text-sm font-sans font-medium">{fabric.collection.name}</h3>}
-                  {fabric.colorway && <h4 className="text-xs font-heading italic">{fabric.colorway.name}</h4>}
+                  {fabric.collection && <h3 className="text-sm font-heading font-medium">{fabric.collection.name}</h3>}
+                  {fabric.colorway && <h4 className="text-xs font-sans italic">{fabric.colorway.name}</h4>}
                   <p className="text-xs font-medium">{fabric.itemNumber}</p>
                 </div>
               </button>

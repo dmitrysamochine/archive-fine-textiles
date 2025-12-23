@@ -24,8 +24,10 @@ export function FabricCard({ item }: FabricCardProps) {
           </div>
         )}
         <div className="space-y-1">
-          {item.collection && <h3 className="font-sans font-medium">{item.collection.name}</h3>}
-          {item.colorway && <h4 className="text-sm font-medium text-muted-foreground">{item.colorway.name}</h4>}
+          {item.collection && <h3 className="font-heading font-medium">{item.collection.name}</h3>}
+          {item.colorway && (
+            <h4 className="text-sm font-sans font-medium text-muted-foreground">{item.colorway.name}</h4>
+          )}
           <p className="text-sm">Item #{item.itemNumber}</p>
           {item.price && <p className="font-medium">${item.price}/yard</p>}
         </div>
