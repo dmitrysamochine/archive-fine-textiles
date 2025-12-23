@@ -86,8 +86,13 @@ export default function Page() {
     <>
       <SiteHeader hasPassedT1={hasPassedT1} hasPassedT2={hasPassedT2} scrollDirection={scrollDirection} />
 
-      <FilterTrigger onClick={() => setDrawerOpen(!drawerOpen)} isOpen={drawerOpen} hasPassedT1={hasPassedT1} />
-      <FilterDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <FilterTrigger
+        onClick={() => setDrawerOpen(!drawerOpen)}
+        isOpen={drawerOpen}
+        hasPassedT1={hasPassedT1}
+        hasActiveFilters={hasActiveFilters}
+      />
+      <FilterDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} hasActiveFilters={hasActiveFilters} />
 
       <div className="min-h-screen">
         <ActiveFiltersBar />

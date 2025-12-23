@@ -9,6 +9,7 @@ import { client } from "@/sanity/lib/client"
 interface FilterDrawerProps {
   isOpen: boolean
   onClose: () => void
+  hasActiveFilters: boolean
 }
 
 interface FilterOption {
@@ -26,7 +27,7 @@ const categoryLabels: Record<FilterCategory, string> = {
   material: "Material Content",
 }
 
-export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
+export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawerProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [activeCategory, setActiveCategory] = useState<FilterCategory | null>(null)
@@ -119,6 +120,8 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
     onClose()
   }
 
+  const topPosition = hasActiveFilters ? 153 : 80
+
   return (
     <>
       {/* Backdrop */}
@@ -137,9 +140,15 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
       {/* Drawer */}
       <motion.div
         initial={{ x: "-100%" }}
-        animate={{ x: isOpen ? 0 : "-100%" }}
-        transition={{ type: "spring", damping: 30, stiffness: 300 }}
-        className="fixed left-0 top-[80px] bottom-0 w-80 bg-background border-r border-border z-50 flex flex-col overflow-hidden"
+        animate={{
+          x: isOpen ? 0 : "-100%",
+          top: topPosition,
+        }}
+        transition={{
+          x: { type: "spring", damping: 30, stiffness: 300 },
+          top: { duration: 0.3 },
+        }}
+        className="fixed left-0 bottom-0 w-80 bg-background border-r border-border z-50 flex flex-col overflow-hidden"
       >
         {/* Main Menu View */}
         <AnimatePresence mode="wait">
