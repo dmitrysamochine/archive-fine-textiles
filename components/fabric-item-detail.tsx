@@ -73,9 +73,9 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
   return (
     <>
       {/* Full viewport image with info overlay */}
-      <div className="relative h-screen w-full overflow-hidden">
+      <div className="relative min-h-screen w-full overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 bg-white">
+        <div className="absolute inset-0 md:inset-y-0 md:left-0 md:right-96 bg-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentImageIndex}
@@ -83,7 +83,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
               animate={{ opacity: currentImageLoaded ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-0 md:right-96"
+              className="absolute inset-0 w-full h-full"
             >
               <TransformWrapper
                 initialScale={1}
@@ -117,7 +117,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
         </div>
 
         {!currentImageLoaded && (
-          <div className="absolute inset-0 md:right-96 flex items-center justify-center pointer-events-none z-10">
+          <div className="absolute inset-0 md:inset-y-0 md:left-0 md:right-96 flex items-center justify-center pointer-events-none z-10">
             <LoadingSpinner />
           </div>
         )}
@@ -127,7 +127,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
           <>
             <button
               onClick={prevImage}
-              className="absolute left-6 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors"
+              className="absolute left-6 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors md:left-6"
               aria-label="Previous image"
             >
               <ChevronLeft className="h-6 w-6" />
@@ -142,7 +142,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
           </>
         )}
 
-        <div className="absolute right-0 top-0 bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto">
+        <div className="relative md:absolute md:right-0 md:top-0 md:bottom-0 w-full md:w-96 bg-background/95 backdrop-blur-sm p-8 overflow-y-auto">
           <div className="space-y-6">
             <div>
               {item.collection && <h1 className="text-3xl font-sans font-semibold mb-2">{item.collection.name}</h1>}
