@@ -17,8 +17,8 @@ export default function Page() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const searchParams = useSearchParams()
   const [showHero, setShowHero] = useState(!searchParams.toString())
-  const [hasPassedT1, setHasPassedT1] = useState(false)
-  const [hasPassedT2, setHasPassedT2] = useState(false)
+  const [hasPassedT1, setHasPassedT1] = useState(!searchParams.toString() ? false : true)
+  const [hasPassedT2, setHasPassedT2] = useState(!searchParams.toString() ? false : true)
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("down")
   const [lastScrollY, setLastScrollY] = useState(0)
   const [heroOpacity, setHeroOpacity] = useState(1)
@@ -36,6 +36,8 @@ export default function Page() {
 
   useEffect(() => {
     const handleScroll = () => {
+      if (!showHero) return
+
       const currentScrollY = window.scrollY
       const viewportHeight = window.innerHeight
       const t2Threshold = viewportHeight - NAV_HEIGHT
@@ -65,7 +67,7 @@ export default function Page() {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [hasPassedT1, hasPassedT2, lastScrollY])
+  }, [hasPassedT1, hasPassedT2, lastScrollY, showHero])
 
   const handleFabricClick = (itemNumber: string) => {
     setSelectedFabricId(itemNumber)
