@@ -35,3 +35,4 @@ fabric-inventory.csv
 dist
 
 fabric-images/
+package-lock.json
