@@ -15,6 +15,7 @@ export async function generateStaticParams() {
     collection: null,
     colorway: null,
     color: null,
+    material: null,
     status: null,
     sort: "item-asc",
   })
