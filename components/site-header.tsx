@@ -127,7 +127,7 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
                       placeholder="Search fabrics..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-10 py-2 bg-muted/50 border border-border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                      className="w-full pl-10 pr-10 py-2 bg-muted/50 rounded-full text-sm focus:outline-none"
                       autoFocus
                     />
                     {searchQuery && (
