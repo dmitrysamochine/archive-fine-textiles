@@ -104,7 +104,9 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
     router.push(`/?${params.toString()}`, { scroll: false })
   }
 
-  const filteredOptions = options.filter((opt) => opt.name.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredOptions = options
+    .filter((opt) => opt.count > 0)
+    .filter((opt) => opt.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
   const searchable = activeCategory === "collection"
 
@@ -149,7 +151,8 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
           x: { type: "spring", damping: 30, stiffness: 300 },
           top: { duration: 0.3 },
         }}
-        className="fixed left-0 bottom-0 w-80 bg-background border-r border-border z-50 flex flex-col overflow-hidden"
+        className="fixed left-0 w-80 bg-background border-r border-border z-50 flex flex-col overflow-hidden"
+        style={{ height: `calc(100vh - ${topPosition}px)` }}
       >
         {/* Main Menu View */}
         <AnimatePresence mode="wait">
@@ -207,7 +210,7 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
               className="flex flex-col h-full"
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-border flex-shrink-0">
                 <h3 className="text-base font-sans">{categoryLabels[activeCategory]}</h3>
                 <button onClick={handleClose} className="text-muted-foreground hover:text-foreground transition-colors">
                   <X className="h-5 w-5" />
@@ -217,7 +220,7 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
               {/* Back Button */}
               <button
                 onClick={handleBack}
-                className="flex items-center gap-2 px-6 py-4 border-b border-border hover:bg-linen-50 transition-colors"
+                className="flex items-center gap-2 px-6 py-4 border-b border-border hover:bg-linen-50 transition-colors flex-shrink-0"
               >
                 <ChevronLeft className="h-5 w-5" />
                 <span className="text-sm font-sans">Back</span>
@@ -225,7 +228,7 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
 
               {/* Search (for collection only) */}
               {searchable && (
-                <div className="px-6 py-4 border-b border-border">
+                <div className="px-6 py-4 border-b border-border flex-shrink-0">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <input
@@ -240,7 +243,7 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
               )}
 
               {/* Options List */}
-              <div className="flex-1 overflow-y-auto px-6 py-4">
+              <div className="flex-1 overflow-y-auto px-6 py-4 min-h-0">
                 {loading ? (
                   <p className="text-sm text-muted-foreground font-sans">Loading...</p>
                 ) : filteredOptions.length === 0 ? (
@@ -268,9 +271,7 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
                           <span className="text-sm group-hover:text-foreground transition-colors flex-1 font-sans">
                             {option.name}
                           </span>
-                          {option.count > 0 && (
-                            <span className="text-xs text-muted-foreground font-sans">({option.count})</span>
-                          )}
+                          <span className="text-xs text-muted-foreground font-sans">({option.count})</span>
                         </label>
                       )
                     })}
