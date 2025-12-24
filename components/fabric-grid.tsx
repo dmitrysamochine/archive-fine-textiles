@@ -31,7 +31,7 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
   const [allFabrics, setAllFabrics] = useState<FabricItem[]>([])
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
-  const [sortBy, setSortBy] = useState("item-asc")
+  const [sortBy, setSortBy] = useState("collection-asc")
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -102,6 +102,10 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
 
     filtered.sort((a, b) => {
       switch (sortBy) {
+        case "collection-asc":
+          return (a.collection?.name || "").localeCompare(b.collection?.name || "")
+        case "collection-desc":
+          return (b.collection?.name || "").localeCompare(a.collection?.name || "")
         case "price-high":
           return (b.price || 0) - (a.price || 0)
         case "price-low":
@@ -109,8 +113,9 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
         case "item-desc":
           return b.itemNumber.localeCompare(a.itemNumber)
         case "item-asc":
-        default:
           return a.itemNumber.localeCompare(b.itemNumber)
+        default:
+          return (a.collection?.name || "").localeCompare(b.collection?.name || "")
       }
     })
 
@@ -155,6 +160,8 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
               onChange={(e) => setSortBy(e.target.value)}
               className="text-sm bg-transparent border-none focus:outline-none cursor-pointer"
             >
+              <option value="collection-asc">Collection: A-Z</option>
+              <option value="collection-desc">Collection: Z-A</option>
               <option value="item-asc">Item Number: A-Z</option>
               <option value="item-desc">Item Number: Z-A</option>
               <option value="price-high">Price: High to Low</option>
@@ -164,7 +171,6 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
         </div>
       )}
 
-      {/* Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {displayedFabrics.map((fabric, index) => {
           const imageUrl = fabric.images?.[0]
