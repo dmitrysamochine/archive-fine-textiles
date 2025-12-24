@@ -101,7 +101,7 @@ export function ActiveFiltersBar() {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed top-[80px] left-0 right-0 z-40 border-b border-border bg-cream-50"
+      className="fixed top-[80px] left-0 right-0 z-40 border-b border-border bg-background/80 backdrop-blur-sm"
     >
       <div className="container mx-auto px-6 py-4 flex items-center">
         <div className="flex items-center gap-3 flex-wrap">
