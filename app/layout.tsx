@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   title: "Archive Fine Textiles",
   description: "Curated collection of fine textiles and fabrics",
   generator: "v0.app",
+  icons: {
+    icon: [{ url: "/favicon.ico" }, { url: "/icon.png", type: "image/png" }],
+  },
 }
 
 export default function RootLayout({
