@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Search, X } from "lucide-react"
 import { useSearchParams, useRouter } from "next/navigation"
 
@@ -15,6 +15,7 @@ interface SiteHeaderProps {
 
 export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("")
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -95,13 +96,53 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
               </div>
             </div>
 
-            {/* Contact - Reduce font size on mobile */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 md:gap-6">
+              <button
+                onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+                className="md:hidden text-foreground hover:text-accent transition-colors"
+                aria-label="Toggle search"
+              >
+                <Search className="h-5 w-5" />
+              </button>
               <Link href="/contact" className="text-sm md:text-base font-heading hover:text-accent transition-colors">
                 Contact Us
               </Link>
             </div>
           </nav>
+
+          <AnimatePresence>
+            {mobileSearchOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="md:hidden overflow-hidden"
+              >
+                <div className="pt-4">
+                  <div className="relative w-full">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <input
+                      type="search"
+                      placeholder="Search fabrics..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-10 py-2 bg-muted/50 border border-border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                      autoFocus
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.header>
     </>
