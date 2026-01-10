@@ -29,28 +29,30 @@ export function ContactSlideshow({ images }: ContactSlideshowProps) {
 
   if (!images || images.length === 0) {
     return (
-      <div className="aspect-[3/4] bg-muted rounded-sm flex items-center justify-center">
+      <div className="w-full bg-muted rounded-sm flex items-center justify-center py-20">
         <p className="text-muted-foreground">No images</p>
       </div>
     )
   }
 
   return (
-    <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
-      <AnimatePresence mode="wait">
+    <div className="relative w-full">
+      <AnimatePresence initial={false}>
         <motion.div
           key={currentIndex}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="absolute inset-0"
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="w-full"
+          style={{ position: currentIndex === 0 ? "relative" : "absolute", top: 0, left: 0 }}
         >
           <Image
             src={images[currentIndex].asset.url || "/placeholder.svg"}
             alt={images[currentIndex].alt || "Contact image"}
-            fill
-            className="object-cover"
+            width={1200}
+            height={800}
+            className="w-full h-auto"
             sizes="(max-width: 768px) 100vw, 50vw"
             priority={currentIndex === 0}
           />
