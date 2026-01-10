@@ -7,6 +7,7 @@ import Link from "next/link"
 import { client } from "@/sanity/lib/client"
 import { urlForImage } from "@/sanity/lib/image"
 import { LoadingSpinner } from "./loading-spinner"
+import { ChevronDown } from "lucide-react"
 
 interface FabricItem {
   _id: string
@@ -83,6 +84,22 @@ export function HeroGrid() {
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
+      <motion.div
+        className="absolute inset-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoaded ? 1 : 0 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+      >
+        <Image
+          src="/hero-background.jpg"
+          alt="Soft draped fabric"
+          fill
+          className="object-cover"
+          priority
+          onLoad={() => setIsLoaded(true)}
+        />
+      </motion.div>
+
       {!imagesLoaded && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-background">
           <LoadingSpinner />
@@ -142,11 +159,12 @@ export function HeroGrid() {
         />
       </div>
 
+      {/* Logo overlay */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ duration: 0.8, delay: 1.05 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
       >
         <Image
           src="/logo.svg"
@@ -158,6 +176,24 @@ export function HeroGrid() {
             filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 16px rgba(255, 255, 255, 0.4))",
           }}
         />
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoaded ? 1 : 0 }}
+        transition={{ duration: 0.6, delay: 1.4 }}
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{
+            duration: 2,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        >
+          <ChevronDown className="w-8 h-8 text-rich-black/50" strokeWidth={1.5} />
+        </motion.div>
       </motion.div>
     </div>
   )
