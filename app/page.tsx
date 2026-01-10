@@ -17,9 +17,10 @@ export default function Page() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const searchParams = useSearchParams()
 
-  const [showHero, setShowHero] = useState(false)
-  const [hasPassedT1, setHasPassedT1] = useState(true)
-  const [hasPassedT2, setHasPassedT2] = useState(true)
+  const hasParams = searchParams.toString()
+  const [showHero, setShowHero] = useState(!hasParams)
+  const [hasPassedT1, setHasPassedT1] = useState(!!hasParams)
+  const [hasPassedT2, setHasPassedT2] = useState(!!hasParams)
 
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("down")
   const [lastScrollY, setLastScrollY] = useState(0)
@@ -28,23 +29,6 @@ export default function Page() {
   const router = useRouter()
 
   const hasActiveFilters = searchParams.has("collection") || searchParams.has("color") || searchParams.has("material")
-
-  useEffect(() => {
-    const skipSplash = sessionStorage.getItem("skipSplash")
-    const hasParams = searchParams.toString()
-
-    if (!hasParams && !skipSplash) {
-      // First visit with no params - show splash
-      setShowHero(true)
-      setHasPassedT1(false)
-      setHasPassedT2(false)
-    }
-
-    // Clear the flag after checking
-    if (skipSplash) {
-      sessionStorage.removeItem("skipSplash")
-    }
-  }, [])
 
   useEffect(() => {
     const fabricParam = searchParams.get("fabric")
