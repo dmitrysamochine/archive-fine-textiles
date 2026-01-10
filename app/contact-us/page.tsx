@@ -31,7 +31,7 @@ export default async function ContactUsPage() {
                     components={{
                       block: {
                         normal: ({ children }) => (
-                          <p className="text-base leading-relaxed mb-6 font-sans">{children}</p>
+                          <p className="text-base leading-relaxed mb-4 font-sans">{children}</p>
                         ),
                         h1: ({ children }) => <h1 className="text-3xl font-heading mb-6">{children}</h1>,
                         h2: ({ children }) => <h2 className="text-2xl font-heading mb-4">{children}</h2>,
@@ -41,9 +41,9 @@ export default async function ContactUsPage() {
                         ),
                       },
                       list: {
-                        bullet: ({ children }) => <ul className="list-disc list-inside mb-6 space-y-2">{children}</ul>,
+                        bullet: ({ children }) => <ul className="list-disc list-inside mb-4 space-y-2">{children}</ul>,
                         number: ({ children }) => (
-                          <ol className="list-decimal list-inside mb-6 space-y-2">{children}</ol>
+                          <ol className="list-decimal list-inside mb-4 space-y-2">{children}</ol>
                         ),
                       },
                       listItem: {
