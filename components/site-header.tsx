@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
@@ -22,6 +24,12 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
 
   const isTextilesActive = pathname === "/" || pathname.startsWith("/fabrics")
   const isContactActive = pathname === "/contact-us"
+
+  const handleTextilesClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    sessionStorage.setItem("skipSplash", "true")
+    router.push("/")
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -96,20 +104,13 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
 
             <div className="flex items-center gap-4 md:gap-6">
               <button
-                onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
-                className="md:hidden text-foreground hover:text-accent transition-colors"
-                aria-label="Toggle search"
-              >
-                <Search className="h-5 w-5" />
-              </button>
-              <Link
-                href="/"
+                onClick={handleTextilesClick}
                 className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
                   isTextilesActive ? "underline underline-offset-4" : ""
                 }`}
               >
                 Textiles
-              </Link>
+              </button>
               <Link
                 href="/contact-us"
                 className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
