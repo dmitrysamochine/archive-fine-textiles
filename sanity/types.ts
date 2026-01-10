@@ -127,3 +127,15 @@ export interface Material {
     current: string
   }
 }
+
+export interface ContactPage {
+  _id: string
+  images: Array<{
+    asset: {
+      _id: string
+      url: string
+    }
+    alt?: string
+  }>
+  content: any[] // Portable Text blocks
+}

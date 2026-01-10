@@ -331,4 +331,53 @@ export const material = defineType({
   },
 })
 
-export const schemaTypes = [fabricItem, fabricCollection, colorway, category, color, material]
+// Contact Page
+export const contactPage = defineType({
+  name: "contactPage",
+  title: "Contact Page",
+  type: "document",
+  fields: [
+    defineField({
+      name: "images",
+      title: "Slideshow Images",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Alternative text",
+              description: "Important for SEO and accessibility",
+            },
+          ],
+        }),
+      ],
+      validation: (Rule) => Rule.required().min(1),
+    }),
+    defineField({
+      name: "content",
+      title: "Content",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "block",
+        }),
+      ],
+      validation: (Rule) => Rule.required(),
+    }),
+  ],
+  preview: {
+    prepare() {
+      return {
+        title: "Contact Page",
+      }
+    },
+  },
+})
+
+export const schemaTypes = [fabricItem, fabricCollection, colorway, category, color, material, contactPage]

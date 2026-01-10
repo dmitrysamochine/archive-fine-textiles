@@ -162,3 +162,14 @@ export const materialsQuery = groq`
     slug
   }
 `
+
+export const contactPageQuery = groq`
+  *[_type == "contactPage"][0] {
+    _id,
+    images[] {
+      asset->,
+      alt
+    },
+    content
+  }
+`

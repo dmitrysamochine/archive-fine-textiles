@@ -5,7 +5,7 @@ import Image from "next/image"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Search, X } from "lucide-react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 
 interface SiteHeaderProps {
   hasPassedT1: boolean
@@ -18,12 +18,10 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const searchParams = useSearchParams()
   const router = useRouter()
+  const pathname = usePathname()
 
-  const activeFilterCount = [
-    searchParams.get("collection"),
-    searchParams.get("color"),
-    searchParams.get("material"),
-  ].filter(Boolean).length
+  const isTextilesActive = pathname === "/" || pathname.startsWith("/fabrics")
+  const isContactActive = pathname === "/contact-us"
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -104,7 +102,20 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
               >
                 <Search className="h-5 w-5" />
               </button>
-              <Link href="/contact" className="text-sm md:text-base font-heading hover:text-accent transition-colors">
+              <Link
+                href="/"
+                className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+                  isTextilesActive ? "underline underline-offset-4" : ""
+                }`}
+              >
+                Textiles
+              </Link>
+              <Link
+                href="/contact-us"
+                className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+                  isContactActive ? "underline underline-offset-4" : ""
+                }`}
+              >
                 Contact Us
               </Link>
             </div>
