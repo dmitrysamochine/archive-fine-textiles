@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 
 interface ContactSlideshowProps {
   images: Array<{
@@ -16,6 +16,8 @@ interface ContactSlideshowProps {
 
 export function ContactSlideshow({ images }: ContactSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [containerHeight, setContainerHeight] = useState<number | null>(null)
+  const imageRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -27,6 +29,12 @@ export function ContactSlideshow({ images }: ContactSlideshowProps) {
     return () => clearInterval(interval)
   }, [images.length])
 
+  const handleImageLoad = () => {
+    if (imageRef.current && !containerHeight) {
+      setContainerHeight(imageRef.current.offsetHeight)
+    }
+  }
+
   if (!images || images.length === 0) {
     return (
       <div className="w-full bg-muted rounded-sm flex items-center justify-center py-20">
@@ -36,28 +44,34 @@ export function ContactSlideshow({ images }: ContactSlideshowProps) {
   }
 
   return (
-    <div className="relative w-full">
-      <AnimatePresence initial={false}>
+    <div
+      className="relative w-full overflow-hidden"
+      style={{ height: containerHeight ? `${containerHeight}px` : "auto" }}
+    >
+      {images.map((image, index) => (
         <motion.div
-          key={currentIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="w-full"
-          style={{ position: currentIndex === 0 ? "relative" : "absolute", top: 0, left: 0 }}
+          key={image.asset._id}
+          initial={false}
+          animate={{
+            opacity: index === currentIndex ? 1 : 0,
+            zIndex: index === currentIndex ? 1 : 0,
+          }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
+          className={`w-full ${index === 0 ? "relative" : "absolute top-0 left-0"}`}
         >
           <Image
-            src={images[currentIndex].asset.url || "/placeholder.svg"}
-            alt={images[currentIndex].alt || "Contact image"}
+            ref={index === 0 ? imageRef : undefined}
+            src={image.asset.url || "/placeholder.svg"}
+            alt={image.alt || "Contact image"}
             width={1200}
             height={800}
             className="w-full h-auto"
             sizes="(max-width: 768px) 100vw, 50vw"
-            priority={currentIndex === 0}
+            priority={index === 0}
+            onLoad={index === 0 ? handleImageLoad : undefined}
           />
         </motion.div>
-      </AnimatePresence>
+      ))}
     </div>
   )
 }
