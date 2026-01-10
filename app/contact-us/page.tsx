@@ -76,8 +76,8 @@ export default async function ContactUsPage() {
     <>
       <ContactHeader />
       <main className="min-h-screen pt-[80px]">
-        <div className="container mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="container mx-auto px-6 py-6 md:py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
             {/* Left column - Slideshow */}
             <div>{contactData?.images && <ContactSlideshow images={contactData.images} />}</div>
 

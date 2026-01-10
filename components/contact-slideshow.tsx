@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
 
@@ -16,8 +16,6 @@ interface ContactSlideshowProps {
 
 export function ContactSlideshow({ images }: ContactSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [containerHeight, setContainerHeight] = useState<number | null>(null)
-  const imageRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -29,12 +27,6 @@ export function ContactSlideshow({ images }: ContactSlideshowProps) {
     return () => clearInterval(interval)
   }, [images.length])
 
-  const handleImageLoad = () => {
-    if (imageRef.current && !containerHeight) {
-      setContainerHeight(imageRef.current.offsetHeight)
-    }
-  }
-
   if (!images || images.length === 0) {
     return (
       <div className="w-full bg-muted rounded-sm flex items-center justify-center py-20">
@@ -44,10 +36,7 @@ export function ContactSlideshow({ images }: ContactSlideshowProps) {
   }
 
   return (
-    <div
-      className="relative w-full overflow-hidden"
-      style={{ height: containerHeight ? `${containerHeight}px` : "auto" }}
-    >
+    <div className="relative w-full overflow-hidden">
       {images.map((image, index) => (
         <motion.div
           key={image.asset._id}
@@ -60,7 +49,6 @@ export function ContactSlideshow({ images }: ContactSlideshowProps) {
           className={`w-full ${index === 0 ? "relative" : "absolute top-0 left-0"}`}
         >
           <Image
-            ref={index === 0 ? imageRef : undefined}
             src={image.asset.url || "/placeholder.svg"}
             alt={image.alt || "Contact image"}
             width={1200}
@@ -68,7 +56,6 @@ export function ContactSlideshow({ images }: ContactSlideshowProps) {
             className="w-full h-auto"
             sizes="(max-width: 768px) 100vw, 50vw"
             priority={index === 0}
-            onLoad={index === 0 ? handleImageLoad : undefined}
           />
         </motion.div>
       ))}
