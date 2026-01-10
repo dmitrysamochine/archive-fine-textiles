@@ -17,7 +17,14 @@ export default function Page() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const searchParams = useSearchParams()
 
-  const hasParams = searchParams.toString()
+  const hasParams =
+    searchParams.toString() && searchParams.get("view") !== "grid"
+      ? searchParams.toString()
+      : searchParams.has("view") ||
+        searchParams.has("collection") ||
+        searchParams.has("color") ||
+        searchParams.has("material") ||
+        searchParams.has("search")
   const [showHero, setShowHero] = useState(!hasParams)
   const [hasPassedT1, setHasPassedT1] = useState(!!hasParams)
   const [hasPassedT2, setHasPassedT2] = useState(!!hasParams)
