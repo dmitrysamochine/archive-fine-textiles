@@ -20,7 +20,7 @@ export function ContactHeader() {
           {/* Navigation Links */}
           <div className="flex items-center gap-4 md:gap-6">
             <Link
-              href="/"
+              href="/?view=grid"
               className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
                 !isContactPage ? "underline underline-offset-4" : ""
               }`}
