@@ -26,7 +26,6 @@ export function OpenStockCard({ item }: OpenStockCardProps) {
           <h3 className="font-heading font-medium">{item.fabric}</h3>
           <h4 className="text-sm font-sans font-medium text-muted-foreground">{item.colorway}</h4>
           <p className="text-sm">Item #{item.itemNumber}</p>
-          {item.price && <p className="font-medium">${item.price}/yard</p>}
         </div>
       </article>
     </div>
