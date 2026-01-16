@@ -43,7 +43,7 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
   }, [searchParams, allFabrics, sortBy])
 
   const loadAllFabrics = async () => {
-    const query = `*[_type == "fabricItem" && defined(images[0])] {
+    const query = `*[_type == "fabricItem" && defined(images[0]) && status != "Out of Stock"] {
       _id,
       itemNumber,
       "collection": fabric->{name, "slug": slug.current},

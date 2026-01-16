@@ -35,19 +35,19 @@ export function OpenStockFilterDrawer({ isOpen, onClose, hasActiveFilters }: Ope
     const fetchFilterOptions = async () => {
       const [colorsData, materialsData] = await Promise.all([
         client.fetch(`
-          *[_type == "color" && count(*[_type == "openStockItem" && references(^._id) && defined(images[0].asset)]) > 0] | order(name asc) {
+          *[_type == "color" && count(*[_type == "openStockItem" && references(^._id)]) > 0] | order(name asc) {
             _id,
             name,
             slug,
-            "itemCount": count(*[_type == "openStockItem" && references(^._id) && defined(images[0].asset)])
+            "itemCount": count(*[_type == "openStockItem" && references(^._id)])
           }
         `),
         client.fetch(`
-          *[_type == "material" && count(*[_type == "openStockItem" && references(^._id) && defined(images[0].asset)]) > 0] | order(name asc) {
+          *[_type == "material" && count(*[_type == "openStockItem" && references(^._id)]) > 0] | order(name asc) {
             _id,
             name,
             slug,
-            "itemCount": count(*[_type == "openStockItem" && references(^._id) && defined(images[0].asset)])
+            "itemCount": count(*[_type == "openStockItem" && references(^._id)])
           }
         `),
       ])

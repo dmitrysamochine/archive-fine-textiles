@@ -8,6 +8,7 @@ export const fabricItemsQuery = groq`
     && ($color == null || $color in color[]->slug.current)
     && ($material == null || $material in materials[]->slug.current)
     && ($status == null || status == $status)
+    && status != "Out of Stock"
   ] | order(itemNumber asc) {
     _id,
     itemNumber,

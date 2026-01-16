@@ -96,7 +96,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
 
                 {item.content && (
                   <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Material Content</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Material</h3>
                     <p className="text-sm text-muted-foreground">{item.content}</p>
                   </div>
                 )}
@@ -112,22 +112,6 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
                   <div>
                     <h3 className="text-sm font-semibold text-muted-foreground mb-1">Pattern Repeat</h3>
                     <p className="text-sm text-muted-foreground">{item.repeat}</p>
-                  </div>
-                )}
-
-                {item.categories && item.categories.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-2">Description Categories</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {item.categories.map((category, index) => (
-                        <span
-                          key={category.slug?.current || `category-${index}`}
-                          className="text-xs px-2 py-1 bg-muted rounded"
-                        >
-                          {category.name}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 )}
               </div>

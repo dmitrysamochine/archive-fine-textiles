@@ -58,7 +58,7 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
           data = await client.fetch(`*[_type == "fabricCollection"] | order(name asc) {
             name,
             "slug": slug.current,
-            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0])])
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0]) && status != "Out of Stock"])
           }`)
           break
         case "color":
@@ -66,14 +66,14 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
             name,
             "slug": slug.current,
             hexValue,
-            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0])])
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0]) && status != "Out of Stock"])
           }`)
           break
         case "material":
           data = await client.fetch(`*[_type == "material"] | order(name asc) {
             name,
             "slug": slug.current,
-            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0])])
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0]) && status != "Out of Stock"])
           }`)
           break
       }
