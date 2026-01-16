@@ -380,4 +380,127 @@ export const contactPage = defineType({
   },
 })
 
-export const schemaTypes = [fabricItem, fabricCollection, colorway, category, color, material, contactPage]
+// Open Stock Item
+export const openStockItem = defineType({
+  name: "openStockItem",
+  title: "Open Stock Items",
+  type: "document",
+  fields: [
+    defineField({
+      name: "itemNumber",
+      title: "Item Number",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+      description: "Unique SKU (e.g., OS-001)",
+    }),
+    defineField({
+      name: "fabric",
+      title: "Fabric",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+      description: "Fabric name (e.g., Brushed Cotton, Linen)",
+    }),
+    defineField({
+      name: "colorway",
+      title: "Colorway",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+      description: "Colorway name (e.g., Grey, Pale Blue)",
+    }),
+    defineField({
+      name: "price",
+      title: "Price",
+      type: "number",
+      validation: (Rule) => Rule.required().min(0),
+    }),
+    defineField({
+      name: "content",
+      title: "Material Content",
+      type: "string",
+      description: "Material composition for display (e.g., 100% Cotton)",
+    }),
+    defineField({
+      name: "width",
+      title: "Width",
+      type: "string",
+      description: 'Fabric width (e.g., 55")',
+    }),
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "string",
+      description: "Brief description (e.g., Solid, Textured)",
+    }),
+    defineField({
+      name: "colors",
+      title: "Colors",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "color" }],
+        }),
+      ],
+      description: "Select colors for filtering",
+    }),
+    defineField({
+      name: "materials",
+      title: "Materials",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "material" }],
+        }),
+      ],
+      description: "Select materials for filtering",
+    }),
+    defineField({
+      name: "images",
+      title: "Images",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Alternative text",
+              description: "Important for SEO and accessibility",
+            },
+          ],
+        }),
+      ],
+    }),
+  ],
+  preview: {
+    select: {
+      title: "itemNumber",
+      fabric: "fabric",
+      colorway: "colorway",
+      media: "images.0",
+    },
+    prepare({ title, fabric, colorway, media }) {
+      return {
+        title: `${title} - ${fabric}`,
+        subtitle: colorway,
+        media,
+      }
+    },
+  },
+})
+
+export const schemaTypes = [
+  fabricItem,
+  fabricCollection,
+  colorway,
+  category,
+  color,
+  material,
+  contactPage,
+  openStockItem,
+]

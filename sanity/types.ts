@@ -139,3 +139,34 @@ export interface ContactPage {
   }>
   content: any[] // Portable Text blocks
 }
+
+export interface OpenStockItem {
+  _id: string
+  itemNumber: string
+  fabric: string
+  colorway: string
+  price: number
+  content?: string
+  width?: string
+  description?: string
+  colors?: Array<{
+    name: string
+    slug: {
+      current: string
+    }
+    hexValue?: string
+  }>
+  materials?: Array<{
+    name: string
+    slug: {
+      current: string
+    }
+  }>
+  images?: Array<{
+    asset: {
+      _id: string
+      url: string
+    }
+    alt?: string
+  }>
+}

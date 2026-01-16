@@ -163,6 +163,47 @@ export const materialsQuery = groq`
   }
 `
 
+export const openStockItemsQuery = groq`
+  *[_type == "openStockItem" && defined(images[0])
+    && ($color == null || $color in colors[]->slug.current)
+    && ($material == null || $material in materials[]->slug.current)
+  ] | order(fabric asc) {
+    _id,
+    itemNumber,
+    fabric,
+    colorway,
+    price,
+    content,
+    width,
+    description,
+    "colors": colors[]->{name, slug, hexValue},
+    "materials": materials[]->{name, slug},
+    images[] {
+      asset->,
+      alt
+    }
+  }
+`
+
+export const openStockColorsQuery = groq`
+  *[_type == "color" && count(*[_type == "openStockItem" && references(^._id)]) > 0] | order(name asc) {
+    _id,
+    name,
+    slug,
+    hexValue,
+    "itemCount": count(*[_type == "openStockItem" && references(^._id)])
+  }
+`
+
+export const openStockMaterialsQuery = groq`
+  *[_type == "material" && count(*[_type == "openStockItem" && references(^._id)]) > 0] | order(name asc) {
+    _id,
+    name,
+    slug,
+    "itemCount": count(*[_type == "openStockItem" && references(^._id)])
+  }
+`
+
 export const contactPageQuery = groq`
   *[_type == "contactPage"][0] {
     _id,

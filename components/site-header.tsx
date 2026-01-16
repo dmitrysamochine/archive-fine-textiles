@@ -21,6 +21,7 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
   const pathname = usePathname()
 
   const isTextilesActive = pathname === "/" || pathname.startsWith("/fabrics")
+  const isOpenStockActive = pathname === "/open-stock"
   const isContactActive = pathname === "/contact-us"
 
   useEffect(() => {
@@ -102,6 +103,14 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
                 }`}
               >
                 Textiles
+              </Link>
+              <Link
+                href="/open-stock"
+                className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+                  isOpenStockActive ? "underline underline-offset-4" : ""
+                }`}
+              >
+                Open Stock
               </Link>
               <Link
                 href="/contact-us"
