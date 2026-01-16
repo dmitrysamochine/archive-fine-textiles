@@ -11,9 +11,15 @@ interface SiteHeaderProps {
   hasPassedT1: boolean
   hasPassedT2: boolean
   scrollDirection: "up" | "down"
+  skipInitialAnimation?: boolean
 }
 
-export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHeaderProps) {
+export function SiteHeader({
+  hasPassedT1,
+  hasPassedT2,
+  scrollDirection,
+  skipInitialAnimation = false,
+}: SiteHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const searchParams = useSearchParams()
@@ -62,7 +68,7 @@ export function SiteHeader({ hasPassedT1, hasPassedT2, scrollDirection }: SiteHe
     <>
       <motion.header
         className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border"
-        initial={{ y: -100, opacity: 0 }}
+        initial={skipInitialAnimation ? false : { y: -100, opacity: 0 }}
         animate={getAnimationState()}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >

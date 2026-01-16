@@ -90,7 +90,12 @@ function HomeContent() {
 
   return (
     <>
-      <SiteHeader hasPassedT1={hasPassedT1} hasPassedT2={hasPassedT2} scrollDirection={scrollDirection} />
+      <SiteHeader
+        hasPassedT1={hasPassedT1}
+        hasPassedT2={hasPassedT2}
+        scrollDirection={scrollDirection}
+        skipInitialAnimation={hasParams}
+      />
 
       <FilterTrigger
         onClick={() => setDrawerOpen(!drawerOpen)}
