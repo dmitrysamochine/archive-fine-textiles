@@ -136,7 +136,7 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
   }
 
   return (
-    <div className="container mx-auto px-6">
+    <div className="container mx-auto px-6 py-12">
       <div className="flex justify-between items-center mb-8">
         <p className="text-sm text-muted-foreground">
           {filteredAndSortedItems.length} item{filteredAndSortedItems.length !== 1 ? "s" : ""}
