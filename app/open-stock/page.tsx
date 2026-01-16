@@ -35,7 +35,7 @@ function OpenStockContent() {
         <OpenStockActiveFiltersBar />
 
         <div
-          className="transition-all duration-300 py-12"
+          className="transition-all duration-300"
           style={{
             paddingTop: hasActiveFilters ? `${NAV_HEIGHT + 65}px` : `${NAV_HEIGHT}px`,
           }}
