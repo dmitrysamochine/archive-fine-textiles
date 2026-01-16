@@ -38,7 +38,7 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
       setLoading(true)
 
       const query = `
-        *[_type == "openStockItem"] | order(fabric asc) {
+        *[_type == "openStockItem" && defined(images[0].asset)] | order(fabric asc) {
           _id,
           itemNumber,
           fabric,
