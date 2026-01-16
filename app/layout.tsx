@@ -3,7 +3,6 @@ import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
 import type React from "react"
 import { Suspense } from "react"
-import { SiteHeader } from "@/components/site-header"
 import "./globals.css"
 
 const bernhard = localFont({
@@ -36,9 +35,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${bernhard.variable} ${lato.variable} font-sans`}>
-        <Suspense fallback={<div className="h-16" />}>
-          <SiteHeader />
-        </Suspense>
         <Suspense fallback={null}>
           {children}
           <Analytics />
