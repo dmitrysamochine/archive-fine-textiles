@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { HeroGrid } from "@/components/hero-grid"
@@ -13,27 +13,21 @@ import { FilterTrigger } from "@/components/filter-trigger"
 
 const NAV_HEIGHT = 80
 
-export default function Page() {
+function HomeContent() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const searchParams = useSearchParams()
+  const router = useRouter()
 
-  const hasParams =
-    searchParams.toString() && searchParams.get("view") !== "grid"
-      ? searchParams.toString()
-      : searchParams.has("view") ||
-        searchParams.has("collection") ||
-        searchParams.has("color") ||
-        searchParams.has("material") ||
-        searchParams.has("search")
+  const hasParams = searchParams.toString().length > 0
+
   const [showHero, setShowHero] = useState(!hasParams)
-  const [hasPassedT1, setHasPassedT1] = useState(!!hasParams)
-  const [hasPassedT2, setHasPassedT2] = useState(!!hasParams)
+  const [hasPassedT1, setHasPassedT1] = useState(hasParams)
+  const [hasPassedT2, setHasPassedT2] = useState(hasParams)
 
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("down")
   const [lastScrollY, setLastScrollY] = useState(0)
   const [heroOpacity, setHeroOpacity] = useState(1)
   const [selectedFabricId, setSelectedFabricId] = useState<string | null>(null)
-  const router = useRouter()
 
   const hasActiveFilters = searchParams.has("collection") || searchParams.has("color") || searchParams.has("material")
 
@@ -144,5 +138,13 @@ export default function Page() {
         {selectedFabricId && <FabricDetailModal itemNumber={selectedFabricId} onClose={handleModalClose} />}
       </AnimatePresence>
     </>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
   )
 }

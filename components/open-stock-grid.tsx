@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
+import { ArrowUpDown } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 import { OpenStockCard } from "./open-stock-card"
 import type { OpenStockItem } from "@/sanity/types"
@@ -135,23 +136,26 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
   }
 
   return (
-    <div className="container mx-auto px-6 py-12">
+    <div className="container mx-auto px-6">
       <div className="flex justify-between items-center mb-8">
         <p className="text-sm text-muted-foreground">
           {filteredAndSortedItems.length} item{filteredAndSortedItems.length !== 1 ? "s" : ""}
         </p>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="text-sm bg-transparent border border-border rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          <option value="fabric-asc">Fabric: A-Z</option>
-          <option value="fabric-desc">Fabric: Z-A</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="item-asc">Item #: Low to High</option>
-          <option value="item-desc">Item #: High to Low</option>
-        </select>
+        <div className="flex items-center gap-2">
+          <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="text-sm bg-transparent border-none focus:outline-none cursor-pointer"
+          >
+            <option value="fabric-asc">Fabric: A-Z</option>
+            <option value="fabric-desc">Fabric: Z-A</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="item-asc">Item #: Low to High</option>
+            <option value="item-desc">Item #: High to Low</option>
+          </select>
+        </div>
       </div>
 
       {filteredAndSortedItems.length === 0 ? (

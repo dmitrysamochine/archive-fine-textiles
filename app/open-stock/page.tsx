@@ -34,10 +34,13 @@ function OpenStockContent() {
       <div className="min-h-screen">
         <OpenStockActiveFiltersBar />
 
-        <div className="transition-all duration-300" style={{ paddingTop: `${NAV_HEIGHT}px` }}>
-          <div className="transition-all duration-300" style={{ paddingTop: hasActiveFilters ? "65px" : "0" }}>
-            <OpenStockGrid />
-          </div>
+        <div
+          className="transition-all duration-300 py-12"
+          style={{
+            paddingTop: hasActiveFilters ? `${NAV_HEIGHT + 65}px` : `${NAV_HEIGHT}px`,
+          }}
+        >
+          <OpenStockGrid />
         </div>
       </div>
     </>
