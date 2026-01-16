@@ -14,6 +14,7 @@ function OpenStockContent() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const searchParams = useSearchParams()
 
+  const hasParams = searchParams.toString().length > 0
   const hasActiveFilters = searchParams.has("color") || searchParams.has("material")
 
   return (
@@ -34,7 +35,12 @@ function OpenStockContent() {
       <div className="min-h-screen">
         <OpenStockActiveFiltersBar />
 
-        <div style={{ paddingTop: `${NAV_HEIGHT}px` }}>
+        <div
+          className="transition-all duration-300"
+          style={{
+            paddingTop: `${NAV_HEIGHT}px`,
+          }}
+        >
           <div
             className="transition-all duration-300"
             style={{
