@@ -27,6 +27,7 @@ interface Material {
 export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
   const searchParams = useSearchParams()
   const [items, setItems] = useState<OpenStockItem[]>([])
+  const [hasFetched, setHasFetched] = useState(false)
   const [sortBy, setSortBy] = useState<string>("fabric-asc")
 
   const colorParam = searchParams.get("color")
@@ -56,6 +57,7 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
 
       const result = await client.fetch(query)
       setItems(result)
+      setHasFetched(true)
     }
 
     fetchItems()
@@ -138,7 +140,7 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
         </div>
       </div>
 
-      {filteredAndSortedItems.length === 0 ? (
+      {hasFetched && filteredAndSortedItems.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-muted-foreground">No items found matching your criteria.</p>
         </div>
