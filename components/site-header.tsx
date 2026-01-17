@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, X } from "lucide-react"
+import { Search, X, Menu } from "lucide-react"
 import { useSearchParams, useRouter, usePathname } from "next/navigation"
 
 interface SiteHeaderProps {
@@ -22,6 +22,7 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -29,6 +30,11 @@ export function SiteHeader({
   const isTextilesActive = pathname === "/" || pathname.startsWith("/fabrics")
   const isOpenStockActive = pathname === "/open-stock"
   const isContactActive = pathname === "/contact-us"
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+    setMobileSearchOpen(false)
+  }, [pathname])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -101,10 +107,10 @@ export function SiteHeader({
               </div>
             </div>
 
-            <div className="flex items-center gap-4 md:gap-6">
+            <div className="hidden md:flex items-center gap-6">
               <Link
                 href="/?view=grid"
-                className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+                className={`text-base font-heading hover:text-accent transition-colors ${
                   isTextilesActive ? "underline underline-offset-4" : ""
                 }`}
               >
@@ -112,7 +118,7 @@ export function SiteHeader({
               </Link>
               <Link
                 href="/open-stock"
-                className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+                className={`text-base font-heading hover:text-accent transition-colors ${
                   isOpenStockActive ? "underline underline-offset-4" : ""
                 }`}
               >
@@ -120,12 +126,35 @@ export function SiteHeader({
               </Link>
               <Link
                 href="/contact-us"
-                className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+                className={`text-base font-heading hover:text-accent transition-colors ${
                   isContactActive ? "underline underline-offset-4" : ""
                 }`}
               >
                 Contact Us
               </Link>
+            </div>
+
+            <div className="flex md:hidden items-center gap-2">
+              <button
+                onClick={() => {
+                  setMobileSearchOpen(!mobileSearchOpen)
+                  setMobileMenuOpen(false)
+                }}
+                className="p-2 hover:bg-muted rounded-full transition-colors"
+                aria-label="Toggle search"
+              >
+                {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(!mobileMenuOpen)
+                  setMobileSearchOpen(false)
+                }}
+                className="p-2 hover:bg-muted rounded-full transition-colors"
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
             </div>
           </nav>
 
@@ -158,6 +187,45 @@ export function SiteHeader({
                       </button>
                     )}
                   </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="md:hidden overflow-hidden"
+              >
+                <div className="pt-4 pb-2 flex flex-col">
+                  <Link
+                    href="/?view=grid"
+                    className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
+                      isTextilesActive ? "underline underline-offset-4" : ""
+                    }`}
+                  >
+                    Textiles
+                  </Link>
+                  <Link
+                    href="/open-stock"
+                    className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
+                      isOpenStockActive ? "underline underline-offset-4" : ""
+                    }`}
+                  >
+                    Open Stock
+                  </Link>
+                  <Link
+                    href="/contact-us"
+                    className={`py-3 font-heading text-lg hover:bg-muted/50 transition-colors ${
+                      isContactActive ? "underline underline-offset-4" : ""
+                    }`}
+                  >
+                    Contact Us
+                  </Link>
                 </div>
               </motion.div>
             )}

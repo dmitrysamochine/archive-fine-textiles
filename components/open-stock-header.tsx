@@ -5,19 +5,25 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, X } from "lucide-react"
+import { Search, X, Menu } from "lucide-react"
 
 export function OpenStockHeader() {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const mobileSearchInputRef = useRef<HTMLInputElement>(null)
 
   const isTextiles = pathname === "/" || pathname.startsWith("/fabrics")
   const isOpenStock = pathname === "/open-stock"
   const isContact = pathname === "/contact-us"
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+    setMobileSearchOpen(false)
+  }, [pathname])
 
   useEffect(() => {
     if (mobileSearchOpen && mobileSearchInputRef.current) {
@@ -52,12 +58,12 @@ export function OpenStockHeader() {
     >
       <div className="container mx-auto px-6 py-4">
         <nav className="flex items-center justify-between gap-8">
-          {/* Logo - same as site-header */}
+          {/* Logo */}
           <Link href="/?view=grid" className="flex-shrink-0">
             <Image src="/logo.svg" alt="Archive Fine Textiles" width={216} height={48} className="h-12 w-auto" />
           </Link>
 
-          {/* Search - centered, same position as site-header */}
+          {/* Search - Hide on mobile */}
           <div className="hidden md:flex flex-1 max-w-md">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -79,20 +85,10 @@ export function OpenStockHeader() {
             </div>
           </div>
 
-          {/* Nav links - same styling as site-header */}
-          <div className="flex items-center gap-4 md:gap-6">
-            {/* Mobile Search Toggle */}
-            <button
-              onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
-              className="md:hidden p-2 hover:bg-muted rounded-full transition-colors"
-              aria-label="Toggle search"
-            >
-              {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
-            </button>
-
+          <div className="hidden md:flex items-center gap-6">
             <Link
               href="/?view=grid"
-              className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+              className={`text-base font-heading hover:text-accent transition-colors ${
                 isTextiles ? "underline underline-offset-4" : ""
               }`}
             >
@@ -100,7 +96,7 @@ export function OpenStockHeader() {
             </Link>
             <Link
               href="/open-stock"
-              className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+              className={`text-base font-heading hover:text-accent transition-colors ${
                 isOpenStock ? "underline underline-offset-4" : ""
               }`}
             >
@@ -108,16 +104,38 @@ export function OpenStockHeader() {
             </Link>
             <Link
               href="/contact-us"
-              className={`text-sm md:text-base font-heading hover:text-accent transition-colors ${
+              className={`text-base font-heading hover:text-accent transition-colors ${
                 isContact ? "underline underline-offset-4" : ""
               }`}
             >
               Contact Us
             </Link>
           </div>
+
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={() => {
+                setMobileSearchOpen(!mobileSearchOpen)
+                setMobileMenuOpen(false)
+              }}
+              className="p-2 hover:bg-muted rounded-full transition-colors"
+              aria-label="Toggle search"
+            >
+              {mobileSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(!mobileMenuOpen)
+                setMobileSearchOpen(false)
+              }}
+              className="p-2 hover:bg-muted rounded-full transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </nav>
 
-        {/* Mobile Search Bar */}
         <AnimatePresence>
           {mobileSearchOpen && (
             <motion.div
@@ -147,6 +165,45 @@ export function OpenStockHeader() {
                     </button>
                   )}
                 </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="md:hidden overflow-hidden"
+            >
+              <div className="pt-4 pb-2 flex flex-col">
+                <Link
+                  href="/?view=grid"
+                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
+                    isTextiles ? "underline underline-offset-4" : ""
+                  }`}
+                >
+                  Textiles
+                </Link>
+                <Link
+                  href="/open-stock"
+                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
+                    isOpenStock ? "underline underline-offset-4" : ""
+                  }`}
+                >
+                  Open Stock
+                </Link>
+                <Link
+                  href="/contact-us"
+                  className={`py-3 font-heading text-lg hover:bg-muted/50 transition-colors ${
+                    isContact ? "underline underline-offset-4" : ""
+                  }`}
+                >
+                  Contact Us
+                </Link>
               </div>
             </motion.div>
           )}
