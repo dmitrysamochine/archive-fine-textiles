@@ -27,7 +27,6 @@ interface Material {
 export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
   const searchParams = useSearchParams()
   const [items, setItems] = useState<OpenStockItem[]>([])
-  const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState<string>("fabric-asc")
 
   const colorParam = searchParams.get("color")
@@ -36,8 +35,6 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
 
   useEffect(() => {
     const fetchItems = async () => {
-      setLoading(true)
-
       const query = `
         *[_type == "openStockItem" && defined(images[0].asset)] | order(fabric asc) {
           _id,
@@ -59,7 +56,6 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
 
       const result = await client.fetch(query)
       setItems(result)
-      setLoading(false)
     }
 
     fetchItems()
@@ -118,22 +114,6 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
 
     return filtered
   }, [items, colorParam, materialParam, searchQuery, sortBy])
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="space-y-2 animate-pulse">
-              <div className="aspect-square bg-muted rounded" />
-              <div className="h-4 bg-muted rounded w-3/4" />
-              <div className="h-3 bg-muted rounded w-1/2" />
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="container mx-auto px-6 py-12">
