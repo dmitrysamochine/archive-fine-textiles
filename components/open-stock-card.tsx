@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { SanityImage } from "@/lib/sanity-image"
 import type { OpenStockItem } from "@/sanity/types"
 
@@ -9,7 +10,7 @@ export function OpenStockCard({ item }: OpenStockCardProps) {
   const firstImage = item.images?.[0]
 
   return (
-    <div className="block group">
+    <Link href={`/open-stock/${item.itemNumber}`} className="block group">
       <article>
         {firstImage && (
           <div className="relative aspect-square overflow-hidden rounded-sm mb-3">
@@ -28,6 +29,6 @@ export function OpenStockCard({ item }: OpenStockCardProps) {
           <p className="text-xs font-medium">{item.itemNumber}</p>
         </div>
       </article>
-    </div>
+    </Link>
   )
 }

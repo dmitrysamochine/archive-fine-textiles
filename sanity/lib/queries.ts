@@ -186,13 +186,22 @@ export const openStockItemsQuery = groq`
   }
 `
 
-export const openStockColorsQuery = groq`
-  *[_type == "color" && count(*[_type == "openStockItem" && references(^._id)]) > 0] | order(name asc) {
+export const openStockItemByNumberQuery = groq`
+  *[_type == "openStockItem" && itemNumber == $itemNumber][0] {
     _id,
-    name,
-    slug,
-    hexValue,
-    "itemCount": count(*[_type == "openStockItem" && references(^._id)])
+    itemNumber,
+    fabric,
+    colorway,
+    price,
+    content,
+    width,
+    description,
+    "colors": colors[]->{name, slug, hexValue},
+    "materials": materials[]->{name, slug},
+    images[] {
+      asset->,
+      alt
+    }
   }
 `
 
@@ -201,6 +210,16 @@ export const openStockMaterialsQuery = groq`
     _id,
     name,
     slug,
+    "itemCount": count(*[_type == "openStockItem" && references(^._id)])
+  }
+`
+
+export const openStockColorsQuery = groq`
+  *[_type == "color" && count(*[_type == "openStockItem" && references(^._id)]) > 0] | order(name asc) {
+    _id,
+    name,
+    slug,
+    hexValue,
     "itemCount": count(*[_type == "openStockItem" && references(^._id)])
   }
 `
