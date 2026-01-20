@@ -69,8 +69,10 @@ const portableTextComponents: Partial<PortableTextReactComponents> = {
   hardBreak: () => <br />,
 }
 
+export const revalidate = 0 // Disable caching for this page
+
 export default async function ContactUsPage() {
-  const contactData = await client.fetch<ContactPage>(contactPageQuery)
+  const contactData = await client.fetch<ContactPage>(contactPageQuery, {}, { cache: 'no-store' })
 
   return (
     <>
