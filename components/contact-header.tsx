@@ -43,7 +43,7 @@ export function ContactHeader() {
                 isOpenStockActive ? "underline underline-offset-4" : ""
               }`}
             >
-              Open Stock
+              Open Stock Fabrics
             </Link>
             <Link
               href="/contact-us"
@@ -90,7 +90,7 @@ export function ContactHeader() {
                     isOpenStockActive ? "underline underline-offset-4" : ""
                   }`}
                 >
-                  Open Stock
+                  Open Stock Fabrics
                 </Link>
                 <Link
                   href="/contact-us"

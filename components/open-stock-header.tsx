@@ -100,7 +100,7 @@ export function OpenStockHeader() {
                 isOpenStock ? "underline underline-offset-4" : ""
               }`}
             >
-              Open Stock
+              Open Stock Fabrics
             </Link>
             <Link
               href="/contact-us"
@@ -194,7 +194,7 @@ export function OpenStockHeader() {
                     isOpenStock ? "underline underline-offset-4" : ""
                   }`}
                 >
-                  Open Stock
+                  Open Stock Fabrics
                 </Link>
                 <Link
                   href="/contact-us"

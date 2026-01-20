@@ -28,7 +28,7 @@ export function OpenStockGrid({ hasScrolled = true }: OpenStockGridProps) {
   const searchParams = useSearchParams()
   const [items, setItems] = useState<OpenStockItem[]>([])
   const [hasFetched, setHasFetched] = useState(false)
-  const [sortBy, setSortBy] = useState<string>("fabric-asc")
+  const [sortBy, setSortBy] = useState<string>("item-asc")
 
   const colorParam = searchParams.get("color")
   const materialParam = searchParams.get("material")
