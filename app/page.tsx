@@ -91,10 +91,14 @@ function HomeContent() {
   return (
     <>
       <SiteHeader
-        hasPassedT1={hasPassedT1}
-        hasPassedT2={hasPassedT2}
-        scrollDirection={scrollDirection}
-        skipInitialAnimation={hasParams}
+        scrollAnimation={{
+          hasPassedT1,
+          hasPassedT2,
+          scrollDirection,
+          skipInitialAnimation: hasParams,
+        }}
+        showSearch={true}
+        searchPath="/"
       />
 
       <FilterTrigger

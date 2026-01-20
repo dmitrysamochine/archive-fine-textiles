@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react"
 import { useSearchParams } from "next/navigation"
-import { OpenStockHeader } from "@/components/open-stock-header"
+import { SiteHeader } from "@/components/site-header"
 import { OpenStockGrid } from "@/components/open-stock-grid"
 import { OpenStockFilterDrawer } from "@/components/open-stock-filter-drawer"
 import { OpenStockFilterTrigger } from "@/components/open-stock-filter-trigger"
@@ -19,7 +19,7 @@ function OpenStockContent() {
 
   return (
     <>
-      <OpenStockHeader />
+      <SiteHeader showSearch={true} searchPath="/open-stock" />
 
       <OpenStockFilterTrigger
         onClick={() => setDrawerOpen(!drawerOpen)}

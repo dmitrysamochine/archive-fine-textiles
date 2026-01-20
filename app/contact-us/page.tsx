@@ -4,7 +4,7 @@ import type { ContactPage } from "@/sanity/types"
 import { ContactSlideshow } from "@/components/contact-slideshow"
 import { PortableText } from "@portabletext/react"
 import type { PortableTextReactComponents } from "@portabletext/react"
-import { ContactHeader } from "@/components/contact-header"
+import { SiteHeader } from "@/components/site-header"
 
 export const metadata = {
   title: "Contact Us | Archive Fine Textiles",
@@ -76,7 +76,7 @@ export default async function ContactUsPage() {
 
   return (
     <>
-      <ContactHeader />
+      <SiteHeader showSearch={false} />
       <main className="min-h-screen pt-[80px]">
         <div className="container mx-auto px-6 py-6 md:py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
