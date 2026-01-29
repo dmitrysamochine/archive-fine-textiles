@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { client } from "@/sanity/lib/client"
@@ -54,12 +53,7 @@ export function RelatedFabrics({ collectionId, collectionName, currentItemId }: 
             : "/placeholder.svg?height=600&width=600"
 
           return (
-            <motion.div
-              key={fabric._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-            >
+            <div key={fabric._id}>
               <Link href={`/fabrics/${fabric.itemNumber}`} className="group block">
                 <div className="relative aspect-square overflow-hidden rounded-sm mb-3">
                   <Image
@@ -76,7 +70,7 @@ export function RelatedFabrics({ collectionId, collectionName, currentItemId }: 
                   <p className="text-xs text-muted-foreground">{fabric.itemNumber}</p>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           )
         })}
       </div>

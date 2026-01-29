@@ -17,9 +17,9 @@ The schema has been updated in `sanity/schema.ts` to include the new `material` 
 
 Deploy the schema changes to Sanity Studio:
 
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 Visit your Sanity Studio (usually at `http://localhost:3000/studio`) and verify the new Material content type appears.
 
@@ -27,9 +27,9 @@ Visit your Sanity Studio (usually at `http://localhost:3000/studio`) and verify 
 
 Run the script to create common material types in Sanity:
 
-```bash
+\`\`\`bash
 npx tsx scripts/create-materials.ts
-```
+\`\`\`
 
 This will create material documents for:
 - Cotton, Linen, Silk, Wool
@@ -41,9 +41,9 @@ This will create material documents for:
 
 Run the migration script to associate materials with existing fabric items:
 
-```bash
+\`\`\`bash
 npx tsx scripts/migrate-materials.ts
-```
+\`\`\`
 
 This script will:
 - Read each fabric item's `content` field
@@ -72,14 +72,14 @@ The filter drawer now shows:
 ## Data Structure
 
 ### Before
-```typescript
+\`\`\`typescript
 // Filtering by exact content string match
 content: "80% Cotton, 20% Linen"
 // Filter URL: ?material=80% Cotton, 20% Linen
-```
+\`\`\`
 
 ### After
-```typescript
+\`\`\`typescript
 // Display field (unchanged)
 content: "80% Cotton, 20% Linen"
 
@@ -89,7 +89,7 @@ materials: [
   { _ref: "linen-id", name: "Linen" }
 ]
 // Filter URL: ?material=cotton,linen
-```
+\`\`\`
 
 ## Troubleshooting
 
