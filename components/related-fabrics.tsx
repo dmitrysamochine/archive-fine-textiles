@@ -16,40 +16,36 @@ interface FabricItem {
 }
 
 interface RelatedFabricsProps {
-  colorwayId: string
+  collectionId: string
+  collectionName: string
   currentItemId: string
 }
 
-export function RelatedFabrics({ colorwayId, currentItemId }: RelatedFabricsProps) {
+export function RelatedFabrics({ collectionId, collectionName, currentItemId }: RelatedFabricsProps) {
   const [fabrics, setFabrics] = useState<FabricItem[]>([])
-  const [colorwayName, setColorwayName] = useState("")
 
   useEffect(() => {
     client
-      .fetch<{ items: FabricItem[]; colorway: { name: string } }>(
-        `{
-          "items": *[_type == "fabricItem" && colorway._ref == $colorwayId && _id != $currentItemId && defined(images[0])] [0...12] {
-            _id,
-            itemNumber,
-            "collection": fabric->{name},
-            colorway->{name},
-            images
-          },
-          "colorway": *[_type == "colorway" && _id == $colorwayId][0]{name}
+      .fetch<FabricItem[]>(
+        `*[_type == "fabricItem" && fabric._ref == $collectionId && _id != $currentItemId && defined(images[0])] [0...12] {
+          _id,
+          itemNumber,
+          "collection": fabric->{name},
+          colorway->{name},
+          images
         }`,
-        { colorwayId, currentItemId },
+        { collectionId, currentItemId },
       )
       .then((data) => {
-        setFabrics(data.items)
-        setColorwayName(data.colorway?.name || "")
+        setFabrics(data)
       })
-  }, [colorwayId, currentItemId])
+  }, [collectionId, currentItemId])
 
   if (fabrics.length === 0) return null
 
   return (
     <div className="container mx-auto px-6 py-16">
-      <h2 className="text-2xl font-heading mb-8">More from {colorwayName}</h2>
+      <h2 className="text-2xl font-heading mb-8">More from {collectionName}</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {fabrics.map((fabric, index) => {
