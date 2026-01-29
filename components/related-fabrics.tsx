@@ -43,7 +43,8 @@ export function RelatedFabrics({ collectionId, collectionName, currentItemId }: 
   if (fabrics.length === 0) return null
 
   return (
-    <div className="container mx-auto px-6 py-16">
+    <div className="bg-background">
+      <div className="container mx-auto px-6 py-16">
       <h2 className="text-2xl font-heading mb-8">More from {collectionName}</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -73,6 +74,7 @@ export function RelatedFabrics({ collectionId, collectionName, currentItemId }: 
             </div>
           )
         })}
+      </div>
       </div>
     </div>
   )
