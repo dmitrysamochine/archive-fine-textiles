@@ -193,8 +193,14 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
         </div>
       </div>
 
-      {/* Related Items from Same Colorway */}
-      {item.colorway && <RelatedFabrics colorwayId={item.colorway._id} currentItemId={item._id} />}
+      {/* Related Items from Same Collection */}
+      {item.collection && (
+        <RelatedFabrics
+          collectionId={item.collection._id}
+          collectionName={item.collection.name}
+          currentItemId={item._id}
+        />
+      )}
     </>
   )
 }
