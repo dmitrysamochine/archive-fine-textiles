@@ -97,7 +97,7 @@ export function OpenStockFilterDrawer({ isOpen, onClose, hasActiveFilters }: Ope
 
   const categories = [
     { id: "color" as const, label: "Color", count: colors.filter((c) => (c.itemCount || 0) > 0).length },
-    { id: "material" as const, label: "Material", count: materials.filter((m) => (m.itemCount || 0) > 0).length },
+    { id: "material" as const, label: "Content", count: materials.filter((m) => (m.itemCount || 0) > 0).length },
   ]
 
   return (
@@ -167,7 +167,7 @@ export function OpenStockFilterDrawer({ isOpen, onClose, hasActiveFilters }: Ope
                 >
                   <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
                     <span className="font-sans text-sm tracking-wider">
-                      {activeCategory === "color" ? "COLOR" : "MATERIAL"}
+                      {activeCategory === "color" ? "COLOR" : "CONTENT"}
                     </span>
                     <button
                       onClick={onClose}

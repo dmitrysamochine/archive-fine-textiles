@@ -96,7 +96,7 @@ export function FabricItemDetail({ item, onImageLoad }: FabricItemDetailProps) {
 
                 {item.content && (
                   <div>
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Material</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-1">Content</h3>
                     <p className="text-sm text-muted-foreground">{item.content}</p>
                   </div>
                 )}
