@@ -75,7 +75,7 @@ export function OpenStockItemDetail({ item, onImageLoad }: OpenStockItemDetailPr
       <div className="relative w-full md:h-screen md:overflow-hidden">
         <div className="flex flex-col md:flex-row md:h-full">
           {/* Info Panel - first on mobile (top), overlay on desktop (right side) */}
-          <div className="w-full md:absolute md:right-0 md:top-0 md:bottom-0 md:w-96 bg-background md:bg-background/95 md:backdrop-blur-sm p-8 overflow-y-auto md:z-20 md:shadow-xl">
+          <div className="w-full md:absolute md:right-0 md:top-0 md:bottom-0 md:w-96 bg-background md:bg-background/95 md:backdrop-blur-sm p-8 overflow-y-auto md:z-20 md:border-l md:border-border">
             <div className="space-y-6">
               <div>
                 {item.fabric && <h1 className="text-3xl font-heading mb-2">{item.fabric}</h1>}
@@ -117,7 +117,7 @@ export function OpenStockItemDetail({ item, onImageLoad }: OpenStockItemDetailPr
             </div>
           </div>
 
-          <div className="relative w-full h-[70vh] md:h-full md:w-[calc(100%-24rem)] bg-white flex items-center justify-center">
+          <div className="relative w-full h-[70vh] md:h-full md:w-[calc(100%-24rem)] bg-white flex items-center justify-center py-10 md:py-20">
             {!currentImageLoaded && (
               <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
                 <LoadingSpinner />
