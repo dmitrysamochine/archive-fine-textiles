@@ -19,12 +19,13 @@ interface FilterOption {
   count: number
 }
 
-type FilterCategory = "collection" | "color" | "material"
+type FilterCategory = "collection" | "color" | "material" | "category"
 
 const categoryLabels: Record<FilterCategory, string> = {
   collection: "Collection",
   color: "Color",
-  material: "Material Content",
+  material: "Content",
+  category: "Description",
 }
 
 export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawerProps) {
@@ -76,6 +77,13 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
             "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0]) && status != "Out of Stock"])
           }`)
           break
+        case "category":
+          data = await client.fetch(`*[_type == "category"] | order(name asc) {
+            name,
+            "slug": slug.current,
+            "count": count(*[_type == "fabricItem" && references(^._id) && defined(images[0]) && status != "Out of Stock"])
+          }`)
+          break
       }
 
       setOptions(data)
@@ -108,7 +116,7 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
     .filter((opt) => opt.count > 0)
     .filter((opt) => opt.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
-  const searchable = activeCategory === "collection"
+  const searchable = activeCategory === "collection" || activeCategory === "category"
 
   const handleBack = () => {
     setActiveCategory(null)
@@ -175,14 +183,6 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
               {/* Categories */}
               <div className="flex-1 flex flex-col">
                 <button
-                  onClick={() => handleCategoryClick("collection")}
-                  className="flex items-center justify-between px-6 py-5 hover:bg-linen-50 transition-colors border-b border-border group"
-                >
-                  <span className="text-base font-sans">Collection</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                </button>
-
-                <button
                   onClick={() => handleCategoryClick("color")}
                   className="flex items-center justify-between px-6 py-5 hover:bg-linen-50 transition-colors border-b border-border group"
                 >
@@ -194,7 +194,23 @@ export function FilterDrawer({ isOpen, onClose, hasActiveFilters }: FilterDrawer
                   onClick={() => handleCategoryClick("material")}
                   className="flex items-center justify-between px-6 py-5 hover:bg-linen-50 transition-colors border-b border-border group"
                 >
-                  <span className="text-base font-sans">Material</span>
+                  <span className="text-base font-sans">Content</span>
+                  <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </button>
+
+                <button
+                  onClick={() => handleCategoryClick("collection")}
+                  className="flex items-center justify-between px-6 py-5 hover:bg-linen-50 transition-colors border-b border-border group"
+                >
+                  <span className="text-base font-sans">Collection</span>
+                  <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </button>
+
+                <button
+                  onClick={() => handleCategoryClick("category")}
+                  className="flex items-center justify-between px-6 py-5 hover:bg-linen-50 transition-colors border-b border-border group"
+                >
+                  <span className="text-base font-sans">Description</span>
                   <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
                 </button>
               </div>

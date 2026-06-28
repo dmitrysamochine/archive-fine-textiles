@@ -20,14 +20,15 @@ export function ActiveFiltersBar() {
 
   useEffect(() => {
     const fetchLabels = async () => {
-      const [collections, colors, materials] = await Promise.all([
+      const [collections, colors, materials, categories] = await Promise.all([
         client.fetch(`*[_type == "fabricCollection"] { "slug": slug.current, name }`),
         client.fetch(`*[_type == "color"] { "slug": slug.current, name }`),
         client.fetch(`*[_type == "material"] { "slug": slug.current, name }`),
+        client.fetch(`*[_type == "category"] { "slug": slug.current, name }`),
       ])
 
       const labels: Record<string, string> = {}
-      ;[...collections, ...colors, ...materials].forEach((item: any) => {
+      ;[...collections, ...colors, ...materials, ...categories].forEach((item: any) => {
         labels[item.slug] = item.name
       })
 
@@ -43,6 +44,7 @@ export function ActiveFiltersBar() {
     const collectionParam = searchParams.get("collection")
     const colorParam = searchParams.get("color")
     const materialParam = searchParams.get("material")
+    const categoryParam = searchParams.get("category")
 
     if (collectionParam) {
       collectionParam.split(",").forEach((value) => {
@@ -68,6 +70,16 @@ export function ActiveFiltersBar() {
       materialParam.split(",").forEach((value) => {
         filters.push({
           category: "material",
+          value,
+          label: filterLabels[value] || value,
+        })
+      })
+    }
+
+    if (categoryParam) {
+      categoryParam.split(",").forEach((value) => {
+        filters.push({
+          category: "category",
           value,
           label: filterLabels[value] || value,
         })
