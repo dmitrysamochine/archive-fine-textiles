@@ -13,10 +13,11 @@ with an upcoming furniture e-commerce section.
   `bg-background` (100% opacity) for content sections.
 
 ## Environment Variables
-Re-add these when deploying to a new Vercel project:
-- `NEXT_PUBLIC_SANITY_PROJECT_ID`
-- `NEXT_PUBLIC_SANITY_DATASET`
-- `SANITY_API_TOKEN`
+Current values (set in the `archive-fine-textiles` Vercel project on team `dmitry-5290s-projects`):
+- `NEXT_PUBLIC_SANITY_PROJECT_ID` = `0piql2nt`
+- `NEXT_PUBLIC_SANITY_DATASET` = `production`
+- `SANITY_API_TOKEN` — only needed to run the data scripts (`scripts/*`); not required for the
+  site to render at runtime. Add it (Editor permissions) only when importing/migrating data.
 - _(Upcoming)_ Shopify Storefront API token and related vars
 
 Sanity data lives in the Sanity project and is independent of Vercel — it reconnects via
@@ -96,9 +97,23 @@ the env vars above regardless of which Vercel account hosts the app.
 - Prefer planning and alignment before writing code, especially for larger features.
 - Value DRY/consolidated components over duplication (e.g. the unified header).
 
-## Migrating to a New Vercel Account
+## Vercel Account Migration — COMPLETED
+The project was migrated from the original Vercel account to team `dmitry-5290s-projects`.
+Current setup:
+- **GitHub repo (source of truth):** `dmitrysamochine/archive-fine-textiles` (production branch `main`).
+- **Vercel project:** `archive-fine-textiles` on team `dmitry-5290s-projects`.
+- **Env vars:** re-added on the new project (see Environment Variables above).
+- **Domain:** `archivefinetextiles.com` + `www` moved via Cloudflare DNS. The `_vercel` TXT
+  verification records and the `www` CNAME (`fd275faff6f60093.vercel-dns-017.com`) were added,
+  ownership was verified into this project, and it auto-detached from the old account. Apex `A`
+  stayed on Vercel's shared IP. SSL is issued; apex 308-redirects to `www`.
+- **Sanity:** unchanged — same project (`0piql2nt`), reconnected via env vars.
+
+### Reference: repeating a Vercel account migration
 1. Push everything to GitHub (source of truth).
 2. Import the GitHub repo into a new Vercel project on the new account.
 3. Re-add the environment variables listed above.
 4. Redeploy. Sanity needs no changes.
-5. Re-register CORS origins in Sanity if the domain changes (see Deployment & Sanity CORS).
+5. Move the domain: add the `_vercel` TXT verification record(s) and repoint the `www` CNAME to
+   the new project's target in DNS, then verify ownership in the new project.
+6. Re-register CORS origins in Sanity if the domain changes (see Deployment & Sanity CORS).

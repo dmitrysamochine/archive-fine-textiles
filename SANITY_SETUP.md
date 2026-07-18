@@ -1,12 +1,20 @@
 # Archive Fine Textiles - Sanity Setup Guide
 
-## Step 1: Create Sanity Project
+> **Status: already provisioned.** The Sanity project exists and is connected. You do **not**
+> need to create a new one. Current config:
+> - **Project ID:** `0piql2nt`
+> - **Dataset:** `production`
+> - Manage it at [manage.sanity.io](https://manage.sanity.io).
+>
+> The steps below are kept as historical reference for a first-time / from-scratch setup.
+
+## Step 1: Create Sanity Project (already done)
 
 1. Go to [sanity.io](https://sanity.io) and sign up/login
 2. Click "Create new project"
 3. Name it: **Archive Fine Textiles**
 4. Choose dataset: **production**
-5. Copy your **Project ID**
+5. Copy your **Project ID** (this project's ID is `0piql2nt`)
 
 ## Step 2: Configure Environment Variables
 
