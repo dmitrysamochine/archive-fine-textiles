@@ -2,8 +2,8 @@
 
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/some-thing/v0-fabric-catalog-website)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/B8TOjelIjaG)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/dmitry-5290s-projects/archive-fine-textiles)
+[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app)
 
 ## Overview
 
@@ -12,15 +12,19 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 ## Deployment
 
-Your project is live at:
+The site is live in production at:
 
-**[https://vercel.com/some-thing/v0-fabric-catalog-website](https://vercel.com/some-thing/v0-fabric-catalog-website)**
+**[https://www.archivefinetextiles.com](https://www.archivefinetextiles.com)**
+
+Vercel project dashboard (team `dmitry-5290s-projects`):
+
+**[https://vercel.com/dmitry-5290s-projects/archive-fine-textiles](https://vercel.com/dmitry-5290s-projects/archive-fine-textiles)**
 
 ## Build your app
 
 Continue building your app on:
 
-**[https://v0.app/chat/projects/B8TOjelIjaG](https://v0.app/chat/projects/B8TOjelIjaG)**
+**[https://v0.app](https://v0.app)**
 
 ## How It Works
 
