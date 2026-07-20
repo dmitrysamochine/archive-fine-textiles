@@ -1,3 +1,0 @@
-{
-  "installCommand": "npm install next@15.2.6 --legacy-peer-deps && npm install --legacy-peer-deps"
-}
