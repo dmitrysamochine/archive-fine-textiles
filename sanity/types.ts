@@ -170,3 +170,38 @@ export interface OpenStockItem {
     alt?: string
   }>
 }
+
+export interface FurnitureItem {
+  _id: string
+  title: string
+  slug: {
+    current: string
+  }
+  maker: string
+  era?: string
+  materialContent?: string
+  dimensions?: string
+  price: number
+  available?: boolean
+  description?: string
+  materials?: Array<{
+    name: string
+    slug: {
+      current: string
+    }
+  }>
+  images?: Array<{
+    asset: {
+      _id: string
+      url: string
+    }
+    alt?: string
+  }>
+}
+
+export interface ShopSettings {
+  _id: string
+  purchaseEmail?: string
+  purchasePhone?: string
+  furnitureIntro?: string
+}

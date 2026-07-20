@@ -234,3 +234,60 @@ export const contactPageQuery = groq`
     content
   }
 `
+
+// Get all furniture items (includes sold items; sold are shown as "Sold")
+export const furnitureItemsQuery = groq`
+  *[_type == "furnitureItem"] | order(available desc, title asc) {
+    _id,
+    title,
+    slug,
+    maker,
+    era,
+    materialContent,
+    dimensions,
+    price,
+    available,
+    description,
+    "materials": materials[]->{name, slug},
+    images[] {
+      asset->,
+      alt
+    }
+  }
+`
+
+// Get single furniture item by slug
+export const furnitureItemBySlugQuery = groq`
+  *[_type == "furnitureItem" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    maker,
+    era,
+    materialContent,
+    dimensions,
+    price,
+    available,
+    description,
+    "materials": materials[]->{name, slug},
+    images[] {
+      asset->,
+      alt
+    }
+  }
+`
+
+// Get all furniture slugs (for static params / metadata)
+export const furnitureSlugsQuery = groq`
+  *[_type == "furnitureItem" && defined(slug.current)].slug.current
+`
+
+// Get global shop settings (singleton)
+export const shopSettingsQuery = groq`
+  *[_type == "shopSettings"][0] {
+    _id,
+    purchaseEmail,
+    purchasePhone,
+    furnitureIntro
+  }
+`
