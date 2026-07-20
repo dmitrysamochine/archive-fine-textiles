@@ -28,9 +28,8 @@ export default async function FurniturePage() {
       <main className="min-h-screen pt-28 pb-8">
         <div className="container mx-auto px-4 md:px-6">
           {/* Section header */}
-          <header className="max-w-3xl mb-12 md:mb-16">
-            <p className="text-xs font-sans uppercase tracking-[0.2em] text-muted-foreground mb-4">Shop</p>
-            <h1 className="text-4xl md:text-5xl font-heading mb-6 text-balance">Furniture</h1>
+          <header className="max-w-2xl ml-auto text-right mb-12 md:mb-16">
+            <h1 className="text-2xl md:text-3xl font-heading mb-4 text-balance">Furniture</h1>
             <p className="text-base font-sans leading-relaxed text-muted-foreground text-pretty">{intro}</p>
           </header>
 
