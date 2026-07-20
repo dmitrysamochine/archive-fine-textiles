@@ -12,7 +12,17 @@ export default defineConfig({
 
   plugins: [
     structureTool({
-      defaultDocumentNode: (S) => S.document(),
+      structure: (S) =>
+        S.list()
+          .title("Content")
+          .items([
+            S.listItem()
+              .title("Shop Settings")
+              .id("shopSettings")
+              .child(S.document().schemaType("shopSettings").documentId("shopSettings")),
+            S.divider(),
+            ...S.documentTypeListItems().filter((listItem) => listItem.getId() !== "shopSettings"),
+          ]),
     }),
     visionTool(),
   ],

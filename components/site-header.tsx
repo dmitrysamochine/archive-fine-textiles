@@ -35,6 +35,7 @@ export function SiteHeader({
 
   const isTextilesActive = pathname === "/" || pathname.startsWith("/fabrics")
   const isOpenStockActive = pathname === "/open-stock" || pathname.startsWith("/open-stock/")
+  const isShopActive = pathname.startsWith("/shop")
   const isContactActive = pathname === "/contact-us"
 
   // Close menus on route change
@@ -152,6 +153,14 @@ export function SiteHeader({
               Open Stock Fabrics
             </Link>
             <Link
+              href="/shop/furniture"
+              className={`text-base font-heading hover:text-accent transition-colors ${
+                isShopActive ? "underline underline-offset-4" : ""
+              }`}
+            >
+              Shop
+            </Link>
+            <Link
               href="/contact-us"
               className={`text-base font-heading hover:text-accent transition-colors ${
                 isContactActive ? "underline underline-offset-4" : ""
@@ -251,6 +260,14 @@ export function SiteHeader({
                   }`}
                 >
                   Open Stock Fabrics
+                </Link>
+                <Link
+                  href="/shop/furniture"
+                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
+                    isShopActive ? "underline underline-offset-4" : ""
+                  }`}
+                >
+                  Shop
                 </Link>
                 <Link
                   href="/contact-us"

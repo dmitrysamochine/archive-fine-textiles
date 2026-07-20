@@ -494,6 +494,162 @@ export const openStockItem = defineType({
   },
 })
 
+// Furniture Item - Shop / Furniture (Phase 1)
+export const furnitureItem = defineType({
+  name: "furnitureItem",
+  title: "Furniture Items",
+  type: "document",
+  fields: [
+    defineField({
+      name: "title",
+      title: "Title",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+      description: "Piece name (e.g., Pair of Armchairs)",
+    }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: (doc) => `${doc.maker ?? ""} ${doc.title ?? ""}`.trim(),
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+      description: "URL path segment, generated from maker + title",
+    }),
+    defineField({
+      name: "maker",
+      title: "Maker",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+      description: "Designer / maker (e.g., Alfred Christansen for Slagelse)",
+    }),
+    defineField({
+      name: "era",
+      title: "Era",
+      type: "string",
+      description: "Period or year (e.g., 1940's, 1958)",
+    }),
+    defineField({
+      name: "materialContent",
+      title: "Material Content",
+      type: "string",
+      description: "Materials for display (e.g., Cashmere, Polyester, Wool, Oak)",
+    }),
+    defineField({
+      name: "dimensions",
+      title: "Dimensions",
+      type: "string",
+      description: 'e.g., H 36" x W 27" x D 23"',
+    }),
+    defineField({
+      name: "price",
+      title: "Price",
+      type: "number",
+      validation: (Rule) => Rule.required().min(0),
+      description: "Price in USD (whole dollars, e.g., 14500)",
+    }),
+    defineField({
+      name: "available",
+      title: "Available",
+      type: "boolean",
+      initialValue: true,
+      description: "Uncheck when the piece is sold (it will display as Sold)",
+    }),
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "materials",
+      title: "Materials",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "material" }],
+        }),
+      ],
+      description: "Optional material references for future filtering",
+    }),
+    defineField({
+      name: "images",
+      title: "Images",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Alternative text",
+              description: "Important for SEO and accessibility",
+            },
+          ],
+        }),
+      ],
+    }),
+  ],
+  preview: {
+    select: {
+      title: "title",
+      maker: "maker",
+      available: "available",
+      media: "images.0",
+    },
+    prepare({ title, maker, available, media }) {
+      return {
+        title,
+        subtitle: `${maker}${available === false ? " — SOLD" : ""}`,
+        media,
+      }
+    },
+  },
+})
+
+// Shop Settings - global settings for the Shop section (singleton)
+export const shopSettings = defineType({
+  name: "shopSettings",
+  title: "Shop Settings",
+  type: "document",
+  fields: [
+    defineField({
+      name: "purchaseEmail",
+      title: "Purchase Inquiry Email",
+      type: "string",
+      validation: (Rule) => Rule.email(),
+      description: "Email address used for furniture purchase inquiries",
+    }),
+    defineField({
+      name: "purchasePhone",
+      title: "Purchase Inquiry Phone",
+      type: "string",
+      description: "Phone number used for furniture purchase inquiries",
+    }),
+    defineField({
+      name: "furnitureIntro",
+      title: "Furniture Intro",
+      type: "text",
+      rows: 4,
+      description: "Intro copy shown at the top of the Furniture page",
+    }),
+  ],
+  preview: {
+    prepare() {
+      return {
+        title: "Shop Settings",
+      }
+    },
+  },
+})
+
 export const schemaTypes = [
   fabricItem,
   fabricCollection,
@@ -503,4 +659,6 @@ export const schemaTypes = [
   material,
   contactPage,
   openStockItem,
+  furnitureItem,
+  shopSettings,
 ]
