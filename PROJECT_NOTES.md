@@ -4,8 +4,8 @@ A fabric catalog website for an interior textiles business (domain: archivefinet
 with an upcoming furniture e-commerce section.
 
 ## Tech Stack
-- **Framework:** Next.js (App Router)
-- **CMS:** Sanity (fabric catalog data — inquiry-based, not e-commerce)
+- **Framework:** Next.js 16 (App Router) + React 19.2
+- **CMS:** Sanity (fabric catalog + furniture shop data — inquiry/contact-based, not checkout)
 - **Styling:** Tailwind CSS + shadcn/ui
 - **Animation:** Framer Motion
 - **Fonts:** Bernhard Modern BT (headings, `font-heading`), Lato Light (body)
@@ -22,6 +22,26 @@ Current values (set in the `archive-fine-textiles` Vercel project on team `dmitr
 
 Sanity data lives in the Sanity project and is independent of Vercel — it reconnects via
 the env vars above regardless of which Vercel account hosts the app.
+
+## Sanity Studio (content editing)
+- **Canonical Studio = the EMBEDDED Studio** built into this Next.js app at the `/studio` route
+  (`app/studio/[[...tool]]/`). It loads `sanity.config.ts` → `sanity/schema.ts`, so it always
+  reflects the schema in this repo and auto-updates on every Vercel deploy.
+  - **Live:** `https://www.archivefinetextiles.com/studio`
+  - **Local dev:** `http://localhost:3000/studio`
+- The Studio is rendered **client-only** (`next/dynamic` with `ssr: false`) to avoid pulling
+  Sanity's Node-only deps (`jsdom` via `isomorphic-dompurify`) into server rendering. Do not
+  convert it back to a server-rendered import.
+- **Do NOT use the old hosted Studio** (`archive-fine-textiles.sanity.studio`). It is a frozen
+  static build from an earlier `sanity deploy` and does NOT reflect current schema changes
+  (it was missing the Shop/furniture types). If it causes confusion, retire it with
+  `npx sanity undeploy` (requires interactive `sanity login`).
+- **CORS requirement:** the embedded Studio authenticates from the browser, so each Studio origin
+  must be allowlisted in Sanity Manage → API → CORS Origins **with "Allow credentials" checked**
+  (`http://localhost:3000` and `https://www.archivefinetextiles.com`). This is separate from the
+  public read-only CORS entries used by the front-end (see Deployment & Sanity CORS).
+- `shopSettings` is registered as a pinned **singleton** in the Studio structure
+  (`sanity.config.ts`) so only one settings document can exist.
 
 ## Architecture & Conventions
 
@@ -60,6 +80,24 @@ the env vars above regardless of which Vercel account hosts the app.
 - Uses `export const revalidate = 0` + `{ cache: 'no-store' }` so Sanity edits appear
   immediately (the Sanity client uses `useCdn: true` globally).
 
+### Shop — Furniture (Phase 1, implemented)
+- **Routes:** `/shop` → redirects to `/shop/furniture`; `/shop/furniture` (editorial showcase);
+  `/shop/furniture/[slug]` (dedicated detail page per item).
+- **Interface:** intentionally NOT the fabric grid. Furniture uses an editorial showcase of large
+  alternating feature rows (`furniture-feature-row.tsx`) because there are few, high-value,
+  one-of-a-kind pieces. Accessories (Phase 2) WILL reuse the existing grid + filtering.
+- **No checkout.** Purchase is contact-only via `mailto:`/`tel:` links, pulling email/phone from
+  the `shopSettings` singleton. Price is shown alongside the contact CTA.
+- **Sold items** stay published and render with a "Sold" badge (`available: false`); unpublish to
+  remove entirely.
+- **Sanity types:** `furnitureItem` (title, slug, maker, era, materialContent, dimensions, price,
+  available, description, optional `materials` refs for future filtering, images) and the
+  `shopSettings` singleton. Both are separate document types — furniture and the eventual
+  `accessoryItem` are modeled independently, not as one shared type.
+- **Nav:** a single "Shop" link → `/shop/furniture`, active on `pathname.startsWith("/shop")`.
+  Phase 2 will convert this to a Shop dropdown (Furniture / Accessories).
+- **Images:** `furniture-image.tsx` handles a graceful placeholder when an item has no images yet.
+
 ## Deployment & Sanity CORS
 - **Workflow:** v0 pushes to a feature branch → opens/updates a PR against `main`. Vercel builds
   a Preview Deployment per PR (review there). Merging the PR into `main` triggers an automatic
@@ -78,18 +116,19 @@ the env vars above regardless of which Vercel account hosts the app.
   `app/fabrics/[itemNumber]/page.tsx`, `app/open-stock/[itemNumber]/page.tsx`) and interacts with
   the loading/jump fixes, so it needs a planned, careful pass. Deferred.
 
-## E-commerce Plan (not yet implemented)
-- **Separation of concerns:** Sanity = fabric catalog (inquiry). Shopify = furniture store
-  (transactional; only a few products to start).
-- Shopify is the inventory source of truth for furniture.
-- Build a `/shop` route in this Next.js app using the **Shopify Storefront API**, matching the
-  existing site aesthetic (same domain).
-- **Checkout:** redirect to Shopify's hosted checkout (Shopify handles PCI compliance).
-  Customization on Basic plan is limited to logo/colors/fonts.
-- **Payments:** Shopify Payments. In-store (retail location) recommended via Shopify POS, since
-  inventory already lives in Shopify.
-- **Status:** waiting on user to set up Shopify store + Storefront API token + test products +
-  Shopify Payments.
+## Shop Roadmap
+- **Phase 1 — Furniture (IMPLEMENTED):** built in **Sanity**, not Shopify. High-value,
+  one-of-a-kind pieces with **no checkout** — purchase is contact-only (email + phone). See
+  "Shop — Furniture" under Architecture & Conventions for details. Remaining setup: user enters
+  the furniture items + `shopSettings` (email/phone) in the embedded Studio.
+- **Phase 2 — Accessories (NOT yet implemented):** will reuse the existing grid + filtering UI.
+  Likely SKU'd/transactional, so this is where a checkout provider would come in. When Phase 2
+  ships, convert the "Shop" nav link into a dropdown (Furniture / Accessories) at `/shop/accessories`.
+- **Permalinks (agreed):** `/shop/furniture` and eventually `/shop/accessories`.
+- **NOTE (superseded):** an earlier plan had furniture going on **Shopify** (Storefront API,
+  hosted checkout, Shopify Payments/POS). That was dropped for Phase 1 — furniture is
+  contact-to-purchase in Sanity. Revisit Shopify (or another checkout provider) only if/when a
+  transactional accessories store is needed in Phase 2.
 
 ## Working Preferences
 - Always announce/discuss unprompted changes BEFORE implementing; get sign-off on approach for
