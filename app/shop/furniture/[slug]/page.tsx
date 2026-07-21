@@ -10,9 +10,12 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
+// Disable caching so newly added/edited furniture (and its images) appears immediately.
+export const revalidate = 0
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const item = await client.fetch<FurnitureItem | null>(furnitureItemBySlugQuery, { slug })
+  const item = await client.fetch<FurnitureItem | null>(furnitureItemBySlugQuery, { slug }, { cache: "no-store" })
 
   if (!item) {
     return { title: "Furniture | Archive Fine Textiles" }
@@ -30,8 +33,8 @@ export default async function FurnitureDetailPage({ params }: PageProps) {
   const { slug } = await params
 
   const [item, settings] = await Promise.all([
-    client.fetch<FurnitureItem | null>(furnitureItemBySlugQuery, { slug }),
-    client.fetch<ShopSettings | null>(shopSettingsQuery),
+    client.fetch<FurnitureItem | null>(furnitureItemBySlugQuery, { slug }, { cache: "no-store" }),
+    client.fetch<ShopSettings | null>(shopSettingsQuery, {}, { cache: "no-store" }),
   ])
 
   if (!item) {

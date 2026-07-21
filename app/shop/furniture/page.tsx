@@ -11,10 +11,13 @@ export const metadata: Metadata = {
     "A curated selection of one-of-a-kind vintage and designer furniture. Each piece is available by direct enquiry.",
 }
 
+// Disable caching so newly added/edited furniture (and its images) appears immediately.
+export const revalidate = 0
+
 export default async function FurniturePage() {
   const [items, settings] = await Promise.all([
-    client.fetch<FurnitureItem[]>(furnitureItemsQuery),
-    client.fetch<ShopSettings | null>(shopSettingsQuery),
+    client.fetch<FurnitureItem[]>(furnitureItemsQuery, {}, { cache: "no-store" }),
+    client.fetch<ShopSettings | null>(shopSettingsQuery, {}, { cache: "no-store" }),
   ])
 
   const intro =

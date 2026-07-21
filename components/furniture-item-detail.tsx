@@ -41,11 +41,11 @@ export function FurnitureItemDetail({ item, settings }: FurnitureItemDetailProps
             <FurnitureImage
               image={images[currentIndex]}
               alt={images[currentIndex]?.alt || `${item.title} by ${item.maker}`}
-              width={1600}
-              height={1200}
+              width={1200}
+              height={1600}
               priority
               sizes="(max-width: 1024px) 100vw, 60vw"
-              className="w-full h-auto object-contain aspect-[4/3]"
+              className="w-full h-auto object-contain aspect-[3/4]"
             />
 
             {isSold && (
