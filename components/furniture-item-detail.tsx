@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { ChevronLeft, ChevronRight, ArrowLeft, Mail, Phone } from "lucide-react"
 import { FurnitureImage } from "@/components/furniture-image"
+import { FurnitureTextilesUsed } from "@/components/furniture-textiles-used"
 import { formatPrice, buildInquiryMailto, buildTelLink } from "@/lib/shop"
 import type { FurnitureItem, ShopSettings } from "@/sanity/types"
 
@@ -128,6 +129,9 @@ export function FurnitureItemDetail({ item, settings }: FurnitureItemDetailProps
                   <dt className="text-muted-foreground uppercase tracking-wider text-xs">Dimensions</dt>
                   <dd>{item.dimensions}</dd>
                 </div>
+              )}
+              {item.textilesUsed && item.textilesUsed.length > 0 && (
+                <FurnitureTextilesUsed textiles={item.textilesUsed} itemTitle={item.title} />
               )}
             </dl>
 

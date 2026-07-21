@@ -273,6 +273,10 @@ export const furnitureItemBySlugQuery = groq`
     images[] {
       asset->,
       alt
+    },
+    textilesUsed[] {
+      asset->,
+      alt
     }
   }
 `
