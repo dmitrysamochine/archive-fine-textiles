@@ -38,6 +38,11 @@ export function SiteHeader({
   const isShopActive = pathname.startsWith("/shop")
   const isContactActive = pathname === "/contact-us"
 
+  // Temporarily hide the Shop link from the nav while furniture content is being
+  // populated. The /shop routes remain live and directly accessible — set this to
+  // true to surface the link again.
+  const SHOW_SHOP_LINK = false
+
   // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false)
@@ -152,14 +157,16 @@ export function SiteHeader({
             >
               Open Stock Fabrics
             </Link>
-            <Link
-              href="/shop/furniture"
-              className={`text-base font-heading hover:text-accent transition-colors ${
-                isShopActive ? "underline underline-offset-4" : ""
-              }`}
-            >
-              Shop
-            </Link>
+            {SHOW_SHOP_LINK && (
+              <Link
+                href="/shop/furniture"
+                className={`text-base font-heading hover:text-accent transition-colors ${
+                  isShopActive ? "underline underline-offset-4" : ""
+                }`}
+              >
+                Shop
+              </Link>
+            )}
             <Link
               href="/contact-us"
               className={`text-base font-heading hover:text-accent transition-colors ${
@@ -261,14 +268,16 @@ export function SiteHeader({
                 >
                   Open Stock Fabrics
                 </Link>
-                <Link
-                  href="/shop/furniture"
-                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
-                    isShopActive ? "underline underline-offset-4" : ""
-                  }`}
-                >
-                  Shop
-                </Link>
+                {SHOW_SHOP_LINK && (
+                  <Link
+                    href="/shop/furniture"
+                    className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
+                      isShopActive ? "underline underline-offset-4" : ""
+                    }`}
+                  >
+                    Shop
+                  </Link>
+                )}
                 <Link
                   href="/contact-us"
                   className={`py-3 font-heading text-lg hover:bg-muted/50 transition-colors ${
