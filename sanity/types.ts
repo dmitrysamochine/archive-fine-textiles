@@ -197,6 +197,13 @@ export interface FurnitureItem {
     }
     alt?: string
   }>
+  textilesUsed?: Array<{
+    asset: {
+      _id: string
+      url: string
+    }
+    alt?: string
+  }>
 }
 
 export interface ShopSettings {

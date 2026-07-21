@@ -596,6 +596,28 @@ export const furnitureItem = defineType({
         }),
       ],
     }),
+    defineField({
+      name: "textilesUsed",
+      title: "Textiles Used",
+      type: "array",
+      description: "Fabrics used to upholster this piece. Shown as clickable thumbnails on the product page.",
+      of: [
+        defineArrayMember({
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Alternative text",
+              description: "Important for SEO and accessibility",
+            },
+          ],
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {

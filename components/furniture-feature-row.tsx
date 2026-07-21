@@ -27,11 +27,11 @@ export function FurnitureFeatureRow({ item, index }: FurnitureFeatureRowProps) {
             <FurnitureImage
               image={firstImage}
               alt={firstImage?.alt || `${item.title} by ${item.maker}`}
-              width={1400}
-              height={1050}
+              width={1200}
+              height={1200}
               sizes="(max-width: 768px) 100vw, 60vw"
               priority={index === 0}
-              className="w-full h-auto object-cover aspect-[4/3] transition-transform duration-500 group-hover:scale-[1.03]"
+              className="w-full h-auto object-cover aspect-square transition-transform duration-500 group-hover:scale-[1.03]"
             />
             {isSold && (
               <span className="absolute top-4 left-4 bg-foreground text-background text-xs font-sans uppercase tracking-widest px-3 py-1.5">
