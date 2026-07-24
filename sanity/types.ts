@@ -212,3 +212,14 @@ export interface ShopSettings {
   purchasePhone?: string
   furnitureIntro?: string
 }
+
+export interface SiteSettings {
+  _id: string
+  heroImage?: {
+    asset: {
+      _id: string
+      url: string
+    }
+    alt?: string
+  }
+}

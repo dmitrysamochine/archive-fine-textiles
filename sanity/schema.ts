@@ -672,6 +672,38 @@ export const shopSettings = defineType({
   },
 })
 
+export const siteSettings = defineType({
+  name: "siteSettings",
+  title: "Site Settings",
+  type: "document",
+  fields: [
+    defineField({
+      name: "heroImage",
+      title: "Homepage Hero Background",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      description: "Full-screen background image shown on the homepage hero. If empty, a default image is used.",
+      fields: [
+        {
+          name: "alt",
+          type: "string",
+          title: "Alternative text",
+          description: "Important for SEO and accessibility",
+        },
+      ],
+    }),
+  ],
+  preview: {
+    prepare() {
+      return {
+        title: "Site Settings",
+      }
+    },
+  },
+})
+
 export const schemaTypes = [
   fabricItem,
   fabricCollection,
@@ -683,4 +715,5 @@ export const schemaTypes = [
   openStockItem,
   furnitureItem,
   shopSettings,
+  siteSettings,
 ]

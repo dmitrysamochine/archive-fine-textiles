@@ -19,11 +19,17 @@ export default defineConfig({
           .title("Content")
           .items([
             S.listItem()
+              .title("Site Settings")
+              .id("siteSettings")
+              .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
+            S.listItem()
               .title("Shop Settings")
               .id("shopSettings")
               .child(S.document().schemaType("shopSettings").documentId("shopSettings")),
             S.divider(),
-            ...S.documentTypeListItems().filter((listItem) => listItem.getId() !== "shopSettings"),
+            ...S.documentTypeListItems().filter(
+              (listItem) => !["shopSettings", "siteSettings"].includes(listItem.getId() as string),
+            ),
           ]),
     }),
     visionTool(),
