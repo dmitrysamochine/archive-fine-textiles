@@ -295,3 +295,14 @@ export const shopSettingsQuery = groq`
     furnitureIntro
   }
 `
+
+// Get global site settings (singleton)
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings"][0] {
+    _id,
+    heroImage {
+      asset->,
+      alt
+    }
+  }
+`

@@ -1,12 +1,34 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { ChevronDown } from "lucide-react"
+import { client } from "@/sanity/lib/client"
+import { urlForImage } from "@/sanity/lib/image"
+import { siteSettingsQuery } from "@/sanity/lib/queries"
+import type { SiteSettings } from "@/sanity/types"
+
+const DEFAULT_HERO = "/hero-background.jpg"
 
 export function HeroGrid() {
   const [isLoaded, setIsLoaded] = useState(false)
+  const [heroSrc, setHeroSrc] = useState(DEFAULT_HERO)
+  const [heroAlt, setHeroAlt] = useState("Soft draped fabric")
+
+  useEffect(() => {
+    client
+      .fetch<SiteSettings | null>(siteSettingsQuery)
+      .then((settings) => {
+        if (settings?.heroImage?.asset) {
+          setHeroSrc(urlForImage(settings.heroImage).width(2400).height(1600).url())
+          if (settings.heroImage.alt) setHeroAlt(settings.heroImage.alt)
+        }
+      })
+      .catch(() => {
+        // Fall back to the bundled default hero image on any fetch error.
+      })
+  }, [])
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-background">
@@ -18,8 +40,8 @@ export function HeroGrid() {
         transition={{ duration: 1.2, ease: "easeOut" }}
       >
         <Image
-          src="/hero-background.jpg"
-          alt="Soft draped fabric"
+          src={heroSrc || "/placeholder.svg"}
+          alt={heroAlt}
           fill
           className="object-cover"
           priority
