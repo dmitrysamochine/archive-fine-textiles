@@ -41,7 +41,7 @@ export function SiteHeader({
   // Temporarily hide the Shop link from the nav while furniture content is being
   // populated. The /shop routes remain live and directly accessible — set this to
   // true to surface the link again.
-  const SHOW_SHOP_LINK = false
+  const SHOW_SHOP_LINK = true
 
   // Close menus on route change
   useEffect(() => {
@@ -143,35 +143,31 @@ export function SiteHeader({
           <div className="hidden md:flex items-center gap-6">
             <Link
               href="/?view=grid"
-              className={`text-base font-heading hover:text-accent transition-colors ${
-                isTextilesActive ? "underline underline-offset-4" : ""
-              }`}
+              className={`text-base font-heading hover:text-accent transition-colors ${isTextilesActive ? "underline underline-offset-4" : ""
+                }`}
             >
               Textiles
             </Link>
             <Link
               href="/open-stock"
-              className={`text-base font-heading hover:text-accent transition-colors ${
-                isOpenStockActive ? "underline underline-offset-4" : ""
-              }`}
+              className={`text-base font-heading hover:text-accent transition-colors ${isOpenStockActive ? "underline underline-offset-4" : ""
+                }`}
             >
               Open Stock Fabrics
             </Link>
             {SHOW_SHOP_LINK && (
               <Link
                 href="/shop/furniture"
-                className={`text-base font-heading hover:text-accent transition-colors ${
-                  isShopActive ? "underline underline-offset-4" : ""
-                }`}
+                className={`text-base font-heading hover:text-accent transition-colors ${isShopActive ? "underline underline-offset-4" : ""
+                  }`}
               >
                 Shop
               </Link>
             )}
             <Link
               href="/contact-us"
-              className={`text-base font-heading hover:text-accent transition-colors ${
-                isContactActive ? "underline underline-offset-4" : ""
-              }`}
+              className={`text-base font-heading hover:text-accent transition-colors ${isContactActive ? "underline underline-offset-4" : ""
+                }`}
             >
               Contact Us
             </Link>
@@ -254,35 +250,31 @@ export function SiteHeader({
               <div className="pt-4 pb-2 flex flex-col">
                 <Link
                   href="/?view=grid"
-                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
-                    isTextilesActive ? "underline underline-offset-4" : ""
-                  }`}
+                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${isTextilesActive ? "underline underline-offset-4" : ""
+                    }`}
                 >
                   Textiles
                 </Link>
                 <Link
                   href="/open-stock"
-                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
-                    isOpenStockActive ? "underline underline-offset-4" : ""
-                  }`}
+                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${isOpenStockActive ? "underline underline-offset-4" : ""
+                    }`}
                 >
                   Open Stock Fabrics
                 </Link>
                 {SHOW_SHOP_LINK && (
                   <Link
                     href="/shop/furniture"
-                    className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${
-                      isShopActive ? "underline underline-offset-4" : ""
-                    }`}
+                    className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${isShopActive ? "underline underline-offset-4" : ""
+                      }`}
                   >
                     Shop
                   </Link>
                 )}
                 <Link
                   href="/contact-us"
-                  className={`py-3 font-heading text-lg hover:bg-muted/50 transition-colors ${
-                    isContactActive ? "underline underline-offset-4" : ""
-                  }`}
+                  className={`py-3 font-heading text-lg hover:bg-muted/50 transition-colors ${isContactActive ? "underline underline-offset-4" : ""
+                    }`}
                 >
                   Contact Us
                 </Link>
