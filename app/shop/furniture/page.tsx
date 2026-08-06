@@ -37,10 +37,10 @@ export default async function FurniturePage() {
             <Image
               src="/furniture-logo.svg"
               alt="Archive Fine Textiles"
-              width={130}
-              height={160}
+              width={160}
+              height={197}
               priority
-              className="h-32 md:h-40 w-auto mb-6"
+              className="w-40 h-auto"
             />
             <p className="text-base font-sans leading-relaxed text-muted-foreground text-pretty">{intro}</p>
           </header>
