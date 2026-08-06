@@ -15,7 +15,7 @@ export function FurnitureFeatureRow({ item, index }: FurnitureFeatureRowProps) {
   const href = `/shop/furniture/${item.slug.current}`
 
   return (
-    <article className="border-t border-border py-12 md:py-20 first:border-t-0">
+    <article className="border-t border-border py-12 md:py-20">
       <div
         className={`flex flex-col gap-8 md:gap-12 lg:gap-16 md:items-center ${
           isReversed ? "md:flex-row-reverse" : "md:flex-row"
