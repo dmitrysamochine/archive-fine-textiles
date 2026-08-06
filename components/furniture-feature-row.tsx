@@ -56,7 +56,7 @@ export function FurnitureFeatureRow({ item, index }: FurnitureFeatureRowProps) {
               <p className="text-base font-sans text-muted-foreground">{item.maker}</p>
             </div>
 
-            <dl className="space-y-3 text-sm font-sans border-t border-border pt-6">
+            <dl className="space-y-3 text-sm font-sans md:border-t md:border-border md:pt-6">
               {item.materialContent && (
                 <div className="flex flex-col gap-0.5">
                   <dt className="text-muted-foreground uppercase tracking-wider text-xs">Materials</dt>
@@ -71,7 +71,7 @@ export function FurnitureFeatureRow({ item, index }: FurnitureFeatureRowProps) {
               )}
             </dl>
 
-            <div className="flex items-center justify-between border-t border-border pt-6">
+            <div className="flex items-center justify-between md:border-t md:border-border md:pt-6">
               <p className="text-xl font-heading">{formatPrice(item.price)}</p>
               <Link
                 href={href}
