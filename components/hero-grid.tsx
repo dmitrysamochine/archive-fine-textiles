@@ -13,21 +13,33 @@ const DEFAULT_HERO = "/hero-background.jpg"
 
 export function HeroGrid() {
   const [isLoaded, setIsLoaded] = useState(false)
-  const [heroSrc, setHeroSrc] = useState(DEFAULT_HERO)
+  // Start with no src so we never load the fallback before knowing whether a
+  // custom hero image exists. Exactly one image loads once the fetch resolves.
+  const [heroSrc, setHeroSrc] = useState<string | null>(null)
   const [heroAlt, setHeroAlt] = useState("Soft draped fabric")
 
   useEffect(() => {
+    let cancelled = false
+
     client
       .fetch<SiteSettings | null>(siteSettingsQuery)
       .then((settings) => {
+        if (cancelled) return
         if (settings?.heroImage?.asset) {
           setHeroSrc(urlForImage(settings.heroImage).width(2400).height(1600).url())
           if (settings.heroImage.alt) setHeroAlt(settings.heroImage.alt)
+        } else {
+          setHeroSrc(DEFAULT_HERO)
         }
       })
       .catch(() => {
         // Fall back to the bundled default hero image on any fetch error.
+        if (!cancelled) setHeroSrc(DEFAULT_HERO)
       })
+
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   return (
@@ -39,14 +51,16 @@ export function HeroGrid() {
         animate={{ opacity: isLoaded ? 1 : 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
       >
-        <Image
-          src={heroSrc || "/placeholder.svg"}
-          alt={heroAlt}
-          fill
-          className="object-cover"
-          priority
-          onLoad={() => setIsLoaded(true)}
-        />
+        {heroSrc && (
+          <Image
+            src={heroSrc || "/placeholder.svg"}
+            alt={heroAlt}
+            fill
+            className="object-cover"
+            priority
+            onLoad={() => setIsLoaded(true)}
+          />
+        )}
       </motion.div>
 
       {/* Logo overlay */}
