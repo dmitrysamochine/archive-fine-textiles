@@ -102,10 +102,16 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
 
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case "collection-asc":
-          return (a.collection?.name || "").localeCompare(b.collection?.name || "")
-        case "collection-desc":
-          return (b.collection?.name || "").localeCompare(a.collection?.name || "")
+        case "collection-asc": {
+          const byCollection = (a.collection?.name || "").localeCompare(b.collection?.name || "")
+          // Within a collection, order items by ascending product number.
+          return byCollection !== 0 ? byCollection : a.itemNumber.localeCompare(b.itemNumber)
+        }
+        case "collection-desc": {
+          const byCollection = (b.collection?.name || "").localeCompare(a.collection?.name || "")
+          // Within a collection, order items by ascending product number.
+          return byCollection !== 0 ? byCollection : a.itemNumber.localeCompare(b.itemNumber)
+        }
         case "price-high":
           return (b.price || 0) - (a.price || 0)
         case "price-low":
@@ -114,8 +120,10 @@ export function FabricGrid({ hasScrolled, onFabricClick }: FabricGridProps) {
           return b.itemNumber.localeCompare(a.itemNumber)
         case "item-asc":
           return a.itemNumber.localeCompare(b.itemNumber)
-        default:
-          return (a.collection?.name || "").localeCompare(b.collection?.name || "")
+        default: {
+          const byCollection = (a.collection?.name || "").localeCompare(b.collection?.name || "")
+          return byCollection !== 0 ? byCollection : a.itemNumber.localeCompare(b.itemNumber)
+        }
       }
     })
 

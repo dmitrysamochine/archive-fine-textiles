@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import { client } from "@/sanity/lib/client"
 import { furnitureItemsQuery, shopSettingsQuery } from "@/sanity/lib/queries"
 import { SiteHeader } from "@/components/site-header"
@@ -31,8 +32,16 @@ export default async function FurniturePage() {
       <main className="min-h-screen pt-28 pb-8">
         <div className="container mx-auto px-4 md:px-6">
           {/* Section header */}
-          <header className="max-w-2xl mx-auto text-center mb-12 md:mb-16">
-            <h1 className="text-2xl md:text-3xl font-heading mb-4 text-balance">Furniture</h1>
+          <header className="max-w-2xl mx-auto text-center mb-12 md:mb-16 flex flex-col items-center">
+            <h1 className="sr-only">Furniture</h1>
+            <Image
+              src="/furniture-logo.svg"
+              alt="Archive Fine Textiles"
+              width={160}
+              height={197}
+              priority
+              className="w-40 h-auto"
+            />
             <p className="text-base font-sans leading-relaxed text-muted-foreground text-pretty">{intro}</p>
           </header>
 
