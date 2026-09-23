@@ -43,6 +43,11 @@ export function SiteHeader({
   // true to surface the link again.
   const SHOW_SHOP_LINK = true
 
+  // Temporarily hide the Open Stock Fabrics link from the nav. The /open-stock
+  // routes are redirected to the homepage (see next.config.mjs) while hidden —
+  // set this back to true (and remove the redirect) to surface the section again.
+  const SHOW_OPEN_STOCK_LINK = false
+
   // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false)
@@ -148,20 +153,22 @@ export function SiteHeader({
             >
               Textiles
             </Link>
-            <Link
-              href="/open-stock"
-              className={`text-base font-heading hover:text-accent transition-colors ${isOpenStockActive ? "underline underline-offset-4" : ""
-                }`}
-            >
-              Open Stock Fabrics
-            </Link>
+            {SHOW_OPEN_STOCK_LINK && (
+              <Link
+                href="/open-stock"
+                className={`text-base font-heading hover:text-accent transition-colors ${isOpenStockActive ? "underline underline-offset-4" : ""
+                  }`}
+              >
+                Open Stock Fabrics
+              </Link>
+            )}
             {SHOW_SHOP_LINK && (
               <Link
                 href="/shop/furniture"
                 className={`text-base font-heading hover:text-accent transition-colors ${isShopActive ? "underline underline-offset-4" : ""
                   }`}
               >
-                Shop
+                Furniture
               </Link>
             )}
             <Link
@@ -255,20 +262,22 @@ export function SiteHeader({
                 >
                   Textiles
                 </Link>
-                <Link
-                  href="/open-stock"
-                  className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${isOpenStockActive ? "underline underline-offset-4" : ""
-                    }`}
-                >
-                  Open Stock Fabrics
-                </Link>
+                {SHOW_OPEN_STOCK_LINK && (
+                  <Link
+                    href="/open-stock"
+                    className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${isOpenStockActive ? "underline underline-offset-4" : ""
+                      }`}
+                  >
+                    Open Stock Fabrics
+                  </Link>
+                )}
                 {SHOW_SHOP_LINK && (
                   <Link
                     href="/shop/furniture"
                     className={`py-3 font-heading text-lg border-b border-border hover:bg-muted/50 transition-colors ${isShopActive ? "underline underline-offset-4" : ""
                       }`}
                   >
-                    Shop
+                    Furniture
                   </Link>
                 )}
                 <Link
